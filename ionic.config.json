@@ -1,0 +1,7 @@
+{
+  "name": "gr8ful",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

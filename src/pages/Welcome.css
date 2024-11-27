@@ -1,10 +1,11 @@
 .background {
     background:
         linear-gradient(to top,
-            rgba(0, 0, 0, 0.3) 1%,
-            rgba(0, 0, 0, 0) 50%,
-            rgba(0, 0, 0, 0) 100%),
+            rgba(0, 217, 255, 0.2) 1%,
+            rgba(0, 217, 255, 0) 20%,
+            rgba(0, 217, 255, 0) 100%),
         var(--background-color);
+    /* Fondo adicional definido por la variable */
     height: 100vh;
     width: 100vw;
     font-family: 'Montserrat', sans-serif;
@@ -33,8 +34,17 @@
     transition: background-color 0.3s ease-in-out;
     font-size: 18px;
     font-weight: 600;
+    color: #ffffff;
 }
 
 .continue-button:hover {
     background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.continue-button:active {
+    background-color: var(--button-hover);
+    color: #000000;
+    transform: scale(0.95);
 }

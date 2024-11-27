@@ -12,6 +12,7 @@ http://ionicframework.com/docs/theming/ */
     --text-color: #000000;
     --primary-color: #000000;
     --secondary-color: #ffffff;
+    --button-hover: #00FFFF;
 
     /* Colores para hombre */
     --male-text-light-color: #506A7B;

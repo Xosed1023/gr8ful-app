@@ -1,2 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+    /* Colores predeterminados (neutros o genéricos) */
+    --background-color: #F8F6F6;
+    --text-color: #000000;
+    --primary-color: #000000;
+    --secondary-color: #ffffff;
+
+    /* Colores para hombre */
+    --male-text-light-color: #506A7B;
+
+
+    /* Colores para mujer */
+}

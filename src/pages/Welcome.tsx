@@ -52,7 +52,7 @@ const Welcome: React.FC = () => {
           {/* Botón */}
           <button
             className="continue-button px-10 py-2 text-white rounded-full"
-            onClick={() => navigate.push("/home")}
+            onClick={() => navigate.push("/languages")}
           >
             Continue
           </button>

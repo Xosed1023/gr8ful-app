@@ -50,6 +50,7 @@ import Welcome from "./pages/Welcome";
 import Home from "./pages/Home";
 import { useEffect } from "react";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
+import Languages from './pages/Languages';
 
 setupIonicReact();
 
@@ -75,6 +76,7 @@ const App: React.FC = () => {
       <IonReactRouter>
         <Route exact path="/" component={Welcome} />
         <Route exact path="/home" component={Home} />
+        <Route exact path="/languages" component={Languages} />
         <Redirect from="*" to="/"></Redirect>
         {/* <IonTabs>
         <IonRouterOutlet>

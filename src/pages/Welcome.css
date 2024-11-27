@@ -27,7 +27,7 @@
 .continue-button {
     background-color: #000000;
     height: 50px;
-    width: 280px;
+    width: clamp(100px, 80%, 280px);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;

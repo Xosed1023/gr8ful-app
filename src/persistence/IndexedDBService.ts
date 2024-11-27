@@ -50,8 +50,15 @@ export async function getRandomPhrase(): Promise<Phrase | null> {
   if (!db) throw new Error('Database not initialized');
   const phrases = await db.getAll(STORE_NAME);
   if (phrases.length === 0) return null;
-  
-  const finalPhrases = phrases.filter(phrase => phrase.hasShown === false);
+
+  let finalPhrases = phrases.filter(phrase => phrase.hasShown === false);
+  if (finalPhrases.length === 0) {
+    phrases.forEach(phrase => {
+      phrase.hasShown = false;
+      addOrUpdatePhrase(phrase);
+    });
+    finalPhrases = phrases.filter(phrase => phrase.hasShown === false);
+  }
   const randomIndex = Math.floor(Math.random() * finalPhrases.length);
   return finalPhrases[randomIndex];
 }

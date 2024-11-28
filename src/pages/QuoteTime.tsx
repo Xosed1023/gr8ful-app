@@ -1,15 +1,25 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import './WomanTime.css';
+import { IonContent, IonPage } from "@ionic/react";
 import { useHistory } from "react-router";
+import "./QuoteTime.css";
 
-const WomanTime: React.FC = () => {
+const QuoteTime: React.FC = () => {
   const navigate = useHistory();
+
+  const handleTimeChange = (time: string) => {
+    localStorage.setItem("time", time);
+    navigate.push("/home");
+  };
+
   return (
     <IonPage>
       <IonContent fullscreen>
         <div className="background-woman flex flex-col items-center justify-center min-h-screen">
           {/* SVG de los puntos superiores */}
-          <img src="./step4.svg" alt="Progress dots" className="dots1 absolute top-20" />
+          <img
+            src="./step4.svg"
+            alt="Progress dots"
+            className="dots1 absolute top-20"
+          />
 
           {/* Texto principal */}
           <div className="text-container flex flex-col items-center mt-12 px-16 pb-6 pt-6">
@@ -21,22 +31,13 @@ const WomanTime: React.FC = () => {
 
           {/* Botones de horario */}
           <div className="buttons-container flex flex-col gap-4 mt-12 pb-6">
-            <button
-              className="time-button"
-              onClick={() => navigate.push("/time/6am")}
-            >
+            <button className="time-button" onClick={() => handleTimeChange("6")}>
               6:00 AM
             </button>
-            <button
-              className="time-button"
-              onClick={() => navigate.push("/time/12pm")}
-            >
+            <button className="time-button" onClick={() => handleTimeChange("12")}>
               12:00 PM
             </button>
-            <button
-              className="time-button"
-              onClick={() => navigate.push("/time/6pm")}
-            >
+            <button className="time-button" onClick={() => handleTimeChange("18")}>
               6:00 PM
             </button>
           </div>
@@ -53,4 +54,4 @@ const WomanTime: React.FC = () => {
   );
 };
 
-export default WomanTime;
+export default QuoteTime;

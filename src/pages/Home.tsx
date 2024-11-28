@@ -7,7 +7,10 @@ import {
   IonTabButton,
   IonTabs,
 } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import { settings, sync } from "ionicons/icons";
 import { useEffect, useState } from "react";
+import { Route } from "react-router";
 import CardsContainer from "../components/home/CardsContainer";
 import Greetings from "../components/home/Greetings";
 import { Phrase } from "../models/Phrase";
@@ -18,11 +21,7 @@ import {
   initDB,
 } from "../persistence/IndexedDBService";
 import "./Home.css";
-import { IonReactRouter } from "@ionic/react-router";
-import { triangle, ellipse, settings, sync } from "ionicons/icons";
-import { Route, Redirect } from "react-router";
-import Tab1 from "./Tab1";
-import Tab2 from "./Tab2";
+import Tab3 from "./Tab3";
 
 const Home = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
@@ -67,7 +66,7 @@ const Home = () => {
           <IonTabs>
             <IonRouterOutlet>
               <Route exact path="/tab2">
-                <Tab2 />
+                <Tab3 />
               </Route>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">

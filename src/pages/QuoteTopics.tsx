@@ -60,7 +60,7 @@ const QuoteTopics: React.FC = () => {
           <div className="action-container flex gap-4 mt-6 mb-4">
             <button
               className="next-button mt-2 rounded-full"
-              onClick={() => navigate.push("/home")}
+              onClick={() => navigate.push("/userName")}
             >
               Next
             </button>

@@ -54,6 +54,8 @@ import Languages from './pages/Languages';
 import Gender from './pages/Gender';
 import QuoteTime from './pages/QuoteTime';
 import QuoteTopics from './pages/QuoteTopics';
+import UserName from './pages/UserName';
+import LoadingScreen from './pages/LoadingScreen';
 
 setupIonicReact();
 
@@ -83,6 +85,8 @@ const App: React.FC = () => {
         <Route exact path="/gender" component={Gender} />
         <Route exact path="/quoteTime" component={QuoteTime} />
         <Route exact path="/quoteTopics" component={QuoteTopics} />
+        <Route exact path="/userName" component={UserName} />
+        <Route exact path="/loadingScreen" component={LoadingScreen} />
         <Redirect from="*" to="/"></Redirect>
         {/* <IonTabs>
         <IonRouterOutlet>

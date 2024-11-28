@@ -22,13 +22,13 @@ const Gender: React.FC = () => {
           <div className="buttons-container flex gap-4 mt-8">
             <button
               className="option-button"
-              onClick={() => navigate.push("/woman")}
+              onClick={() => navigate.push("/womanTime")}
             >
               A woman
             </button>
             <button
               className="option-button"
-              onClick={() => navigate.push("/womanTime")}
+              onClick={() => navigate.push("/manTime")}
             >
               A man
             </button>

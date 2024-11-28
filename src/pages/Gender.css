@@ -5,6 +5,7 @@
     text-align: center;
     display: flex;
     gap: 4px;
+    line-height: 1.2;
 }
 
 .text-normal {
@@ -18,13 +19,6 @@
     font-family: "Playwrite DE SAS", cursive;
     font-weight: 400;
     font-weight: 700;
-}
-
-.buttons-container {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
-    gap: 18px;
 }
 
 .option-button {

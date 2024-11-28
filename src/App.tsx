@@ -12,7 +12,7 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { ellipse, square, triangle } from "ionicons/icons";
 import Tab1 from "./pages/Gender";
-import Tab2 from "./pages/Tab2";
+import Tab2 from "./pages/WomanTime";
 import Tab3 from "./pages/Tab3";
 import "./tailwind.css";
 import { initialData } from "./persistence/initialData";
@@ -52,6 +52,7 @@ import { useEffect } from "react";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import Languages from './pages/Languages';
 import Gender from './pages/Gender';
+import WomanTime from './pages/WomanTime';
 
 setupIonicReact();
 
@@ -79,6 +80,7 @@ const App: React.FC = () => {
         <Route exact path="/home" component={Home} />
         <Route exact path="/languages" component={Languages} />
         <Route exact path="/gender" component={Gender} />
+        <Route exact path="/womanTime" component={WomanTime} />
         <Redirect from="*" to="/"></Redirect>
         {/* <IonTabs>
         <IonRouterOutlet>

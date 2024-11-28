@@ -7,7 +7,10 @@ const UserName: React.FC = () => {
     const [name, setName] = useState<string>('');
     const navigate = useHistory();
     const handleFinish = () => {
-        console.log('User name:', name);
+        // TODO Validar que el nombre exista
+        // TODO Validar la longintud del nombre
+        localStorage.setItem("name", name);
+        navigate.push("/loadingScreen")
     };
 
     return (
@@ -41,7 +44,7 @@ const UserName: React.FC = () => {
                     <div className="action-container flex gap-4 mt-8 pb-8">
                         <button
                             className="next-button mt-2 rounded-full"
-                            onClick={() => navigate.push("/loadingScreen")}
+                            onClick={() => handleFinish()}
                         >
                             Finish
                         </button>

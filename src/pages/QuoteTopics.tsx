@@ -26,6 +26,11 @@ const QuoteTopics: React.FC = () => {
     );
   };
 
+  const handleTopicsChange = () => {
+    localStorage.setItem("topics", JSON.stringify(selectedTopics));
+    navigate.push("/userName")
+  }
+
   return (
     <IonPage>
       <IonContent fullscreen>
@@ -60,7 +65,7 @@ const QuoteTopics: React.FC = () => {
           <div className="action-container flex gap-4 mt-6 mb-4">
             <button
               className="next-button mt-2 rounded-full"
-              onClick={() => navigate.push("/userName")}
+              onClick={() => handleTopicsChange()}
             >
               Next
             </button>

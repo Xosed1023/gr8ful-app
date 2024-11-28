@@ -1,6 +1,5 @@
 .backgroundHome {
     background: var(--background-color);
-    height: 100vh;
     width: 100vw;
     font-family: 'Montserrat', sans-serif;
 }

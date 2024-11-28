@@ -1,19 +1,37 @@
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
-import "./Gender.css";
+import { IonContent, IonPage } from "@ionic/react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { AppGenderScreenLanguage } from "../persistence/languages";
+import "./Gender.css";
 
 const Gender: React.FC = () => {
+  const [userLanguage, setUserLanguage] = useState(
+    localStorage.getItem("language")
+  );
+  const [title, setTitle] = useState(["I", "identify", "as"]);
+  const [options, setOptions] = useState(["Woman", "Man"]);
+
   const navigate = useHistory();
   const handleGenderChange = (gender: string) => {
     localStorage.setItem("gender", gender);
     navigate.push("/quoteTime");
   };
+
+  useEffect(() => {
+    setTitle(
+      AppGenderScreenLanguage.title[
+        userLanguage as keyof typeof AppGenderScreenLanguage.title
+      ]
+    );
+    setOptions([
+      AppGenderScreenLanguage.options.woman[
+        userLanguage as keyof typeof AppGenderScreenLanguage.options.woman
+      ],
+      AppGenderScreenLanguage.options.man[
+        userLanguage as keyof typeof AppGenderScreenLanguage.options.man
+      ],
+    ]);
+  }, []);
 
   return (
     <IonPage>
@@ -28,9 +46,9 @@ const Gender: React.FC = () => {
 
           {/* Texto "I Identify as" */}
           <div className="text-container flex items-center justify-center mt-16">
-            <p className="text-normal">I</p>
-            <p className="text-highlight">Identify</p>
-            <p className="text-normal">as</p>
+            <p className="text-normal">{title[0]}</p>
+            <p className="text-highlight">{title[1]}</p>
+            <p className="text-normal">{title[2]}</p>
           </div>
 
           {/* Botones de opciones */}
@@ -39,13 +57,13 @@ const Gender: React.FC = () => {
               className="option-button"
               onClick={() => handleGenderChange("W")}
             >
-              A woman
+              {options[0]}
             </button>
             <button
               className="option-button"
               onClick={() => handleGenderChange("M")}
             >
-              A man
+              {options[1]}
             </button>
           </div>
         </div>

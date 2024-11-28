@@ -56,6 +56,7 @@ import QuoteTime from './pages/QuoteTime';
 import QuoteTopics from './pages/QuoteTopics';
 import UserName from './pages/UserName';
 import LoadingScreen from './pages/LoadingScreen';
+import MainHome from "./pages/MainHome";
 
 setupIonicReact();
 
@@ -80,6 +81,7 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <Route exact path="/" component={Welcome} />
+        <Route exact path="/mainHome" component={MainHome} />
         <Route exact path="/home" component={Home} />
         <Route exact path="/languages" component={Languages} />
         <Route exact path="/gender" component={Gender} />

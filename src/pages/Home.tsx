@@ -36,9 +36,8 @@ const Home = () => {
   const loadRandomPhrase = async () => {
     const randomPhrase = await getRandomPhrase();
     if (randomPhrase) {
-      // Actualizar la frase en la base de datos con la fecha actual
       await updateHistoryDate(randomPhrase.id!);
-      setPhrase(randomPhrase); // Mostrar en español, puedes cambiarlo dinámicamente
+      setPhrase(randomPhrase);
     }
   };
 
@@ -53,7 +52,7 @@ const Home = () => {
   return (
     <IonPage className="overflow-hidden">
       <IonContent fullscreen className="overflow-hidden">
-        <div className="backgroundHome flex flex-col min-h-screen overflow-hidden">
+        <div className="backgroundHome flex flex-col overflow-hidden h-4/5">
           <Greetings />
           {phrase && (
             <div className="flex flex-col items-center justify-center -mt-6">
@@ -61,24 +60,6 @@ const Home = () => {
             </div>
           )}
         </div>
-
-        <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Route exact path="/tab2">
-                <Tab3 />
-              </Route>
-            </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="tab1" href="/home" onClick={loadRandomPhrase}>
-                <IonIcon aria-hidden="true" icon={sync} />
-              </IonTabButton>
-              <IonTabButton tab="tab2" href="/tab2">
-                <IonIcon aria-hidden="true" icon={settings} />
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
-        </IonReactRouter>
       </IonContent>
     </IonPage>
   );

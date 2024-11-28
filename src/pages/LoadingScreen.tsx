@@ -19,7 +19,7 @@ const LoadingScreen: React.FC = () => {
 
                     {/* SVG de la pluma */}
                     <div className="feather-container mt-8">
-                        <img src="./feather.svg" alt="Feather" className="feather animate-feather" onClick={() => navigate.push("/home")} />
+                        <img src="./feather.svg" alt="Feather" className="feather animate-feather" onClick={() => navigate.push("/mainHome")} />
                     </div>
                 </div>
             </IonContent>

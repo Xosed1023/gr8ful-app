@@ -21,7 +21,7 @@ const Languages: React.FC = () => {
                         </button>
                         <button
                             className="language-button"
-                            onClick={() => navigate.push("/home")}
+                            onClick={() => navigate.push("/gender")}
                         >
                             English
                         </button>

@@ -35,15 +35,22 @@
 }
 
 .time-button:hover {
-    background-color: #6f36eb;
-    color: white;
+    background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.time-button:active {
+    background-color: var(--button-hover);
+    color: #000000;
+    transform: scale(0.95);
 }
 
 /* Nota al final */
 .note-container {
-    margin-top: 46px;
     font-size: 14px;
     color: var(--woman-light-purple);
     text-align: center;
     font-style: italic;
+    bottom: 10px;
 }

@@ -7,7 +7,7 @@ const QuoteTime: React.FC = () => {
 
   const handleTimeChange = (time: string) => {
     localStorage.setItem("time", time);
-    navigate.push("/home");
+    navigate.push("/quoteTopics");
   };
 
   return (

@@ -21,7 +21,7 @@ import {
   initDB,
 } from "../persistence/IndexedDBService";
 import "./Home.css";
-import Tab3 from "./Tab3";
+import Tab3 from "./QuoteTopics";
 
 const Home = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
@@ -53,7 +53,7 @@ const Home = () => {
   return (
     <IonPage className="overflow-hidden">
       <IonContent fullscreen className="overflow-hidden">
-        <div className="background flex flex-col min-h-screen overflow-hidden">
+        <div className="backgroundHome flex flex-col min-h-screen overflow-hidden">
           <Greetings />
           {phrase && (
             <div className="flex flex-col items-center justify-center -mt-6">

@@ -1,0 +1,83 @@
+.topics-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.topic-button {
+    width: 100%;
+    max-width: 150px;
+    padding: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--woman-dark-purple);
+    border: 2px solid var(--woman-dark-purple);
+    border-radius: 20px;
+    background-color: transparent;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.topic-button:hover {
+    background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.topic-button:active {
+    background-color: var(--button-hover);
+    color: #000000;
+    transform: scale(0.95);
+}
+
+.action-container {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.next-button {
+    padding: 12px 24px;
+    background-color: var(--woman-vibrant-purple);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: clamp(130px, 0%, 280px);
+}
+
+.next-button:hover {
+    background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.next-button:active {
+    background-color: var(--button-hover);
+    color: #000000;
+    transform: scale(0.95);
+}
+
+.note-container-topics {
+    font-size: 14px;
+    color: var(--woman-light-purple);
+    text-align: center;
+    font-style: italic;
+    margin-bottom: -50px;
+}
+
+.topic-button:hover,
+.topic-button.selected {
+    background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+    transform: scale(0.95);
+}
+
+.topic-button:active {
+    transform: scale(0.95);
+}

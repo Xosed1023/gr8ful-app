@@ -8,7 +8,7 @@ import Gender from "./Gender";
 const MainHome = () => {
   return (
     <IonReactRouter>
-      <IonTabs>
+      <IonTabs className="bg-indigo-950">
         <IonRouterOutlet>
           <Route exact path="/home">
             <Home />
@@ -20,11 +20,11 @@ const MainHome = () => {
             <Redirect to="/home" />
           </Route>
         </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
+        <IonTabBar slot="bottom" className="bg-slate-900 rounded-t-3xl">
+          <IonTabButton tab="home" href="/home" className="bg-slate-900">
             <IonIcon aria-hidden="true" icon={sync} />
           </IonTabButton>
-          <IonTabButton tab="settings" href="/settings">
+          <IonTabButton tab="settings" href="/settings" className="bg-slate-900">
             <IonIcon aria-hidden="true" icon={settings} />
           </IonTabButton>
         </IonTabBar>

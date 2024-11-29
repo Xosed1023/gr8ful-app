@@ -1,94 +1,92 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 
 interface CardPhraseProps {
   phrase: string;
-  position: number;
   color: CardColors;
 }
 
-interface CardPhraseStyle {
-  background: string;
-  text: string;
-  position: string;
-  height: string;
-}
-
-const colorConfig: Record<CardColors, CardPhraseStyle> = {
+const colorConfig = {
   [CardColors.WOMAN_BLUE]: {
     background: "bg-sky-500",
     text: "text-sky-900",
-    position: "32%", // Cambia las posiciones a valores numéricos para animación
-    height: "58%",
+    initialPosition: "32%",
+    initialHeight: "68%",
+    expandedPosition: "0%",
+    expandedHeight: "100%",
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-violet-400",
     text: "text-purple-900",
-    position: "50%",
-    height: "40%",
+    initialPosition: "50%",
+    initialHeight: "50%",
+    expandedPosition: "18%",
+    expandedHeight: "82%",
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-violet-300",
     text: "text-indigo-900",
-    position: "68%",
-    height: "20%",
+    initialPosition: "68%",
+    initialHeight: "31%",
+    expandedPosition: "36%",
+    expandedHeight: "64%",
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-sky-500",
     text: "text-sky-800",
-    position: "32%",
-    height: "68%",
+    initialPosition: "32%",
+    initialHeight: "68%",
+    expandedPosition: "10%",
+    expandedHeight: "90%",
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
     background: "bg-cyan-700",
     text: "text-sky-900",
-    position: "52%",
-    height: "48%",
+    initialPosition: "52%",
+    initialHeight: "48%",
+    expandedPosition: "10%",
+    expandedHeight: "90%",
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
     background: "bg-slate-400",
     text: "text-sky-900",
-    position: "72%",
-    height: "28%",
+    initialPosition: "72%",
+    initialHeight: "28%",
+    expandedPosition: "10%",
+    expandedHeight: "90%",
   },
 };
 
-const CardPhrase = ({ phrase, position, color }: CardPhraseProps) => {
-  const [componentColorConfig, setComponentColorConfig] = useState(colorConfig);
-  const [topPosition, setTopPosition] = useState(colorConfig[color].position);
-  
-  const handleClick = (currentPosition: number) => {
-    // Cambia la posición según el valor de `position`
-    switch (currentPosition) {
-      case 0:
-        setTopPosition("10%"); // Nueva posición
-        break;
-      case 1:
-        setTopPosition("40%");
-        break;
-      case 2:
-        setTopPosition("70%");
-        break;
-      default:
-        setTopPosition("32%");
-    }
+const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleCard = () => {
+    setIsExpanded((prev) => !prev);
   };
+
+  const { background, text, initialPosition, initialHeight, expandedPosition, expandedHeight } =
+    colorConfig[color];
 
   return (
     <motion.div
-      className={`${colorConfig[color].background} 
-        rounded-t-3xl p-6 shadow-[rgba(0,0,0,0.55)_-2px_-2px_10px_-2px] absolute 
-        ${colorConfig[color].height}`}
-      style={{ top: topPosition }} // Aplica la posición dinámica
-      onClick={() => handleClick(position)}
-      animate={{ top: topPosition }} // Propiedad animada
-      initial={{ top: topPosition }} // Estado inicial
-      transition={{ duration: 0.5 }} // Duración de la animación
+      className={`${background} rounded-t-3xl p-6 shadow-[rgba(0,0,0,0.55)_-2px_-2px_10px_-2px] absolute w-full`}
+      style={{ top: initialPosition }}
+      onClick={toggleCard}
+      animate={{
+        top: isExpanded ? expandedPosition : initialPosition,
+        height: isExpanded ? expandedHeight : initialHeight,
+      }}
+      initial={{
+        top: initialPosition,
+        height: initialHeight,
+      }}
+      transition={{
+        duration: 0.4,
+        ease: "easeInOut",
+      }}
     >
-      <h1 className={`${colorConfig[color].text} text-lg font-semibold`}>
-        {phrase}
-      </h1>
+      <h1 className={`${text} text-lg font-semibold`}>{phrase}</h1>
     </motion.div>
   );
 };

@@ -1,21 +1,11 @@
-import { Redirect, Route } from "react-router-dom";
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
+  setupIonicReact
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
-import Tab1 from "./pages/Gender";
-import Tab2 from "./pages/QuoteTime";
-import Tab3 from "./pages/QuoteTopics";
-import "./tailwind.css";
+import { Redirect, Route } from "react-router-dom";
 import { initialData } from "./persistence/initialData";
+import "./tailwind.css";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -26,12 +16,12 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
 
 /* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
+import "@ionic/react/css/display.css";
+import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/padding.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
 
 /**
  * Ionic Dark Mode
@@ -45,18 +35,19 @@ import "@ionic/react/css/display.css";
 import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
-import "./theme/variables.css";
-import Welcome from "./pages/Welcome";
-import Home from "./pages/Home";
 import { useEffect } from "react";
-import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
-import Languages from './pages/Languages';
 import Gender from './pages/Gender';
-import QuoteTime from './pages/QuoteTime';
-import QuoteTopics from './pages/QuoteTopics';
-import UserName from './pages/UserName';
+import Home from "./pages/Home";
+import Languages from './pages/Languages';
 import LoadingScreen from './pages/LoadingScreen';
 import MainHome from "./pages/MainHome";
+import QuoteTime from './pages/QuoteTime';
+import QuoteTopics from './pages/QuoteTopics';
+import Settings from "./pages/Settings";
+import UserName from './pages/UserName';
+import Welcome from "./pages/Welcome";
+import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
+import "./theme/variables.css";
 
 setupIonicReact();
 
@@ -89,28 +80,8 @@ const App: React.FC = () => {
         <Route exact path="/quoteTopics" component={QuoteTopics} />
         <Route exact path="/userName" component={UserName} />
         <Route exact path="/loadingScreen" component={LoadingScreen} />
+        <Route exact path="/settings" component={Settings} />
         <Redirect from="*" to="/"></Redirect>
-        {/* <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/tab1" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs> */}
       </IonReactRouter>
     </IonApp>
   );

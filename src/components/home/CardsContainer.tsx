@@ -1,19 +1,13 @@
-import React from "react";
-import CardPhrase from "./CardPhrase";
-import { Phrase } from "../../models/Phrase";
 import { CardColors } from "../../models/CardColors";
+import { Phrase } from "../../models/Phrase";
+import CardPhrase from "./CardPhrase";
 
 const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
+
   return (
     <div className="overflow-y-hidden flex flex-col items-center">
-      <CardPhrase
-        color={CardColors.WOMAN_BLUE}
-        phrase={phrase.content.en}
-      />
-      <CardPhrase
-        color={CardColors.WOMAN_PURPLE}
-        phrase={phrase.content.es}
-      />
+      <CardPhrase color={CardColors.WOMAN_BLUE} phrase={phrase.content.en} />
+      <CardPhrase color={CardColors.WOMAN_PURPLE} phrase={phrase.content.es} />
       <CardPhrase
         color={CardColors.WOMAN_VIOLETTE}
         phrase={phrase.content.fr}

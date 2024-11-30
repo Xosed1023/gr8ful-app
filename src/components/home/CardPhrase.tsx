@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CardColors } from "../../models/CardColors";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 interface CardPhraseProps {
   phrase: string;
@@ -60,6 +61,7 @@ const colorConfig = {
 
 const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
 
   const toggleCard = () => {
     setIsExpanded((prev) => !prev);
@@ -68,22 +70,47 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
   const { background, text, initialPosition, initialHeight, expandedPosition, expandedHeight } =
     colorConfig[color];
 
+  const triggerHapticFeedback = async () => {
+    try {
+      await Haptics.impact({ style: ImpactStyle.Medium });
+    } catch {
+      if (navigator.vibrate) navigator.vibrate(50); // Fallback para navegadores
+    }
+  };
+
+  // Calcula el delay invertido basado en `initialPosition`
+  const calculateDelay = (position: string) => {
+    const invertedValue = 100 - parseInt(position.replace("%", ""));
+    return invertedValue * 0.01; // Convierte el porcentaje invertido en segundos
+  };
+
+  const animationDelay = calculateDelay(initialPosition);
+
   return (
     <motion.div
       className={`${background} rounded-t-3xl p-6 shadow-[rgba(0,0,0,0.55)_-2px_-2px_10px_-2px] absolute w-full`}
-      style={{ top: initialPosition }}
       onClick={toggleCard}
       animate={{
         top: isExpanded ? expandedPosition : initialPosition,
         height: isExpanded ? expandedHeight : initialHeight,
       }}
       initial={{
-        top: initialPosition,
+        top: "100%", // Empieza fuera de la pantalla (abajo)
         height: initialHeight,
       }}
       transition={{
-        duration: 0.4,
-        ease: "easeInOut",
+        top: {
+          duration: 0.6,
+          ease: "easeOut",
+          delay: isInitialAnimationDone ? 0 : animationDelay, // Aplica delay solo en la animación inicial
+        },
+        height: { duration: 0.4, ease: "easeInOut" },
+      }}
+      onAnimationComplete={() => {
+        if (!isInitialAnimationDone) {
+          setIsInitialAnimationDone(true); // Marca como completada la animación inicial
+          triggerHapticFeedback(); // Vibra al finalizar la animación de entrada
+        }
       }}
     >
       <h1 className={`${text} text-lg font-semibold`}>{phrase}</h1>

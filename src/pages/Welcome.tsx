@@ -1,8 +1,7 @@
-import { IonContent, IonPage } from "@ionic/react";
-import "./Welcome.css";
-import { useHistory } from "react-router";
-import { useEffect, useState } from "react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
+import "./Welcome.css";
 
 const Welcome: React.FC = () => {
   const welcomeTexts = [
@@ -12,7 +11,7 @@ const Welcome: React.FC = () => {
   ];
   const [welcomeText, setWelcomeText] = useState(welcomeTexts[0]);
   const [textIndex, setTextIndex] = useState(0); // Índice del texto actual
-  const navigate = useHistory();
+  const navigate = useIonRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,7 +51,7 @@ const Welcome: React.FC = () => {
           {/* Botón */}
           <button
             className="continue-button px-10 py-2 text-white rounded-full"
-            onClick={() => navigate.push("/languages")}
+            onClick={() => navigate.push("/languages", "forward")}
           >
             Continue
           </button>

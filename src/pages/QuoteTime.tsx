@@ -1,13 +1,13 @@
-import { IonContent, IonPage } from "@ionic/react";
-import { useHistory } from "react-router";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./QuoteTime.css";
 
-const QuoteTime: React.FC = () => {
-  const navigate = useHistory();
+const QuoteTime = ({ backTo }: { backTo: string }) => {
+  const navigate = useIonRouter();
 
   const handleTimeChange = (time: string) => {
     localStorage.setItem("time", time);
-    navigate.push("/quoteTopics");
+    if (backTo) navigate.push(backTo, "back");
+    else navigate.push("/quoteTopics", "forward");
   };
 
   return (
@@ -31,13 +31,22 @@ const QuoteTime: React.FC = () => {
 
           {/* Botones de horario */}
           <div className="buttons-container flex flex-col gap-4 mt-12 pb-6">
-            <button className="time-button" onClick={() => handleTimeChange("6")}>
+            <button
+              className="time-button"
+              onClick={() => handleTimeChange("6")}
+            >
               6:00 AM
             </button>
-            <button className="time-button" onClick={() => handleTimeChange("12")}>
+            <button
+              className="time-button"
+              onClick={() => handleTimeChange("12")}
+            >
               12:00 PM
             </button>
-            <button className="time-button" onClick={() => handleTimeChange("18")}>
+            <button
+              className="time-button"
+              onClick={() => handleTimeChange("18")}
+            >
               6:00 PM
             </button>
           </div>

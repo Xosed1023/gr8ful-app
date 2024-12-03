@@ -1,6 +1,5 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";
 
@@ -11,10 +10,10 @@ const Gender: React.FC = () => {
   const [title, setTitle] = useState(["I", "identify", "as"]);
   const [options, setOptions] = useState(["Woman", "Man"]);
 
-  const navigate = useHistory();
+  const navigate = useIonRouter();
   const handleGenderChange = (gender: string) => {
     localStorage.setItem("gender", gender);
-    navigate.push("/quoteTime");
+    navigate.push("/quoteTime", "forward");
   };
 
   useEffect(() => {

@@ -12,26 +12,26 @@ const colorConfig = {
   [CardColors.WOMAN_BLUE]: {
     background: "bg-sky-500",
     text: "text-sky-900",
-    initialPosition: "32%",
-    initialHeight: "68%",
-    expandedPosition: "0%",
-    expandedHeight: "100%",
+    initialPosition: "30vh", // Cambiado a vh para ser relativo al tamaño del viewport
+    initialHeight: "70vh", // Altura relativa
+    expandedPosition: "0vh",
+    expandedHeight: "100vh",
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-violet-400",
     text: "text-purple-900",
-    initialPosition: "50%",
-    initialHeight: "50%",
-    expandedPosition: "18%",
-    expandedHeight: "82%",
+    initialPosition: "50vh",
+    initialHeight: "50vh",
+    expandedPosition: "10vh",
+    expandedHeight: "90vh",
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-violet-300",
     text: "text-indigo-900",
-    initialPosition: "68%",
-    initialHeight: "31%",
-    expandedPosition: "36%",
-    expandedHeight: "64%",
+    initialPosition: "70vh",
+    initialHeight: "30vh",
+    expandedPosition: "20vh",
+    expandedHeight: "80vh",
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-sky-500",
@@ -63,8 +63,9 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
 
-  const toggleCard = () => {
+  const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
+    await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
   const { background, text, initialPosition, initialHeight, expandedPosition, expandedHeight } =
@@ -100,7 +101,7 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
       }}
       transition={{
         top: {
-          duration: 0.6,
+          duration: 0.4,
           ease: "easeOut",
           delay: isInitialAnimationDone ? 0 : animationDelay, // Aplica delay solo en la animación inicial
         },

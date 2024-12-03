@@ -1,16 +1,5 @@
-import {
-  IonContent,
-  IonIcon,
-  IonPage,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-} from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-import { settings, sync } from "ionicons/icons";
+import { IonContent, IonPage } from "@ionic/react";
 import { useEffect, useState } from "react";
-import { Route } from "react-router";
 import CardsContainer from "../components/home/CardsContainer";
 import Greetings from "../components/home/Greetings";
 import { Phrase } from "../models/Phrase";
@@ -21,7 +10,6 @@ import {
   initDB,
 } from "../persistence/IndexedDBService";
 import "./Home.css";
-import Tab3 from "./QuoteTopics";
 
 const Home = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
@@ -51,7 +39,7 @@ const Home = () => {
 
   return (
     <IonPage className="overflow-hidden">
-      <IonContent fullscreen className="overflow-hidden">
+      <IonContent fullscreen>
         <div className="backgroundHome flex flex-col overflow-hidden h-4/5">
           <Greetings />
           {phrase && (

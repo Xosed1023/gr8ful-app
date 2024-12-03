@@ -1,9 +1,6 @@
-import {
-  IonApp,
-  setupIonicReact
-} from "@ionic/react";
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useHistory } from "react-router-dom";
 import { initialData } from "./persistence/initialData";
 import "./tailwind.css";
 
@@ -36,15 +33,14 @@ import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
 import { useEffect } from "react";
-import Gender from './pages/Gender';
+import Gender from "./pages/Gender";
 import Home from "./pages/Home";
-import Languages from './pages/Languages';
-import LoadingScreen from './pages/LoadingScreen';
+import Languages from "./pages/Languages";
+import LoadingScreen from "./pages/LoadingScreen";
 import MainHome from "./pages/MainHome";
-import QuoteTime from './pages/QuoteTime';
-import QuoteTopics from './pages/QuoteTopics';
-import Settings from "./pages/Settings";
-import UserName from './pages/UserName';
+import QuoteTime from "./pages/QuoteTime";
+import QuoteTopics from "./pages/QuoteTopics";
+import UserName from "./pages/UserName";
 import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
@@ -61,27 +57,31 @@ const App: React.FC = () => {
 
   const loadInitialData = async () => {
     // Leer el json inicial y cargarlo en la base de datos
-    if (localStorage.getItem("firstTime") === null) {
-      console.log("Cargando datos iniciales por ser primera vez");
+    if (localStorage.getItem("gr8fulFirstTime") === null) {
       await addPhrasesBatch(initialData);
       localStorage.setItem("gr8fulFirstTime", "true");
+    } else {
+      console.log("No se cargaron las frases iniciales");
     }
   };
 
   return (
     <IonApp>
       <IonReactRouter>
-        <Route exact path="/" component={Welcome} />
-        <Route exact path="/mainHome" component={MainHome} />
-        <Route exact path="/home" component={Home} />
-        <Route exact path="/languages" component={Languages} />
-        <Route exact path="/gender" component={Gender} />
-        <Route exact path="/quoteTime" component={QuoteTime} />
-        <Route exact path="/quoteTopics" component={QuoteTopics} />
-        <Route exact path="/userName" component={UserName} />
-        <Route exact path="/loadingScreen" component={LoadingScreen} />
-        <Route exact path="/settings" component={Settings} />
-        <Redirect from="*" to="/"></Redirect>
+        <IonRouterOutlet>
+          <Route exact path="/" component={Welcome} />
+          <Route exact path="/languages" component={Languages} />
+          <Route exact path="/gender" component={Gender} />
+          <Route exact path="/quoteTime" component={QuoteTime} />
+          <Route exact path="/quoteTopics" component={QuoteTopics} />
+          <Route exact path="/userName" component={UserName} />
+          <Route exact path="/loadingScreen" component={LoadingScreen} />
+          <Route exact path="/mainHome" component={MainHome} />
+          <Route exact path="/tabs/home" component={Home} />
+          <Route>
+            <Redirect to="/" />
+          </Route>
+        </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
   );

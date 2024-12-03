@@ -1,0 +1,18 @@
+* {
+  font-family: 'Montserrat' !important;
+}
+
+ion-button {
+  --background: transparent;
+  --color: #010326;
+
+  --border-radius: 25px;
+  --border-color: #010326;
+  --border-style: solid;
+  --border-width: 1px;
+
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  text-transform: none;
+  font-size: .9rem;
+}

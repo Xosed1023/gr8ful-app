@@ -1,13 +1,13 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./Languages.css";
-import { useHistory } from "react-router";
 
-const Languages: React.FC = () => {
-  const navigate = useHistory();
+const Languages = ({backTo}: {backTo: string}) => {
+  const navigate = useIonRouter();
 
   const handleLanguageChange = (language: string) => {
     localStorage.setItem("language", language);
-    navigate.push("/gender");
+    if (backTo) navigate.push(backTo, "back");
+    else navigate.push("/gender", "forward");
   };
 
   return (

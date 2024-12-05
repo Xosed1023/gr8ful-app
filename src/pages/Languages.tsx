@@ -1,7 +1,7 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./Languages.css";
 
-const Languages = ({backTo}: {backTo: string}) => {
+const Languages = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
 
   const handleLanguageChange = (language: string) => {
@@ -15,11 +15,13 @@ const Languages = ({backTo}: {backTo: string}) => {
       <IonContent fullscreen>
         <div className="background flex flex-col items-center justify-center min-h-screen">
           {/* Puntos superiores */}
-          <img
-            src="./step1.svg"
-            alt="Progress dots"
-            className="dots1 absolute top-20"
-          />
+          {backTo === undefined &&
+            <img
+              src="./step1.svg"
+              alt="Progress dots"
+              className="dots1 absolute top-20"
+            />
+          }
 
           {/* Idiomas */}
           <div className="buttons-container flex flex-col items-center gap-8 mt-16">

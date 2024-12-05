@@ -1,7 +1,8 @@
-import { IonContent, IonPage, useIonRouter } from "@ionic/react";
+import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 const Gender: React.FC = () => {
   const [userLanguage, setUserLanguage] = useState(
@@ -19,15 +20,15 @@ const Gender: React.FC = () => {
   useEffect(() => {
     setTitle(
       AppGenderScreenLanguage.title[
-        userLanguage as keyof typeof AppGenderScreenLanguage.title
+      userLanguage as keyof typeof AppGenderScreenLanguage.title
       ]
     );
     setOptions([
       AppGenderScreenLanguage.options.woman[
-        userLanguage as keyof typeof AppGenderScreenLanguage.options.woman
+      userLanguage as keyof typeof AppGenderScreenLanguage.options.woman
       ],
       AppGenderScreenLanguage.options.man[
-        userLanguage as keyof typeof AppGenderScreenLanguage.options.man
+      userLanguage as keyof typeof AppGenderScreenLanguage.options.man
       ],
     ]);
   }, []);
@@ -52,18 +53,26 @@ const Gender: React.FC = () => {
 
           {/* Botones de opciones */}
           <div className="buttons-container flex gap-4 mt-8">
-            <button
+            <IonButton
               className="option-button"
-              onClick={() => handleGenderChange("W")}
+              onClick={async () => {
+                handleGenderChange("W")
+                await Haptics.impact({ style: ImpactStyle.Medium });
+              }
+              }
             >
               {options[0]}
-            </button>
-            <button
+            </IonButton>
+            <IonButton
               className="option-button"
-              onClick={() => handleGenderChange("M")}
+              onClick={async () => {
+                handleGenderChange("M")
+                await Haptics.impact({ style: ImpactStyle.Medium });
+              }
+              }
             >
               {options[1]}
-            </button>
+            </IonButton>
           </div>
         </div>
       </IonContent>

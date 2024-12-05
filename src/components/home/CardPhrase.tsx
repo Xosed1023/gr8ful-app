@@ -65,6 +65,7 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
 
   const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
+    // Copiar esta línea para las vibraciones
     await Haptics.impact({ style: ImpactStyle.Medium });
   };
 

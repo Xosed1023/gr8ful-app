@@ -1,7 +1,8 @@
-import { IonContent, IonPage, useIonRouter } from "@ionic/react";
+import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import "./Welcome.css";
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 const Welcome: React.FC = () => {
   const welcomeTexts = [
@@ -49,12 +50,16 @@ const Welcome: React.FC = () => {
           </div>
 
           {/* Botón */}
-          <button
-            className="continue-button px-10 py-2 text-white rounded-full"
-            onClick={() => navigate.push("/languages", "forward")}
+          <IonButton
+            className='ionic-button'
+            onClick={async () => {
+              navigate.push("/languages", "forward")
+              await Haptics.impact({ style: ImpactStyle.Medium });
+            }
+            }
           >
             Continue
-          </button>
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>

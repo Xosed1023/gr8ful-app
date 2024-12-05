@@ -1,8 +1,32 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./QuoteTime.css";
+import { useEffect, useState } from "react";
+import { AppTimeScreenLanguage } from '../persistence/languages';
 
 const QuoteTime = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
+  const [userLanguage, setUserLanguage] = useState(
+    localStorage.getItem("language")
+  );
+  const [title, setTitle] = useState(["When should we send your daily", "quote?"]);
+  const [note, setNote] = useState(["*You can change this later in settings."]);
+
+  const handleGenderChange = (gender: string) => {
+    localStorage.setItem("gender", gender);
+    navigate.push("/quoteTime", "forward");
+  };
+
+  useEffect(() => {
+    setTitle(
+      AppTimeScreenLanguage.title[
+      userLanguage as keyof typeof AppTimeScreenLanguage.title
+      ]
+    );
+    setNote(
+      AppTimeScreenLanguage.note[
+      userLanguage as keyof typeof AppTimeScreenLanguage.note
+      ]);
+  }, []);
 
   const handleTimeChange = (time: string) => {
     localStorage.setItem("time", time);
@@ -10,23 +34,26 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
     else navigate.push("/quoteTopics", "forward");
   };
 
+  const backgroundClass =
+    localStorage.gender === "W" ? "background-woman" : "background-man";
+
   return (
     <IonPage>
       <IonContent fullscreen>
-        <div className="background-woman flex flex-col items-center justify-center min-h-screen">
+        <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
           {/* SVG de los puntos superiores */}
-          <img
-            src="./step4.svg"
-            alt="Progress dots"
-            className="dots1 absolute top-20"
-          />
+          {backTo === undefined &&
+            <img
+              src="./step4.svg"
+              alt="Progress dots"
+              className="dots1 absolute top-20"
+            />
+          }
 
           {/* Texto principal */}
           <div className="text-container flex flex-col items-center mt-12 px-16 pb-6 pt-6">
-            <p className="text-normal">
-              When should we send your daily{" "}
-              <span className="text-highlight">quote? *</span>
-            </p>
+            <p className="text-normal">{title[0]}</p>
+            <p className="text-highlight">{title[1]}</p>
           </div>
 
           {/* Botones de horario */}
@@ -52,11 +79,11 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
           </div>
 
           {/* Texto de nota */}
-          <div className="note-container mt-8 text-center px-20">
-            <p className="text-note">
-              * You can change this later in settings.
-            </p>
-          </div>
+          {backTo === undefined &&
+            <div className="note-container mt-8 text-center px-20">
+              <p className="text-note">{note[0]}</p>
+            </div>
+          }
         </div>
       </IonContent>
     </IonPage>
@@ -64,3 +91,4 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
 };
 
 export default QuoteTime;
+

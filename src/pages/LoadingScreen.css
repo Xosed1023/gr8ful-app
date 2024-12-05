@@ -1,18 +1,38 @@
+/* Fondo con ambos degradados */
 .background-waiting {
     background:
         linear-gradient(to top right,
             rgba(111, 54, 235, 0.1) 10%,
             rgba(111, 54, 235, 0) 20%,
             rgba(111, 54, 235, 0) 100%),
+        /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to bottom left,
             rgba(111, 54, 235, 0.1) 10%,
             rgba(111, 54, 235, 0) 20%,
             rgba(111, 54, 235, 0) 100%),
+        /* Color de fondo base */
         var(--background-color);
     height: 100vh;
     width: 100vw;
     font-family: 'Montserrat', sans-serif;
 }
+
+.loading-man {
+    background:
+        linear-gradient(to top right,
+            rgba(54, 181, 235, 0.2) 10%,
+            rgba(54, 166, 235, 0) 20%,
+            rgba(54, 166, 235, 0) 100%),
+        linear-gradient(to bottom left,
+            rgba(54, 166, 235, 0.2) 10%,
+            rgba(54, 160, 235, 0.137) 20%,
+            rgba(54, 187, 235, 0) 100%),
+        var(--background-color);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
 
 .text-container-loading {
     margin-top: 1rem;

@@ -7,23 +7,21 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import "./QuoteTopics.css";
-import { useHistory } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AppTopicsScreenLanguage } from '../persistence/languages';
+
 const QuoteTopics = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const topics = [
-    "Motivation",
-    "Love",
-    "Happiness",
-    "Success",
-    "Mindfulness",
-    "Humor",
-    "Creativity",
-    "Spirituality",
-    "Leadership",
-    "Investing",
-  ];
+  const [title, setTitle] = useState(["Choose the", "topics", "that matter to you the most"]);
+  const [note, setNote] = useState(["*We'll tailor your daily quotes to match your interests. Select as many topics as you like!"]);
+  const [topics, setTopics] = useState(["Motivation", "Love", "Happiness", "Success", "Mindfulness", "Humor", "Creativity", "Spirituality", "Leadership", "Investing"]);
+  const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
+  const [buttonText, setButtonText] = useState(["Next"]);
+
+  useEffect(() => {
+    console.log(backTo, "backTo")
+  }, []);
 
   const toggleTopic = (topic: string) => {
     setSelectedTopics((prev) =>
@@ -31,28 +29,52 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
     );
   };
 
+  useEffect(() => {
+    setTitle(
+      AppTopicsScreenLanguage.title[
+      userLanguage as keyof typeof AppTopicsScreenLanguage.title
+      ]
+    );
+    setNote(
+      AppTopicsScreenLanguage.note[
+      userLanguage as keyof typeof AppTopicsScreenLanguage.note
+      ]);
+    setTopics(
+      AppTopicsScreenLanguage.topics[
+      userLanguage as keyof typeof AppTopicsScreenLanguage.topics
+      ]);
+    setButtonText(
+      AppTopicsScreenLanguage.buttons[
+      userLanguage as keyof typeof AppTopicsScreenLanguage.buttons
+      ]);
+  }, []);
+
   const handleTopicsChange = () => {
     localStorage.setItem("topics", JSON.stringify(selectedTopics));
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/userName", "forward");
   };
 
+  const backgroundClass =
+    localStorage.gender === "W" ? "background-woman" : "background-man";
+
   return (
     <IonPage>
       <IonContent fullscreen>
-        <div className="background-woman flex flex-col items-center justify-center min-h-screen">
+        <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
           {/* SVG de los puntos superiores */}
-          <img
-            src="./step5.svg"
-            alt="Progress dots"
-            className="dots1 absolute top-20 mb-6"
-          />
+          {backTo === undefined &&
+            <img
+              src="./step5.svg"
+              alt="Progress dots"
+              className="dots1 absolute top-20 mb-6"
+            />
+          }
 
           {/* Texto principal */}
           <div className="text-container flex flex-col items-center mt-12 px-16 pb-4 pt-6">
             <p className="text-normal">
-              Choose the <span className="text-highlight">topics</span> that
-              matter to you most
+              {title[0]} <span className="text-highlight">{title[1]}</span> {title[2]}
             </p>
           </div>
 
@@ -61,9 +83,8 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
             {topics.map((topic, index) => (
               <button
                 key={index}
-                className={`topic-button ${
-                  selectedTopics.includes(topic) ? "selected" : ""
-                }`}
+                className={`topic-button ${selectedTopics.includes(topic) ? "selected" : ""
+                  }`}
                 onClick={() => toggleTopic(topic)}
               >
                 {topic}
@@ -74,20 +95,23 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
           {/* Botones de opciones */}
           <div className="action-container flex gap-4 mt-6 mb-4">
             <button
-              className="next-button mt-2 rounded-full"
+              className={`next-button mt-2 rounded-full ${selectedTopics.length === 0 ? "disabled" : ""
+                }`}
               onClick={() => handleTopicsChange()}
+              disabled={selectedTopics.length === 0}
             >
-              Next
+              {buttonText[0]}
             </button>
           </div>
 
           {/* Texto de nota */}
-          <div className="note-container-topics mt-2 text-center px-20 ">
-            <p className="text-note">
-              * We'll tailor your daily quotes to match your interests. Select
-              as many topics as you like!
-            </p>
-          </div>
+          {backTo === undefined &&
+            <div className="note-container-topics mt-2 text-center px-20 ">
+              <p className="text-note">
+                {note[0]}
+              </p>
+            </div>
+          }
         </div>
       </IonContent>
     </IonPage>

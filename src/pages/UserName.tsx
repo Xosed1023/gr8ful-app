@@ -67,7 +67,7 @@ const UserName = ({ backTo }: { backTo?: string }) => {
               className="name-input"
               placeholder={placeholder[0]}
               value={name}
-              maxLength={7} // Limita la longitud del input
+              maxLength={10}
               onChange={(e) => setName(e.target.value)}
             />
           </div>

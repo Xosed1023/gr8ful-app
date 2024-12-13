@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AppNameScreenLanguage } from '../persistence/languages';
 
 const UserName = ({ backTo }: { backTo?: string }) => {
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
   const [title, setTitle] = useState(["What's your", "name?"]);
   const [note, setNote] = useState(["*Your name will appear with your daily quotes for a personalized experience."]);

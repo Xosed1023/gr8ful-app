@@ -2,17 +2,13 @@
   font-family: 'Montserrat' !important;
 }
 
-ion-button {
-  --background: transparent;
-  --color: #010326;
+/* ion-button {
+  --color: #010326 !important;
+  --border-radius: 25px !important;
+  --border-color: #010326 !important;
+  --border-style: solid !important;
+  --border-width: 1px !important;
+  text-transform: none !important;
+  font-size: .9rem !important;
+} */
 
-  --border-radius: 25px;
-  --border-color: #010326;
-  --border-style: solid;
-  --border-width: 1px;
-
-  --padding-top: 10px;
-  --padding-bottom: 10px;
-  text-transform: none;
-  font-size: .9rem;
-}

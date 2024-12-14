@@ -19,10 +19,6 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
   const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
   const [buttonText, setButtonText] = useState(["Next"]);
 
-  useEffect(() => {
-    console.log(backTo, "backTo")
-  }, []);
-
   const toggleTopic = (topic: string) => {
     setSelectedTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]

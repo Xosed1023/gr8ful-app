@@ -1,3 +1,5 @@
+import { language } from "ionicons/icons"
+
 export const AppGenderScreenLanguage = {
   title: {
     es: ["Me", "identifico", "como"],
@@ -93,4 +95,47 @@ export const AppLoadingScreenLanguage = {
     en: ["Good things take time.", "Your quote is on its", "way!"],
     fr: ["Les bonnes choses prennent du temps.", "Votre citation est en", "chemin."]
   },
+}
+
+export const AppSetttingsScreenLanguage = {
+  title: {
+    es: ["Ajustes"],
+    en: ["Settings"],
+    fr: ["Paramètres"]
+  },
+  editNameButton: {
+    es: ["Editar nombre"],
+    en: ["Edit name"],
+    fr: ["Modifier le nom"]
+  },
+  languageButton: {
+    es: ["Idioma"],
+    en: ["Language"],
+    fr: ["Langue"]
+  },
+  TimeButton: {
+    es: ["Hora"],
+    en: ["Time"],
+    fr: ["Heure"]
+  },
+  topicsButton: {
+    es: ["Temas"],
+    en: ["Topics"],
+    fr: ["Sujets"]
+  },
+  pushNotificationsButton: {
+    es: ["Notificaciones Push"],
+    en: ["Push Notifications"],
+    fr: ["Notifications Push"]
+  },
+  darkThemeButton: {
+    es: ["Tema oscuro"],
+    en: ["Dark Theme"],
+    fr: ["Thème sombre"]
+  },
+  versionLabel: {
+    es: ["Versión"],
+    en: ["Version"],
+    fr: ["Version"]
+  }
 }

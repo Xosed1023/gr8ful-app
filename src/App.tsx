@@ -28,8 +28,8 @@ import "@ionic/react/css/text-transformation.css";
  */
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
-/* import '@ionic/react/css/palettes/dark.class.css'; */
-import "@ionic/react/css/palettes/dark.system.css";
+import '@ionic/react/css/palettes/dark.class.css';
+/* import "@ionic/react/css/palettes/dark.system.css"; */
 
 /* Theme variables */
 import { useEffect } from "react";

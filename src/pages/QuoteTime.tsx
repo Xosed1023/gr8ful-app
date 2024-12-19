@@ -2,6 +2,8 @@ import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./QuoteTime.css";
 import { useEffect, useState } from "react";
 import { AppTimeScreenLanguage } from '../persistence/languages';
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { IoArrowBack } from "react-icons/io5";
 
 const QuoteTime = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
@@ -28,10 +30,11 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
       ]);
   }, []);
 
-  const handleTimeChange = (time: string) => {
+  const handleTimeChange = async (time: string) => {
     localStorage.setItem("time", time);
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/quoteTopics", "forward");
+    await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
   const backgroundClass =
@@ -41,6 +44,14 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
     <IonPage>
       <IonContent fullscreen>
         <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
+          {/* Flecha de retroceso */}
+          <div className="absolute top-4 left-4">
+            <IoArrowBack
+              className="text-black text-3xl cursor-pointer"
+              onClick={() => navigate.push(backTo || "/gender", "back")}
+            />
+          </div>
+
           {/* SVG de los puntos superiores */}
           {backTo === undefined &&
             <img
@@ -91,4 +102,3 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
 };
 
 export default QuoteTime;
-

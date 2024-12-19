@@ -9,6 +9,7 @@ import {
 import "./QuoteTopics.css";
 import { useEffect, useState } from "react";
 import { AppTopicsScreenLanguage } from '../persistence/languages';
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 const QuoteTopics = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
@@ -19,10 +20,11 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
   const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
   const [buttonText, setButtonText] = useState(["Next"]);
 
-  const toggleTopic = (topic: string) => {
+  const toggleTopic = async (topic: string) => {
     setSelectedTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
     );
+    await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
   useEffect(() => {
@@ -45,10 +47,11 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
       ]);
   }, []);
 
-  const handleTopicsChange = () => {
+  const handleTopicsChange = async () => {
     localStorage.setItem("topics", JSON.stringify(selectedTopics));
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/userName", "forward");
+    await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
   const backgroundClass =

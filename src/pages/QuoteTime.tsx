@@ -2,6 +2,7 @@ import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./QuoteTime.css";
 import { useEffect, useState } from "react";
 import { AppTimeScreenLanguage } from '../persistence/languages';
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 const QuoteTime = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
@@ -28,10 +29,11 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
       ]);
   }, []);
 
-  const handleTimeChange = (time: string) => {
+  const handleTimeChange = async (time: string) => {
     localStorage.setItem("time", time);
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/quoteTopics", "forward");
+    await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
   const backgroundClass =

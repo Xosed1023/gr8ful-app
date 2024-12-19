@@ -2,7 +2,7 @@ import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./UserName.css";
 import { useEffect, useState } from "react";
 import { AppNameScreenLanguage } from '../persistence/languages';
-
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
@@ -12,11 +12,12 @@ const UserName = ({ backTo }: { backTo?: string }) => {
   const [button, setButton] = useState(["Finish"]);
   const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (name.trim() === "") return; // Evitar continuar si el nombre está vacío
     localStorage.setItem("name", name);
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/loadingScreen", "forward");
+    await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
   useEffect(() => {

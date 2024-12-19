@@ -10,6 +10,7 @@ import "./QuoteTopics.css";
 import { useEffect, useState } from "react";
 import { AppTopicsScreenLanguage } from '../persistence/languages';
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { IoArrowBack } from "react-icons/io5";
 
 const QuoteTopics = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
@@ -61,6 +62,14 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
     <IonPage>
       <IonContent fullscreen>
         <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
+          {/* Flecha de retroceso */}
+          <div className="absolute top-4 left-4">
+            <IoArrowBack
+              className="text-black text-3xl cursor-pointer"
+              onClick={() => navigate.push(backTo || "/quoteTime", "back")}
+            />
+          </div>
+
           {/* SVG de los puntos superiores */}
           {backTo === undefined &&
             <img

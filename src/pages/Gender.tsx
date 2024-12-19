@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { IoArrowBack } from "react-icons/io5";
 
 const Gender: React.FC = () => {
   const [userLanguage, setUserLanguage] = useState(
@@ -37,6 +38,14 @@ const Gender: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <div className="background flex flex-col items-center justify-center min-h-screen">
+          {/* Flecha de retroceso */}
+          <div className="absolute top-4 left-4">
+            <IoArrowBack
+              className="text-black text-3xl cursor-pointer"
+              onClick={() => navigate.push("/languages", "back")}
+            />
+          </div>
+
           {/* SVG de los puntos superiores */}
           <img
             src="./step2.svg"
@@ -58,8 +67,7 @@ const Gender: React.FC = () => {
               onClick={async () => {
                 handleGenderChange("W")
                 await Haptics.impact({ style: ImpactStyle.Medium });
-              }
-              }
+              }}
             >
               {options[0]}
             </IonButton>
@@ -68,8 +76,7 @@ const Gender: React.FC = () => {
               onClick={async () => {
                 handleGenderChange("M")
                 await Haptics.impact({ style: ImpactStyle.Medium });
-              }
-              }
+              }}
             >
               {options[1]}
             </IonButton>

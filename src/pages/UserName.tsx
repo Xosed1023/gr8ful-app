@@ -3,6 +3,8 @@ import "./UserName.css";
 import { useEffect, useState } from "react";
 import { AppNameScreenLanguage } from '../persistence/languages';
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { IoArrowBack } from "react-icons/io5"; // Importa el icono de flecha
+
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
@@ -47,6 +49,14 @@ const UserName = ({ backTo }: { backTo?: string }) => {
     <IonPage>
       <IonContent fullscreen>
         <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
+          {/* Flecha de retroceso */}
+          <div className="absolute top-4 left-4"> {/* Estilo para posicionar la flecha */}
+            <IoArrowBack
+              className="text-black text-3xl cursor-pointer" // Ajusta los estilos según sea necesario
+              onClick={() => navigate.goBack()} // Regresar a la pantalla anterior
+            />
+          </div>
+
           {/* Puntos superiores */}
           {backTo === undefined &&
             <img

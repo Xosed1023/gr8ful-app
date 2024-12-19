@@ -1,47 +1,48 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import CardsContainer from "../components/home/CardsContainer";
 import Greetings from "../components/home/Greetings";
 import { Phrase } from "../models/Phrase";
-import {
-  addOrUpdatePhrase,
-  getPhraseById,
-  getRandomPhrase,
-  initDB,
-} from "../persistence/IndexedDBService";
-import "./Home.css";
 
-const Home = () => {
-  const [phrase, setPhrase] = useState<Phrase | null>(null);
+import "./Home.css";
+import { AppHomeScreenLanguage } from "../persistence/languages";
+
+const Home = ({ phrase }: { phrase: Phrase }) => {
+  
+  const [greetingsText, setGreetingsText] = useState(["Hi"]);
+  const [inspirationText, setInspirationText] = useState([
+    "Here's some inspiration for your today!",
+  ]);
+  const [userLanguage, setUserLanguage] = useState(
+    localStorage.getItem("language")
+  );
+  const navigate = useIonRouter();
 
   useEffect(() => {
-    // Inicializar la base de datos
-    initDB().then(() => {
-      loadRandomPhrase();
-    });
-  }, []);
+    setUserLanguage(localStorage.getItem("language"));
+  }, [navigate]);
 
-  const loadRandomPhrase = async () => {
-    const randomPhrase = await getRandomPhrase();
-    if (randomPhrase) {
-      await updateHistoryDate(randomPhrase.id!);
-      setPhrase(randomPhrase);
-    }
-  };
-
-  const updateHistoryDate = async (id: number) => {
-    const phrase = await getPhraseById(id);
-    if (phrase) {
-      phrase.hasShown = true;
-      await addOrUpdatePhrase(phrase);
-    }
-  };
+  useEffect(() => {
+    setGreetingsText(
+      AppHomeScreenLanguage.greetings[
+        userLanguage as keyof typeof AppHomeScreenLanguage.greetings
+      ]
+    );
+    setInspirationText(
+      AppHomeScreenLanguage.inspirationText[
+        userLanguage as keyof typeof AppHomeScreenLanguage.inspirationText
+      ]
+    );
+  }, [userLanguage]);
 
   return (
     <IonPage className="overflow-hidden">
       <IonContent fullscreen>
         <div className="backgroundHome flex flex-col overflow-hidden h-4/5">
-          <Greetings />
+          <Greetings
+            greeting={greetingsText[0]}
+            inspiration={inspirationText[0]}
+          />
           {phrase && (
             <div className="flex flex-col items-center justify-center -mt-6">
               <CardsContainer phrase={phrase} />

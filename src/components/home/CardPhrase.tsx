@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { CardColors } from "../../models/CardColors";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { CardColors } from "../../models/CardColors";
 
 interface CardPhraseProps {
   phrase: string;
@@ -12,50 +12,50 @@ const colorConfig = {
   [CardColors.WOMAN_BLUE]: {
     background: "bg-sky-500",
     text: "text-sky-900",
-    initialPosition: "30vh", // Cambiado a vh para ser relativo al tamaño del viewport
-    initialHeight: "70vh", // Altura relativa
-    expandedPosition: "0vh",
-    expandedHeight: "100vh",
+    initialPosition: "35vh",
+    initialHeight: "65vh",
+    expandedHeight: "90vh",
+    expandedPosition: "10vh",
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-violet-400",
     text: "text-purple-900",
-    initialPosition: "50vh",
-    initialHeight: "50vh",
-    expandedPosition: "10vh",
-    expandedHeight: "90vh",
+    initialPosition: "53vh",
+    initialHeight: "47vh",
+    expandedHeight: "72vh",
+    expandedPosition: "28vh",
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-violet-300",
     text: "text-indigo-900",
     initialPosition: "70vh",
     initialHeight: "30vh",
-    expandedPosition: "20vh",
-    expandedHeight: "80vh",
+    expandedHeight: "54vh",
+    expandedPosition: "46vh",
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-sky-500",
     text: "text-sky-800",
-    initialPosition: "32%",
-    initialHeight: "68%",
-    expandedPosition: "10%",
-    expandedHeight: "90%",
+    initialPosition: "35vh",
+    initialHeight: "65vh",
+    expandedPosition: "10vh",
+    expandedHeight: "90vh",
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
     background: "bg-cyan-700",
     text: "text-sky-900",
-    initialPosition: "52%",
-    initialHeight: "48%",
-    expandedPosition: "10%",
-    expandedHeight: "90%",
+    initialPosition: "53vh",
+    initialHeight: "47vh",
+    expandedPosition: "10vh",
+    expandedHeight: "90vh",
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
     background: "bg-slate-400",
     text: "text-sky-900",
-    initialPosition: "72%",
-    initialHeight: "28%",
-    expandedPosition: "10%",
-    expandedHeight: "90%",
+    initialPosition: "70vh",
+    initialHeight: "30vh",
+    expandedPosition: "20vh",
+    expandedHeight: "80vh",
   },
 };
 
@@ -69,8 +69,14 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
     await Haptics.impact({ style: ImpactStyle.Medium });
   };
 
-  const { background, text, initialPosition, initialHeight, expandedPosition, expandedHeight } =
-    colorConfig[color];
+  const {
+    background,
+    text,
+    initialPosition,
+    initialHeight,
+    expandedPosition,
+    expandedHeight,
+  } = colorConfig[color];
 
   const triggerHapticFeedback = async () => {
     try {

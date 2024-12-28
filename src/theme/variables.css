@@ -12,7 +12,7 @@ http://ionicframework.com/docs/theming/ */
     --text-color: #000000;
     --primary-color: #000000;
     --secondary-color: #ffffff;
-    --button-hover: #EBDB36;
+    --button-hover: #ffffff;
 
     /* Colores para hombre */
     --male-text-light-color: #506A7B;
@@ -26,19 +26,17 @@ http://ionicframework.com/docs/theming/ */
     --ion-safe-area-top: 25px;
 }
 
-ion-button {
-    --background: #000000;
-    --background-hover: #3C91C7;
-    --background-activated: #3C91C7;
+.ionic-button {
+    background-color: #000000;
     height: 50px;
-    width: clamp(100px, 80%, 280px);
+    width: clamp(130px, 90%, 280px);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
     font-size: 18px;
     font-weight: 600;
     color: #ffffff;
-    border-radius: 60px;
+    border-radius: 130px;
 }
 
 .ionic-button:hover {
@@ -63,8 +61,6 @@ ion-button {
             rgba(111, 54, 235, 0) 100%),
         /* Color de fondo base */
         var(--background-color);
-    height: 100vh;
-    width: 100vw;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -78,8 +74,6 @@ ion-button {
             rgba(0, 217, 255, 0) 100%),
         /* Color de fondo base */
         var(--background-color);
-    height: 100vh;
-    width: 100vw;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -97,4 +91,49 @@ ion-toast.custom-toast::part(button) {
     border-left: 1px solid #d2d2d2;
     color: #030207;
     font-size: 15px;
+}
+
+html {
+    --ion-safe-area-left: 25px;
+}
+
+ion-modal {
+    --ion-safe-area-top: 0;
+}
+
+/* Fondo ajustado para cubrir toda el área desplazable */
+.background-woman,
+.background-man {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Contenedor general del contenido */
+.scroll-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* Contenedor principal */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    align-self: center;
 }

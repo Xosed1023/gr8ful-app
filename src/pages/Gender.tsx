@@ -62,24 +62,24 @@ const Gender: React.FC = () => {
 
           {/* Botones de opciones */}
           <div className="buttons-container flex gap-4 mt-8">
-            <IonButton
-              className="option-button"
+            <button
+              className="ionic-button "
               onClick={async () => {
                 handleGenderChange("W")
                 await Haptics.impact({ style: ImpactStyle.Medium });
               }}
             >
               {options[0]}
-            </IonButton>
-            <IonButton
-              className="option-button"
+            </button>
+            <button
+              className="ionic-button"
               onClick={async () => {
                 handleGenderChange("M")
                 await Haptics.impact({ style: ImpactStyle.Medium });
               }}
             >
               {options[1]}
-            </IonButton>
+            </button>
           </div>
         </div>
       </IonContent>

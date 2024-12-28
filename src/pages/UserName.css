@@ -82,3 +82,50 @@
     width: 100vw;
     font-family: 'Montserrat', sans-serif;
 }
+
+
+/* Botón de continuar */
+.next-button {
+    margin-top: 10px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    width: clamp(170px, 90%, 280px);
+    border-radius: 50px;
+    /* Limita el ancho máximo */
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Botón de continuar - Mujer */
+.next-button.woman-button {
+    background-color: var(--woman-vibrant-purple);
+    color: white;
+}
+
+.next-button.woman-button:hover:not(.disabled) {
+    background-color: rgb(217, 172, 253);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+/* Botón de continuar - Hombre */
+.next-button.man-button {
+    background-color: #3C91C7;
+    color: white;
+}
+
+.next-button.man-button:hover:not(.disabled) {
+    background-color: #12324a;
+    color: #ffffff;
+}
+
+/* Botón deshabilitado */
+.next-button.disabled {
+    background-color: #d3d3d3;
+    color: #a1a1a1;
+    pointer-events: none;
+    cursor: not-allowed;
+}

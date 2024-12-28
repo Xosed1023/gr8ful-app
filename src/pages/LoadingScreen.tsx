@@ -46,7 +46,6 @@ const LoadingScreen: React.FC = () => {
                 src="./feather.svg"
                 alt="Feather"
                 className="feather animate-feather"
-                onClick={() => navigate.push("/mainHome", "forward")}
               />
             )}
           </div>

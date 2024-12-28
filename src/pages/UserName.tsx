@@ -15,11 +15,14 @@ const UserName = ({ backTo }: { backTo?: string }) => {
   const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
 
   const handleFinish = async () => {
-    if (name.trim() === "") return; // Evitar continuar si el nombre está vacío
+    if (name.trim() === "") return;
     localStorage.setItem("name", name);
-    if (backTo) navigate.push(backTo, "back");
-    else navigate.push("/loadingScreen", "forward");
     await Haptics.impact({ style: ImpactStyle.Medium });
+    navigate.push("/loadingScreen", "forward");
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setTimeout(() => {
+      navigate.push("/mainHome", "forward");
+    }, 1000);
   };
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const UserName = ({ backTo }: { backTo?: string }) => {
       <IonContent fullscreen>
         <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
           {/* Flecha de retroceso */}
-          <div className="absolute top-4 left-4"> {/* Estilo para posicionar la flecha */}
+          <div className="absolute top-4 left-4">
             <IoArrowBack
               className="text-black text-3xl cursor-pointer" // Ajusta los estilos según sea necesario
               onClick={() => navigate.goBack()} // Regresar a la pantalla anterior
@@ -86,9 +89,11 @@ const UserName = ({ backTo }: { backTo?: string }) => {
           {/* Botones de opciones */}
           <div className="action-container flex gap-4 mt-8 pb-8">
             <button
-              className={`next-button mt-2 rounded-full ${name.trim() === "" ? "disabled" : ""}`}
+              className={`next-button mt-2 rounded-full ${localStorage.gender === "W" ? "woman-button" : "man-button"
+                } ${name.trim() === "" ? "disabled" : ""}`}
               onClick={handleFinish}
               disabled={name.trim() === ""}
+
             >
               {button[0]}
             </button>

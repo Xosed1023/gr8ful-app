@@ -1,41 +1,99 @@
 import {
+  IonAlert,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonPage,
   IonToggle,
+  useIonAlert,
   useIonRouter,
 } from "@ionic/react";
 import { alarmOutline, arrowForward, language, list } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import "./Settings.css";
-import { AppTimeScreenLanguage } from "../persistence/languages";
+import { AppSetttingsScreenLanguage } from "../persistence/languages";
 
 const Settings = () => {
   const navigate = useIonRouter();
   const [title, setTitle] = useState(["Settings"]);
+  const [changeNameBtnText, setChangeNameBtnText] = useState(["Edit name"]);
+  const [languageOptText, setLanguageOptText] = useState(["Language"]);
+  const [hourOptText, setHourOptText] = useState(["Time"]);
+  const [topicsOptText, setTopicsOptText] = useState(["Topics"]);
+  const [versionText, setVersionText] = useState(["Version"]);
+  const [pushNotificationsOptText, setPushNotificationsOptText] = useState([
+    "Push Notifications",
+  ]);
+  const [darkmodeOptText, setDarkmodeOptText] = useState(["Dark Mode"]);
   const [userLanguage, setUserLanguage] = useState(
     localStorage.getItem("language")
   );
+  const [presentAlert] = useIonAlert();
 
   useEffect(() => {
     document.documentElement.classList.toggle(
       "ion-palette-dark",
       localStorage.getItem("darkMode")?.toLowerCase?.() === "true"
     );
+  }, []);
 
+  useEffect(() => {
+    setUserLanguage(localStorage.getItem("language"));
+  }, [navigate]);
+
+  useEffect(() => {
     setTitle(
-      AppTimeScreenLanguage.title[
-        userLanguage as keyof typeof AppTimeScreenLanguage.title
+      AppSetttingsScreenLanguage.title[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.title
       ]
     );
-  }, []);
+
+    setChangeNameBtnText(
+      AppSetttingsScreenLanguage.editNameButton[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.editNameButton
+      ]
+    );
+
+    setLanguageOptText(
+      AppSetttingsScreenLanguage.languageButton[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.languageButton
+      ]
+    );
+
+    setHourOptText(
+      AppSetttingsScreenLanguage.TimeButton[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.TimeButton
+      ]
+    );
+
+    setTopicsOptText(
+      AppSetttingsScreenLanguage.topicsButton[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.topicsButton
+      ]
+    );
+    setPushNotificationsOptText(
+      AppSetttingsScreenLanguage.pushNotificationsButton[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.pushNotificationsButton
+      ]
+    );
+    setDarkmodeOptText(
+      AppSetttingsScreenLanguage.darkModeButton[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.darkModeButton
+      ]
+    );
+
+    setVersionText(
+      AppSetttingsScreenLanguage.versionLabel[
+        userLanguage as keyof typeof AppSetttingsScreenLanguage.versionLabel
+      ]
+    );
+  }, [userLanguage]);
 
   return (
     <IonPage className="bg-slate-900">
       <div className="bg-slate-900 h-1/5 flex items-center pl-10">
-        <h1 className="text-3xl font-bold text-white">Settings</h1>
+        <h1 className="text-3xl font-bold text-white">{title[0]}</h1>
       </div>
       <div
         className="bg-white rounded-t-3xl
@@ -47,7 +105,7 @@ const Settings = () => {
             className="mt-2 px-2 py-1 border-solid border border-slate-900 rounded-3xl text-sm"
             onClick={() => navigate.push("/userName", "root")}
           >
-            Edit name
+            {changeNameBtnText[0]}
           </button>
 
           <IonList inset={true} lines="none" className="w-full">
@@ -57,7 +115,7 @@ const Settings = () => {
                 slot="start"
                 icon={language}
               />
-              <IonLabel>Language</IonLabel>
+              <IonLabel>{languageOptText[0]}</IonLabel>
               <IonIcon
                 className="text-slate-900"
                 slot="end"
@@ -70,7 +128,7 @@ const Settings = () => {
                 slot="start"
                 icon={alarmOutline}
               />
-              <IonLabel>Time</IonLabel>
+              <IonLabel>{hourOptText[0]}</IonLabel>
               <IonIcon
                 className="text-slate-900"
                 slot="end"
@@ -79,7 +137,7 @@ const Settings = () => {
             </IonItem>
             <IonItem onClick={() => navigate.push("/quoteTopics", "forward")}>
               <IonIcon className="text-slate-900" slot="start" icon={list} />
-              <IonLabel>Topics</IonLabel>
+              <IonLabel>{topicsOptText[0]}</IonLabel>
               <IonIcon
                 className="text-slate-900"
                 slot="end"
@@ -87,7 +145,7 @@ const Settings = () => {
               />
             </IonItem>
             <IonItem>
-              <IonLabel>Push Notifications</IonLabel>
+              <IonLabel>{pushNotificationsOptText[0]}</IonLabel>
               <IonToggle
                 enableOnOffLabels={true}
                 color="tertiary"
@@ -102,11 +160,26 @@ const Settings = () => {
                     "pushNotifications",
                     e.detail.checked.toString()
                   );
+                  presentAlert({
+                    header: pushNotificationsOptText[0],
+                    message: "Para poder enviarte notificaciones push necesitamos algunos permisos.",
+                    buttons: [{
+                      text: "Cancelar",
+                      handler: () => {
+                        console.log("Cancelado");
+                      }
+                    },{
+                      text: "Permitir",
+                      handler: () => {
+                        console.log("Permitido");
+                      }
+                    }],
+                  });
                 }}
               />
             </IonItem>
             <IonItem>
-              <IonLabel>Tema Oscuro</IonLabel>
+              <IonLabel>{darkmodeOptText[0]}</IonLabel>
               <IonToggle
                 enableOnOffLabels={true}
                 color="tertiary"
@@ -126,7 +199,9 @@ const Settings = () => {
           </IonList>
         </div>
 
-        <p className="mb-2 text-xs">Version 1.0.0</p>
+        <p className="mb-2 text-xs">
+          {versionText[0]} {import.meta.env.VITE_VERSION_APP}
+        </p>
       </div>
     </IonPage>
   );

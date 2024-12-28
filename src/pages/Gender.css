@@ -1,51 +1,54 @@
 .text-container {
-    margin-top: 1rem;
-    font-size: 24px;
-    font-weight: 500;
-    text-align: center;
-    display: flex;
-    gap: 4px;
-    line-height: 1.2;
+  margin-top: 1rem;
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  gap: 4px;
+  line-height: 1.2;
 }
 
 .text-normal {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    color: var(--text-color);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .text-highlight {
-    color: var(--text-color);
-    font-family: "Playwrite DE SAS", cursive;
-    font-weight: 400;
-    font-weight: 700;
+  color: var(--text-color);
+  font-family: "Playwrite DE SAS", cursive;
+  font-weight: 400;
+  font-weight: 700;
 }
 
 .option-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    background-color: var(--text-color);
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
-    border: none;
-    border-radius: 20px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    text-align: center;
-    width: clamp(140px, 0%, 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background-color: var(--text-color);
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  width: clamp(140px, 0%, 140px);
 }
 
-
 .option-button:hover {
-    background-color: var(--button-hover);
-    color: #000000;
-    border: 2px solid #000000;
+  background-color: var(--button-hover);
+  color: #000000;
+  border: 2px solid #000000;
 }
 
 .option-button:active {
-    background-color: #000000;
-    color: #ffffff;
-    transform: scale(0.95);
+  background-color: var(--button-hover);
+  color: #000000;
+  transform: scale(0.95);
+}
+
+ion-button {
+  text-transform: none !important;
 }

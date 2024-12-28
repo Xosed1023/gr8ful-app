@@ -97,6 +97,19 @@ export const AppLoadingScreenLanguage = {
   },
 }
 
+export const AppHomeScreenLanguage = {
+  greetings: {
+    es: ["Hola"],
+    en: ["Hi"],
+    fr: ["Bonjour"]
+  },
+  inspirationText: {
+    es: ["Aquí tienes algo de inspiración para tu día!"],
+    en: ["Here's some inspiration for your today!"],
+    fr: ["Voici de l'inspiration pour votre jour!"]
+  }
+}
+
 export const AppSetttingsScreenLanguage = {
   title: {
     es: ["Ajustes"],
@@ -128,7 +141,7 @@ export const AppSetttingsScreenLanguage = {
     en: ["Push Notifications"],
     fr: ["Notifications Push"]
   },
-  darkThemeButton: {
+  darkModeButton: {
     es: ["Tema oscuro"],
     en: ["Dark Theme"],
     fr: ["Thème sombre"]

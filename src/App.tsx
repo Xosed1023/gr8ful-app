@@ -28,7 +28,7 @@ import "@ionic/react/css/text-transformation.css";
  */
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
-import '@ionic/react/css/palettes/dark.class.css';
+import "@ionic/react/css/palettes/dark.class.css";
 /* import "@ionic/react/css/palettes/dark.system.css"; */
 
 /* Theme variables */
@@ -76,8 +76,11 @@ const App: React.FC = () => {
           <Route exact path="/quoteTopics" component={QuoteTopics} />
           <Route exact path="/userName" component={UserName} />
           <Route exact path="/loadingScreen" component={LoadingScreen} />
-          <Route exact path="/mainHome" component={MainHome} />
-          <Route exact path="/tabs/home" component={Home} />
+          <Route
+            exact
+            path={["/mainHome", "/tabs/home"]}
+            component={MainHome}
+          />
           <Route>
             <Redirect to="/" />
           </Route>

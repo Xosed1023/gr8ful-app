@@ -29,8 +29,8 @@
 }
 
 .topic-button:active {
-    background-color: var(--button-hover);
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
     transform: scale(0.95);
 }
 
@@ -72,8 +72,8 @@
 
 .topic-button:hover,
 .topic-button.selected {
-    background-color: var(--button-hover);
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
     border: 2px solid #000000;
     transform: scale(0.95);
 }

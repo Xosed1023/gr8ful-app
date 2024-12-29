@@ -2,9 +2,12 @@ import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
+import { IonButton, IonChip, IonIcon, IonLabel } from "@ionic/react";
+import { bookmarkOutline, ellipsisHorizontal, save, share, shareSocialOutline } from "ionicons/icons";
+import { Phrase } from "../../models/Phrase";
 
 interface CardPhraseProps {
-  phrase: string;
+  phrase: Pick<Phrase, "content" | "type">;
   color: CardColors;
 }
 
@@ -34,24 +37,24 @@ const colorConfig = {
     expandedPosition: "46vh",
   },
   [CardColors.MAN_SKY_BLUE]: {
-    background: "bg-sky-500",
-    text: "text-sky-800",
+    background: "bg-[#61B2E4]",
+    text: "text-[#17537A]",
     initialPosition: "35vh",
     initialHeight: "65vh",
     expandedPosition: "10vh",
     expandedHeight: "90vh",
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
-    background: "bg-cyan-700",
-    text: "text-sky-900",
+    background: "bg-[#5A9ABE]",
+    text: "text-[#154C6B]",
     initialPosition: "53vh",
     initialHeight: "47vh",
     expandedPosition: "10vh",
     expandedHeight: "90vh",
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
-    background: "bg-slate-400",
-    text: "text-sky-900",
+    background: "bg-[#95C5DE]",
+    text: "text-[#0D4461]",
     initialPosition: "70vh",
     initialHeight: "30vh",
     expandedPosition: "20vh",
@@ -121,7 +124,28 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
         }
       }}
     >
-      <h1 className={`${text} text-lg font-semibold`}>{phrase}</h1>
+      <IonIcon icon={ellipsisHorizontal} className={`absolute top-3 right-6 text-xl ${text}`} />
+      <h1 className={`${text} text-lg font-medium mt-2`}>{phrase.content.es}</h1>
+      <div className="mt-2 flex justify-between items-center">
+        <IonChip className="text-sm italic">{phrase.type}</IonChip>
+        <div className="flex -space-x-2">
+          <IonButton shape="round" fill="clear" color="light" size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('Guardando frase...');
+          }}>
+            <IonIcon slot="icon-only" icon={bookmarkOutline}></IonIcon>
+          </IonButton>
+          <IonButton shape="round" fill="clear" color="light" size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('Compartiendo frase...');
+          }}>
+            <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>
+          </IonButton>
+        </div>
+      </div>
+
     </motion.div>
   );
 };

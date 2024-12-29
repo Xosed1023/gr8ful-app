@@ -11,13 +11,14 @@ import { useEffect, useState } from "react";
 import { AppTopicsScreenLanguage } from '../persistence/languages';
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { IoArrowBack } from "react-icons/io5";
+import { TypePhraseEnum } from "../models/TypePhraseEnum";
 
 const QuoteTopics = ({ backTo }: { backTo: string }) => {
   const navigate = useIonRouter();
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [title, setTitle] = useState(["Choose the", "topics", "that matter to you the most"]);
   const [note, setNote] = useState(["*We'll tailor your daily quotes to match your interests. Select as many topics as you like!"]);
-  const [topics, setTopics] = useState(["Motivation", "Love", "Happiness", "Success", "Mindfulness", "Humor", "Creativity", "Spirituality", "Leadership", "Investing"]);
+  const [topics, setTopics] = useState([TypePhraseEnum.CREATIVITY,  "Motivation", "Love", "Happiness", "Success", "Mindfulness", "Humor", "Creativity", "Spirituality", "Leadership", "Investing"]);
   const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
   const [buttonText, setButtonText] = useState(["Next"]);
 

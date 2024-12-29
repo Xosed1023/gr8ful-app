@@ -37,7 +37,8 @@ const MainHome = () => {
   }, []);
 
   const loadRandomPhrase = async () => {
-    const randomPhrase = await getRandomPhrase();
+    let topics = JSON.parse(localStorage.getItem("topics") || "[]");
+    const randomPhrase = await getRandomPhrase(topics);
     if (randomPhrase) {
       await updateHistoryDate(randomPhrase.id!);
       setPhrase(randomPhrase);
@@ -89,7 +90,7 @@ const MainHome = () => {
             render={() => <Redirect to="/tabs/home" />}
           />
         </IonRouterOutlet>
-        <IonTabBar slot="bottom" className="bg-slate-900 rounded-t-3xl">
+        <IonTabBar slot="bottom" className="bg-slate-900">
           <IonTabButton
             tab="home"
             href="/tabs/home"

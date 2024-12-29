@@ -1,64 +1,725 @@
 import { Phrase } from "../models/Phrase";
+import { TypePhraseEnum } from "../models/TypePhraseEnum";
 
 export const initialData: Phrase[] = [
   {
     id: 1,
     author: "Albert Einstein",
-    type: "inspiración",
+    type: TypePhraseEnum.MOTIVATION,
     content: {
       es: "La vida es como montar en bicicleta. Para mantener el equilibrio, debes seguir adelante.",
       en: "Life is like riding a bicycle. To keep your balance, you must keep moving.",
-      fr: "La vie, c'est comme faire du vélo. Pour garder l'équilibre, il faut avancer.",
+      fr: "La vie, c'est comme faire du vélo. Pour garder l'équilibre, il faut avancer."
     },
     isFavorite: false,
     hasShown: false
   },
   {
     id: 2,
-    author: "Maya Angelou",
-    type: "superación",
+    author: "Aristóteles",
+    type: TypePhraseEnum.HAPPINESS,
     content: {
-      es: "Puedes encontrar muchas derrotas, pero no debes ser derrotado.",
-      en: "You may encounter many defeats, but you must not be defeated.",
-      fr: "Vous pouvez rencontrer de nombreuses défaites, mais vous ne devez pas être vaincu.",
+      es: "La felicidad depende de nosotros mismos.",
+      en: "Happiness depends upon ourselves.",
+      fr: "Le bonheur dépend de nous-mêmes."
     },
     isFavorite: false,
     hasShown: false
   },
   {
     id: 3,
-    author: "Dalai Lama",
-    type: "alegría",
+    author: "Steve Jobs",
+    type: TypePhraseEnum.SUCCESS,
     content: {
-      es: "El propósito de nuestras vidas es ser felices.",
-      en: "The purpose of our lives is to be happy.",
-      fr: "Le but de nos vies est d'être heureux.",
+      es: "La única forma de hacer un gran trabajo es amar lo que haces.",
+      en: "The only way to do great work is to love what you do.",
+      fr: "La seule façon de faire du bon travail est d'aimer ce que vous faites."
     },
     isFavorite: false,
     hasShown: false
   },
   {
     id: 4,
-    author: "Nelson Mandela",
-    type: "superación",
+    author: "Rumi",
+    type: TypePhraseEnum.SPIRITUALITY,
     content: {
-      es: "Siempre parece imposible hasta que se hace.",
-      en: "It always seems impossible until it's done.",
-      fr: "Cela semble toujours impossible jusqu'à ce que ce soit fait.",
+      es: "No estás en el universo, eres el universo.",
+      en: "You are not in the universe; you are the universe.",
+      fr: "Vous n'êtes pas dans l'univers; vous êtes l'univers."
     },
     isFavorite: false,
     hasShown: false
   },
   {
     id: 5,
-    author: "Confucio",
-    type: "sabiduría",
+    author: "Mahatma Gandhi",
+    type: TypePhraseEnum.LEADERSHIP,
     content: {
-      es: "Elige un trabajo que te guste y no tendrás que trabajar ni un día de tu vida.",
-      en: "Choose a job you love, and you will never have to work a day in your life.",
-      fr: "Choisissez un travail que vous aimez, et vous n'aurez jamais à travailler un seul jour de votre vie.",
+      es: "Sé el cambio que quieres ver en el mundo.",
+      en: "Be the change you wish to see in the world.",
+      fr: "Soyez le changement que vous voulez voir dans le monde."
     },
     isFavorite: false,
     hasShown: false
   },
-];
+  {
+    id: 6,
+    author: "Pablo Neruda",
+    type: TypePhraseEnum.LOVE,
+    content: {
+      es: "En un beso, sabrás todo lo que he callado.",
+      en: "In a kiss, you will know everything I have kept silent.",
+      fr: "Dans un baiser, tu sauras tout ce que j'ai gardé silencieux."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 7,
+    author: "Dalai Lama",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "No vivas en el pasado, no sueñes con el futuro, concentra la mente en el momento presente.",
+      en: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+      fr: "Ne vis pas dans le passé, ne rêve pas du futur, concentre ton esprit sur le moment présent."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 8,
+    author: "Walt Disney",
+    type: TypePhraseEnum.CREATIVITY,
+    content: {
+      es: "La forma de empezar es dejar de hablar y comenzar a hacer.",
+      en: "The way to get started is to quit talking and begin doing.",
+      fr: "La façon de commencer est d'arrêter de parler et de commencer à faire."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 9,
+    author: "Benjamin Franklin",
+    type: TypePhraseEnum.INVESTMENT,
+    content: {
+      es: "Una inversión en conocimiento paga el mejor interés.",
+      en: "An investment in knowledge pays the best interest.",
+      fr: "Un investissement dans la connaissance rapporte le meilleur intérêt."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 10,
+    author: "Oscar Wilde",
+    type: TypePhraseEnum.HUMOR,
+    content: {
+      es: "Sé tú mismo; los demás ya están tomados.",
+      en: "Be yourself; everyone else is already taken.",
+      fr: "Soyez vous-même; tous les autres sont déjà pris."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 11,
+    author: "Confucio",
+    type: TypePhraseEnum.LEADERSHIP,
+    content: {
+      es: "Elige un trabajo que amas, y nunca tendrás que trabajar un día en tu vida.",
+      en: "Choose a job you love, and you will never have to work a day in your life.",
+      fr: "Choisissez un travail que vous aimez, et vous n'aurez jamais à travailler un seul jour de votre vie."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 12,
+    author: "C.S. Lewis",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "Nunca eres demasiado viejo para establecer otra meta o soñar un nuevo sueño.",
+      en: "You are never too old to set another goal or to dream a new dream.",
+      fr: "Vous n'êtes jamais trop vieux pour fixer un nouvel objectif ou rêver un nouveau rêve."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 13,
+    author: "Helen Keller",
+    type: TypePhraseEnum.HAPPINESS,
+    content: {
+      es: "La felicidad se logra a través del esfuerzo dedicado a una causa digna.",
+      en: "Happiness is achieved through dedication to a worthy cause.",
+      fr: "Le bonheur est atteint par le dévouement à une cause digne."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 14,
+    author: "Napoleón Hill",
+    type: TypePhraseEnum.SUCCESS,
+    content: {
+      es: "Lo que la mente del hombre puede concebir y creer, lo puede lograr.",
+      en: "Whatever the mind of man can conceive and believe, it can achieve.",
+      fr: "Tout ce que l'esprit de l'homme peut concevoir et croire, il peut le réaliser."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 15,
+    author: "Mark Twain",
+    type: TypePhraseEnum.HUMOR,
+    content: {
+      es: "El secreto para salir adelante es comenzar.",
+      en: "The secret of getting ahead is getting started.",
+      fr: "Le secret pour avancer est de commencer."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 16,
+    author: "Viktor Frankl",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "Cuando ya no podemos cambiar una situación, estamos desafiados a cambiarnos a nosotros mismos.",
+      en: "When we are no longer able to change a situation, we are challenged to change ourselves.",
+      fr: "Lorsque nous ne pouvons plus changer une situation, nous sommes mis au défi de nous changer nous-mêmes."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 17,
+    author: "Maya Angelou",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "No puedes controlar todos los eventos que te suceden, pero puedes decidir no ser reducido por ellos.",
+      en: "You may not control all the events that happen to you, but you can decide not to be reduced by them.",
+      fr: "Vous ne pouvez pas contrôler tous les événements qui vous arrivent, mais vous pouvez décider de ne pas être diminué par eux."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 18,
+    author: "J.K. Rowling",
+    type: TypePhraseEnum.CREATIVITY,
+    content: {
+      es: "La imaginación no solo nos hace inventar cosas, sino que nos hace mejores seres humanos.",
+      en: "Imagination not only helps us create things, but it also makes us better human beings.",
+      fr: "L'imagination ne nous aide pas seulement à créer des choses, elle nous rend aussi meilleurs en tant qu'êtres humains."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 19,
+    author: "Warren Buffett",
+    type: TypePhraseEnum.INVESTMENT,
+    content: {
+      es: "No ahorres lo que queda después de gastar; gasta lo que queda después de ahorrar.",
+      en: "Do not save what is left after spending; spend what is left after saving.",
+      fr: "Ne sauvegardez pas ce qui reste après avoir dépensé; dépensez ce qui reste après avoir économisé."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 20,
+    author: "Madre Teresa",
+    type: TypePhraseEnum.LOVE,
+    content: {
+      es: "No todos podemos hacer grandes cosas, pero podemos hacer pequeñas cosas con gran amor.",
+      en: "Not all of us can do great things, but we can do small things with great love.",
+      fr: "Nous ne pouvons pas tous faire de grandes choses, mais nous pouvons faire de petites choses avec beaucoup d'amour."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 21,
+    author: "Leonardo da Vinci",
+    type: TypePhraseEnum.CREATIVITY,
+    content: {
+      es: "La simplicidad es la máxima sofisticación.",
+      en: "Simplicity is the ultimate sophistication.",
+      fr: "La simplicité est la sophistication ultime."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 22,
+    author: "Epicteto",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "No es lo que te sucede, sino cómo reaccionas ante ello lo que importa.",
+      en: "It's not what happens to you, but how you react to it that matters.",
+      fr: "Ce n'est pas ce qui vous arrive, mais comment vous y réagissez qui compte."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 23,
+    author: "Eleanor Roosevelt",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "El futuro pertenece a quienes creen en la belleza de sus sueños.",
+      en: "The future belongs to those who believe in the beauty of their dreams.",
+      fr: "L'avenir appartient à ceux qui croient en la beauté de leurs rêves."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 24,
+    author: "Jim Rohn",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "O trabajas en tus sueños o alguien más te contratará para trabajar en los suyos.",
+      en: "Either you run the day, or the day runs you.",
+      fr: "Soit vous contrôlez la journée, soit la journée vous contrôle."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 25,
+    author: "Carl Jung",
+    type: TypePhraseEnum.SPIRITUALITY,
+    content: {
+      es: "Aquel que mira hacia afuera, sueña; quien mira hacia adentro, despierta.",
+      en: "He who looks outside, dreams; he who looks inside, awakens.",
+      fr: "Celui qui regarde dehors rêve; celui qui regarde à l'intérieur s'éveille."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 26,
+    author: "Zig Ziglar",
+    type: TypePhraseEnum.SUCCESS,
+    content: {
+      es: "No necesitas ser grandioso para empezar, pero necesitas empezar para ser grandioso.",
+      en: "You don't have to be great to start, but you have to start to be great.",
+      fr: "Vous n'avez pas besoin d'être génial pour commencer, mais vous devez commencer pour être génial."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 27,
+    author: "Audrey Hepburn",
+    type: TypePhraseEnum.LOVE,
+    content: {
+      es: "Para tener hermosos ojos, busca lo bueno en los demás; para tener hermosos labios, di palabras amables.",
+      en: "For beautiful eyes, look for the good in others; for beautiful lips, speak only words of kindness.",
+      fr: "Pour de beaux yeux, cherchez le bien chez les autres; pour de belles lèvres, ne prononcez que des mots de gentillesse."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 28,
+    author: "Nelson Mandela",
+    type: TypePhraseEnum.LEADERSHIP,
+    content: {
+      es: "Siempre parece imposible hasta que se hace.",
+      en: "It always seems impossible until it is done.",
+      fr: "Cela semble toujours impossible jusqu'à ce que ce soit fait."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 29,
+    author: "Lao Tse",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "Un viaje de mil millas comienza con un solo paso.",
+      en: "A journey of a thousand miles begins with a single step.",
+      fr: "Un voyage de mille miles commence par un seul pas."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 30,
+    author: "George Bernard Shaw",
+    type: TypePhraseEnum.HUMOR,
+    content: {
+      es: "No dejamos de jugar porque envejecemos; envejecemos porque dejamos de jugar.",
+      en: "We don't stop playing because we grow old; we grow old because we stop playing.",
+      fr: "Nous ne cessons pas de jouer parce que nous vieillissons; nous vieillissons parce que nous cessons de jouer."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 31,
+    author: "Friedrich Nietzsche",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "Aquel que tiene un porqué para vivir puede soportar casi cualquier cómo.",
+      en: "He who has a why to live can bear almost any how.",
+      fr: "Celui qui a un pourquoi pour vivre peut supporter presque n'importe quel comment."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 32,
+    author: "Henry Ford",
+    type: TypePhraseEnum.SUCCESS,
+    content: {
+      es: "El fracaso es simplemente la oportunidad de comenzar de nuevo, esta vez de forma más inteligente.",
+      en: "Failure is simply the opportunity to begin again, this time more intelligently.",
+      fr: "L'échec est simplement l'occasion de recommencer, cette fois plus intelligemment."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 33,
+    author: "Ralph Waldo Emerson",
+    type: TypePhraseEnum.HAPPINESS,
+    content: {
+      es: "La única manera de tener un amigo es ser uno.",
+      en: "The only way to have a friend is to be one.",
+      fr: "La seule façon d'avoir un ami est d'en être un."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 34,
+    author: "Simone de Beauvoir",
+    type: TypePhraseEnum.SPIRITUALITY,
+    content: {
+      es: "Vivir plenamente significa aceptar todo lo que nos rodea.",
+      en: "To live fully is to accept everything that surrounds us.",
+      fr: "Vivre pleinement, c'est accepter tout ce qui nous entoure."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 35,
+    author: "Les Brown",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "Apunta a la luna. Incluso si fallas, aterrizarás entre las estrellas.",
+      en: "Shoot for the moon. Even if you miss, you'll land among the stars.",
+      fr: "Visez la lune. Même si vous échouez, vous atterrirez parmi les étoiles."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 36,
+    author: "Johann Wolfgang von Goethe",
+    type: TypePhraseEnum.CREATIVITY,
+    content: {
+      es: "El talento se desarrolla en la soledad; el carácter se forma en el tumulto del mundo.",
+      en: "Talent develops in solitude; character is formed in the stormy billows of the world.",
+      fr: "Le talent se développe dans la solitude ; le caractère se forme dans les vagues tumultueuses du monde."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 37,
+    author: "Robin Sharma",
+    type: TypePhraseEnum.LEADERSHIP,
+    content: {
+      es: "Los líderes no nacen; se forman a través del esfuerzo y la experiencia.",
+      en: "Leaders are not born; they are forged through effort and experience.",
+      fr: "Les leaders ne naissent pas ; ils se forment par l'effort et l'expérience."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 38,
+    author: "Antoine de Saint-Exupéry",
+    type: TypePhraseEnum.LOVE,
+    content: {
+      es: "Amar no es mirarse el uno al otro, sino mirar juntos en la misma dirección.",
+      en: "Love does not consist in gazing at each other, but in looking outward together in the same direction.",
+      fr: "Aimer, ce n'est pas se regarder l'un l'autre, mais regarder ensemble dans la même direction."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 39,
+    author: "Peter Drucker",
+    type: TypePhraseEnum.INVESTMENT,
+    content: {
+      es: "El mejor modo de predecir el futuro es crearlo.",
+      en: "The best way to predict the future is to create it.",
+      fr: "La meilleure façon de prédire l'avenir est de le créer."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 40,
+    author: "Charlie Chaplin",
+    type: TypePhraseEnum.HUMOR,
+    content: {
+      es: "Un día sin reír es un día perdido.",
+      en: "A day without laughter is a day wasted.",
+      fr: "Un jour sans rire est un jour perdu."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 41,
+    author: "Bruce Lee",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "No reces por una vida fácil; reza por la fuerza para soportar una difícil.",
+      en: "Do not pray for an easy life; pray for the strength to endure a difficult one.",
+      fr: "Ne priez pas pour une vie facile ; priez pour la force d'en supporter une difficile."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 42,
+    author: "Marcel Proust",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "El verdadero viaje de descubrimiento no consiste en buscar nuevos paisajes, sino en tener nuevos ojos.",
+      en: "The real voyage of discovery consists not in seeking new landscapes, but in having new eyes.",
+      fr: "Le véritable voyage de découverte ne consiste pas à chercher de nouveaux paysages, mais à avoir de nouveaux yeux."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 43,
+    author: "Abraham Lincoln",
+    type: TypePhraseEnum.LEADERSHIP,
+    content: {
+      es: "La mejor manera de predecir tu futuro es crearlo tú mismo.",
+      en: "The best way to predict your future is to create it yourself.",
+      fr: "La meilleure façon de prédire votre avenir est de le créer vous-même."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 44,
+    author: "Florence Nightingale",
+    type: TypePhraseEnum.HAPPINESS,
+    content: {
+      es: "Vive tu vida mientras la tengas; vive de manera que cuando te vayas, nadie pueda decir que no viviste.",
+      en: "Live your life while you have it; live it so that when you leave, no one can say you did not live.",
+      fr: "Vivez votre vie tant que vous l'avez ; vivez-la de manière à ce que lorsque vous partez, personne ne puisse dire que vous n'avez pas vécu."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 45,
+    author: "Mahatma Gandhi",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "La fuerza no proviene de la capacidad física, sino de una voluntad indomable.",
+      en: "Strength does not come from physical capacity. It comes from an indomitable will.",
+      fr: "La force ne vient pas de la capacité physique, mais d'une volonté indomptable."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 46,
+    author: "Victor Hugo",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "El futuro tiene muchos nombres",
+      en: "The future has many names",
+      fr: "L'avenir a plusieurs noms "
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 47,
+    author: "Seneca",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "No es que tengamos poco tiempo, sino que perdemos mucho.",
+      en: "It is not that we have a short time to live, but that we waste much of it.",
+      fr: "Ce n'est pas que nous ayons peu de temps, mais que nous en perdons beaucoup."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 48,
+    author: "Coco Chanel",
+    type: TypePhraseEnum.SUCCESS,
+    content: {
+      es: "El acto más valiente es pensar por ti mismo. En voz alta.",
+      en: "The most courageous act is to think for yourself. Aloud.",
+      fr: "L'acte le plus courageux est de penser par soi-même. À voix haute."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 49,
+    author: "Teresa de Calcuta",
+    type: TypePhraseEnum.LOVE,
+    content: {
+      es: "No podemos hacer grandes cosas, solo cosas pequeñas con gran amor.",
+      en: "We cannot do great things, only small things with great love.",
+      fr: "Nous ne pouvons pas faire de grandes choses, seulement de petites choses avec un grand amour."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 50,
+    author: "Johann Sebastian Bach",
+    type: TypePhraseEnum.CREATIVITY,
+    content: {
+      es: "La música ayuda a no escuchar el silencio que hay dentro de nosotros.",
+      en: "Music helps not to hear the silence inside us.",
+      fr: "La musique aide à ne pas entendre le silence en nous."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 51,
+    author: "Wayne Dyer",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "Cuando cambias la forma en que miras las cosas, las cosas que miras cambian.",
+      en: "When you change the way you look at things, the things you look at change.",
+      fr: "Lorsque vous changez la façon dont vous regardez les choses, les choses que vous regardez changent."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 52,
+    author: "J.K. Rowling",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "Es imposible vivir sin fallar en algo, a menos que vivas tan cautelosamente que podrías no haber vivido en absoluto.",
+      en: "It is impossible to live without failing at something unless you live so cautiously that you might as well not have lived at all.",
+      fr: "Il est impossible de vivre sans échouer à quelque chose, à moins de vivre si prudemment que vous n'avez peut-être pas vécu du tout."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 53,
+    author: "Benjamin Disraeli",
+    type: TypePhraseEnum.LEADERSHIP,
+    content: {
+      es: "El hombre no está hecho para derrotas pequeñas; su espíritu está destinado a grandes cosas.",
+      en: "Man is not made for small defeats; his spirit is meant for great things.",
+      fr: "L'homme n'est pas fait pour de petites défaites ; son esprit est destiné à de grandes choses."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 54,
+    author: "John Maxwell",
+    type: TypePhraseEnum.LEADERSHIP,
+    content: {
+      es: "Un líder es alguien que conoce el camino, anda el camino y muestra el camino.",
+      en: "A leader is one who knows the way, goes the way, and shows the way.",
+      fr: "Un leader est celui qui connaît le chemin, suit le chemin et montre le chemin."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 55,
+    author: "Stephen Hawking",
+    type: TypePhraseEnum.HAPPINESS,
+    content: {
+      es: "La inteligencia es la habilidad de adaptarse al cambio.",
+      en: "Intelligence is the ability to adapt to change.",
+      fr: "L'intelligence est la capacité de s'adapter au changement."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 56,
+    author: "Aristóteles",
+    type: TypePhraseEnum.MINDFULNESS,
+    content: {
+      es: "Somos lo que hacemos repetidamente. La excelencia, entonces, no es un acto, sino un hábito.",
+      en: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.",
+      fr: "Nous sommes ce que nous faisons de manière répétée. L'excellence n'est donc pas un acte, mais une habitude."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 57,
+    author: "Paulo Coelho",
+    type: TypePhraseEnum.SPIRITUALITY,
+    content: {
+      es: "Cuando realmente quieres algo, todo el universo conspira para ayudarte a conseguirlo.",
+      en: "When you want something, all the universe conspires in helping you to achieve it.",
+      fr: "Quand vous voulez quelque chose, tout l'univers conspire à vous aider à l'obtenir."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 58,
+    author: "Marie Curie",
+    type: TypePhraseEnum.MOTIVATION,
+    content: {
+      es: "No temas a las dificultades, pues te están mostrando el camino.",
+      en: "Do not fear difficulties, for they are showing you the way.",
+      fr: "Ne craignez pas les difficultés, car elles vous montrent le chemin."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 59,
+    author: "Walt Whitman",
+    type: TypePhraseEnum.LOVE,
+    content: {
+      es: "No seas otra cosa que amor.",
+      en: "Be nothing but love.",
+      fr: "Ne soyez rien d'autre que l'amour."
+    },
+    isFavorite: false,
+    hasShown: false
+  },
+  {
+    id: 60,
+    author: "Mark Zuckerberg",
+    type: TypePhraseEnum.INVESTMENT,
+    content: {
+      es: "El mayor riesgo es no tomar ningún riesgo.",
+      en: "The biggest risk is not taking any risk.",
+      fr: "Le plus grand risque est de ne prendre aucun risque."
+    },
+    isFavorite: false,
+    hasShown: false
+  }
+]

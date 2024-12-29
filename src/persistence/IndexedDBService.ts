@@ -46,12 +46,24 @@ export async function toggleFavorite(id: number, isFavorite: boolean) {
   }
 }
 
-export async function getRandomPhrase(): Promise<Phrase | null> {
+export async function getRandomPhrase(typesToFilter: string[] = []): Promise<Phrase | null> {
   if (!db) throw new Error('Database not initialized');
   const phrases = await db.getAll(STORE_NAME);
   if (phrases.length === 0) return null;
 
+
+  // Se filtran por las frases que no se han mostrado
   let finalPhrases = phrases.filter(phrase => phrase.hasShown === false);
+  console.log("Frases sin mostrar: ", finalPhrases.length);
+
+  // Se filtran las frases por los topicos seleccinados
+  if(typesToFilter.length > 0) {
+    console.log({typesToFilter})
+    finalPhrases = finalPhrases.filter(phrase => typesToFilter.includes(phrase.type));
+    console.log("Frases con topicos de usuario: ", finalPhrases.length);
+  }
+
+  // Si se encuentra que las frases han sido mostradas todas se reinicia el atributo hasShown
   if (finalPhrases.length === 0) {
     phrases.forEach(phrase => {
       phrase.hasShown = false;

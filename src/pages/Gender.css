@@ -20,35 +20,3 @@
   font-weight: 400;
   font-weight: 700;
 }
-
-.option-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 20px;
-  background-color: var(--text-color);
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  border: none;
-  border-radius: 20px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-align: center;
-  width: clamp(140px, 0%, 140px);
-}
-
-.option-button:hover {
-  background-color: var(--button-hover);
-  color: #000000;
-  border: 2px solid #000000;
-}
-
-.option-button:active {
-  background-color: var(--button-hover);
-  color: #000000;
-  transform: scale(0.95);
-}
-
-ion-button {
-  text-transform: none !important;
-}

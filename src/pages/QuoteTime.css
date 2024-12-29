@@ -26,8 +26,8 @@
 }
 
 .time-button:active {
-    background-color: var(--button-hover);
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
     transform: scale(0.95);
 }
 

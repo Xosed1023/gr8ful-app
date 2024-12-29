@@ -50,7 +50,7 @@ const Welcome: React.FC = () => {
           </div>
 
           {/* Botón */}
-          <IonButton
+          <button
             className='ionic-button'
             onClick={async () => {
               navigate.push("/languages", "forward")
@@ -59,7 +59,7 @@ const Welcome: React.FC = () => {
             }
           >
             Continue
-          </IonButton>
+          </button>
         </div>
       </IonContent>
     </IonPage>

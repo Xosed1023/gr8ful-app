@@ -7,7 +7,7 @@
 }
 
 .time-button {
-    width: clamp(150px, 80%, 150px);
+    width: 100%;
     padding: 12px 16px;
     font-size: 18px;
     font-weight: 500;

@@ -29,37 +29,39 @@ const Welcome: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen>
-        <div className="background flex flex-col items-center justify-center min-h-screen">
-          {/* Logo */}
-          <img src="./logo.svg" alt="Gr8ful Logo" className="logo" />
+        <div className="safe-area">
+          <div className="background flex flex-col items-center justify-center min-h-screen">
+            {/* Logo */}
+            <img src="./logo.svg" alt="Gr8ful Logo" className="logo" />
 
-          {/* Descripción */}
-          <div className="text-container mb-6 pb-8 h-44">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={textIndex} // Cambia el componente cuando cambia el índice
-                className="description text-center"
-                initial={{ opacity: 0 }} // Estado inicial: invisible
-                animate={{ opacity: 1 }} // Estado final: visible
-                exit={{ opacity: 0 }} // Animación de salida
-                transition={{ duration: 0.8 }} // Duración de la animación
-              >
-                {welcomeText}
-              </motion.p>
-            </AnimatePresence>
+            {/* Descripción */}
+            <div className="text-container mb-6 pb-8 h-44">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={textIndex} // Cambia el componente cuando cambia el índice
+                  className="description text-center"
+                  initial={{ opacity: 0 }} // Estado inicial: invisible
+                  animate={{ opacity: 1 }} // Estado final: visible
+                  exit={{ opacity: 0 }} // Animación de salida
+                  transition={{ duration: 0.8 }} // Duración de la animación
+                >
+                  {welcomeText}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+
+            {/* Botón */}
+            <button
+              className='ionic-button'
+              onClick={async () => {
+                navigate.push("/languages", "forward")
+                await Haptics.impact({ style: ImpactStyle.Medium });
+              }
+              }
+            >
+              Continue
+            </button>
           </div>
-
-          {/* Botón */}
-          <button
-            className='ionic-button'
-            onClick={async () => {
-              navigate.push("/languages", "forward")
-              await Haptics.impact({ style: ImpactStyle.Medium });
-            }
-            }
-          >
-            Continue
-          </button>
         </div>
       </IonContent>
     </IonPage>

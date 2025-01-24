@@ -1,9 +1,9 @@
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { IonButton, IonChip, IonIcon } from "@ionic/react";
 import { motion } from "framer-motion";
+import { bookmarkOutline, ellipsisHorizontal, shareSocialOutline } from "ionicons/icons";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
-import { IonButton, IonChip, IonIcon, IonLabel } from "@ionic/react";
-import { bookmarkOutline, ellipsisHorizontal, save, share, shareSocialOutline } from "ionicons/icons";
 import { Phrase } from "../../models/Phrase";
 
 interface CardPhraseProps {
@@ -129,14 +129,14 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
         <div className="flex -space-x-2">
-          <IonButton shape="round" fill="clear" color="light" size="small"
+          <IonButton shape="round" fill="clear" color="light" size="large"
           onClick={(e) => {
             e.stopPropagation();
             console.log('Guardando frase...');
           }}>
             <IonIcon slot="icon-only" icon={bookmarkOutline}></IonIcon>
           </IonButton>
-          <IonButton shape="round" fill="clear" color="light" size="small"
+          <IonButton shape="round" fill="clear" color="light" size="large"
           onClick={(e) => {
             e.stopPropagation();
             console.log('Compartiendo frase...');

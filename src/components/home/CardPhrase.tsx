@@ -30,6 +30,7 @@ const colorConfig = {
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
+    bottomAdSpace: 400
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-violet-400",
@@ -38,6 +39,7 @@ const colorConfig = {
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
+    bottomAdSpace: 250
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-violet-300",
@@ -46,30 +48,34 @@ const colorConfig = {
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
+    bottomAdSpace: 120
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-[#61B2E4]",
     text: "text-[#17537A]",
     initialPosition: "35vh",
     initialHeight: "65vh",
-    expandedPosition: "10vh",
     expandedHeight: "90vh",
+    expandedPosition: "10vh",
+    bottomAdSpace: 400
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
     background: "bg-[#5A9ABE]",
     text: "text-[#154C6B]",
     initialPosition: "53vh",
     initialHeight: "47vh",
-    expandedPosition: "10vh",
-    expandedHeight: "90vh",
+    expandedHeight: "72vh",
+    expandedPosition: "28vh",
+    bottomAdSpace: 250
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
     background: "bg-[#95C5DE]",
     text: "text-[#0D4461]",
     initialPosition: "70vh",
     initialHeight: "30vh",
-    expandedPosition: "20vh",
-    expandedHeight: "80vh",
+    expandedHeight: "54vh",
+    expandedPosition: "46vh",
+    bottomAdSpace: 120
   },
 };
 
@@ -78,33 +84,30 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
   const [present] = useIonToast();
 
-  useEffect(() => {
-    showBanner();
-  }, []);
+  const options: BannerAdOptions = {
+    adId: "ca-app-pub-6255300430204769/1831115123",
+    adSize: BannerAdSize.BANNER,
+    position: BannerAdPosition.BOTTOM_CENTER,
+    margin: colorConfig[color].bottomAdSpace,
+  };
+
+  const presentToast = (message: string) => {
+    present({
+      message,
+      duration: 10000,
+      position: "bottom",
+    });
+  };
 
   async function showBanner(): Promise<void> {
     AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-      presentToast("Banner Loaded");
+      //presentToast("Banner Loaded");
     });
 
     AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
       presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
     });
-
-    const presentToast = (message: string) => {
-      present({
-        message,
-        duration: 10000,
-        position: "bottom",
-      });
-    };
-
-    const options: BannerAdOptions = {
-      adId: "ca-app-pub-6255300430204769/4171974484",
-      adSize: BannerAdSize.BANNER,
-      position: BannerAdPosition.BOTTOM_CENTER,
-      margin: 0
-    };
+    
     AdMob.showBanner(options);
   }
 
@@ -112,6 +115,8 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
     setIsExpanded((prev) => !prev);
     // Copiar esta línea para las vibraciones
     await Haptics.impact({ style: ImpactStyle.Medium });
+    if (isExpanded) AdMob.hideBanner();
+    else showBanner();
   };
 
   const {

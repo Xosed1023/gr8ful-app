@@ -115,8 +115,8 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
   const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
     await Haptics.impact({ style: ImpactStyle.Medium });
-    if (isExpanded) showBanner();
-    else AdMob.hideBanner();
+    if (isExpanded) AdMob.hideBanner();
+    else showBanner();
   };
 
   const {

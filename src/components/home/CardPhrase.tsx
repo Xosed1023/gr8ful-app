@@ -1,25 +1,26 @@
+import {
+  AdMob,
+  BannerAdOptions,
+  BannerAdPluginEvents,
+  BannerAdPosition,
+  BannerAdSize,
+} from "@capacitor-community/admob";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { IonButton, IonChip, IonIcon, useIonToast } from "@ionic/react";
+import { IonButton, IonChip, IonIcon, isPlatform, useIonToast } from "@ionic/react";
 import { motion } from "framer-motion";
 import {
   bookmarkOutline,
   ellipsisHorizontal,
   shareSocialOutline,
 } from "ionicons/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
-import {
-  AdMob,
-  BannerAdPluginEvents,
-  BannerAdOptions,
-  BannerAdSize,
-  BannerAdPosition,
-} from "@capacitor-community/admob";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type">;
   color: CardColors;
+  adBannerId: string;
 }
 
 const colorConfig = {
@@ -30,7 +31,7 @@ const colorConfig = {
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
-    bottomAdSpace: 400
+    bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-violet-400",
@@ -39,7 +40,7 @@ const colorConfig = {
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
-    bottomAdSpace: 250
+    bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-violet-300",
@@ -48,7 +49,7 @@ const colorConfig = {
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
-    bottomAdSpace: 120
+    bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-[#61B2E4]",
@@ -57,7 +58,7 @@ const colorConfig = {
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
-    bottomAdSpace: 400
+    bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
     background: "bg-[#5A9ABE]",
@@ -66,7 +67,7 @@ const colorConfig = {
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
-    bottomAdSpace: 250
+    bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
     background: "bg-[#95C5DE]",
@@ -75,17 +76,17 @@ const colorConfig = {
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
-    bottomAdSpace: 120
+    bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
 };
 
-const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
+const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
   const [present] = useIonToast();
 
   const options: BannerAdOptions = {
-    adId: "ca-app-pub-6255300430204769/1831115123",
+    adId: adBannerId,
     adSize: BannerAdSize.BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
     margin: colorConfig[color].bottomAdSpace,
@@ -94,29 +95,28 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
   const presentToast = (message: string) => {
     present({
       message,
-      duration: 10000,
+      duration: 5000,
       position: "bottom",
     });
   };
 
   async function showBanner(): Promise<void> {
     AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-      //presentToast("Banner Loaded");
+      presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
     });
 
     AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
       presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
     });
-    
+
     AdMob.showBanner(options);
   }
 
   const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
-    // Copiar esta línea para las vibraciones
     await Haptics.impact({ style: ImpactStyle.Medium });
-    if (isExpanded) AdMob.hideBanner();
-    else showBanner();
+    if (isExpanded) showBanner();
+    else AdMob.hideBanner();
   };
 
   const {

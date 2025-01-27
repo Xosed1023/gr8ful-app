@@ -15,6 +15,10 @@ const Welcome: React.FC = () => {
   const navigate = useIonRouter();
 
   useEffect(() => {
+    if(localStorage.getItem("gr8fulFirstTime") === "true"){
+      navigate.push("/mainHome", "forward");
+    }
+
     const interval = setInterval(() => {
       setTextIndex((prevIndex) => (prevIndex + 1) % welcomeTexts.length);
     }, 4000);

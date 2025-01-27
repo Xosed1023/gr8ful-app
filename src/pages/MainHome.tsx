@@ -1,40 +1,59 @@
 import {
+  AdMob
+} from "@capacitor-community/admob";
+import {
   IonIcon,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs,
+  IonTabs
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { settings, sync } from "ionicons/icons";
-import { Redirect, Route } from "react-router";
-import Home from "./Home";
-import Settings from "./Settings";
-import Languages from "./Languages";
-import QuoteTime from "./QuoteTime";
-import QuoteTopics from "./QuoteTopics";
-import UserName from "./UserName";
 import { useEffect, useState } from "react";
+import { Redirect, Route } from "react-router";
+import { Phrase } from "../models/Phrase";
 import {
   addOrUpdatePhrase,
   getPhraseById,
   getRandomPhrase,
   initDB,
 } from "../persistence/IndexedDBService";
-import { Phrase } from "../models/Phrase";
+import Home from "./Home";
+import Languages from "./Languages";
+import QuoteTime from "./QuoteTime";
+import QuoteTopics from "./QuoteTopics";
+import Settings from "./Settings";
+import UserName from "./UserName";
 
 const MainHome = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('home');
+  const [activeTab, setActiveTab] = useState<string>("home");
   const [homeRefreshTrigger, setHomeRefreshTrigger] = useState<number>(0);
 
   useEffect(() => {
+    initializeAdMob();
+
     initDB().then(() => {
       if (phrase === null) {
         loadRandomPhrase();
       }
     });
   }, []);
+
+  
+
+  const initializeAdMob = async () => {
+    try {
+      await AdMob.initialize({
+        testingDevices: [],
+        initializeForTesting: true,
+      });
+      console.log("AdMob inicializado");
+    } catch (error) {
+      console.error("Error al inicializar AdMob", error);
+    }
+  };
 
   const loadRandomPhrase = async () => {
     let topics = JSON.parse(localStorage.getItem("topics") || "[]");
@@ -55,14 +74,13 @@ const MainHome = () => {
 
   const handleTabChange = (tab: string) => {
     // Detectar si estás tocando la tab "home" nuevamente
-    console.log('Tab de Home tocado nuevamente.');
-    if (tab === 'home' && activeTab === 'home') {
-      console.log('Tab de Home tocado nuevamente.');
-      setHomeRefreshTrigger(prev => prev + 1); // Actualizar estado
+    console.log("Tab de Home tocado nuevamente.");
+    if (tab === "home" && activeTab === "home") {
+      console.log("Tab de Home tocado nuevamente.");
+      setHomeRefreshTrigger((prev) => prev + 1); // Actualizar estado
     }
     setActiveTab(tab);
   };
-
 
   return (
     <IonReactRouter>
@@ -98,7 +116,7 @@ const MainHome = () => {
             onClick={() => {
               // TODO: Verificar que esté en el home para cargar nueva frase
               // TODO: Solicitar anuncio para nueva frase
-              loadRandomPhrase()
+              loadRandomPhrase();
             }}
           >
             <IonIcon aria-hidden="true" icon={sync} />

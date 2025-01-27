@@ -1,10 +1,21 @@
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { IonButton, IonChip, IonIcon } from "@ionic/react";
+import { IonButton, IonChip, IonIcon, useIonToast } from "@ionic/react";
 import { motion } from "framer-motion";
-import { bookmarkOutline, ellipsisHorizontal, shareSocialOutline } from "ionicons/icons";
-import { useState } from "react";
+import {
+  bookmarkOutline,
+  ellipsisHorizontal,
+  shareSocialOutline,
+} from "ionicons/icons";
+import { useEffect, useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
+import {
+  AdMob,
+  BannerAdPluginEvents,
+  BannerAdOptions,
+  BannerAdSize,
+  BannerAdPosition,
+} from "@capacitor-community/admob";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type">;
@@ -65,6 +76,37 @@ const colorConfig = {
 const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
+  const [present] = useIonToast();
+
+  useEffect(() => {
+    showBanner();
+  }, []);
+
+  async function showBanner(): Promise<void> {
+    AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
+      presentToast("Banner Loaded");
+    });
+
+    AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
+      presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
+    });
+
+    const presentToast = (message: string) => {
+      present({
+        message,
+        duration: 10000,
+        position: "bottom",
+      });
+    };
+
+    const options: BannerAdOptions = {
+      adId: "ca-app-pub-6255300430204769/4171974484",
+      adSize: BannerAdSize.BANNER,
+      position: BannerAdPosition.BOTTOM_CENTER,
+      margin: 0
+    };
+    AdMob.showBanner(options);
+  }
 
   const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
@@ -124,28 +166,42 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
         }
       }}
     >
-      <IonIcon icon={ellipsisHorizontal} className={`absolute top-4 right-6 text-xl ${text}`} />
-      <h1 className={`${text} text-lg font-medium mt-4 min-h-32`}>{phrase.content.es}</h1>
+      <IonIcon
+        icon={ellipsisHorizontal}
+        className={`absolute top-4 right-6 text-xl ${text}`}
+      />
+      <h1 className={`${text} text-lg font-medium mt-4 min-h-32`}>
+        {phrase.content.es}
+      </h1>
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
         <div className="flex -space-x-2">
-          <IonButton shape="round" fill="clear" color="light" size="large"
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log('Guardando frase...');
-          }}>
+          <IonButton
+            shape="round"
+            fill="clear"
+            color="light"
+            size="large"
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Guardando frase...");
+            }}
+          >
             <IonIcon slot="icon-only" icon={bookmarkOutline}></IonIcon>
           </IonButton>
-          <IonButton shape="round" fill="clear" color="light" size="large"
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log('Compartiendo frase...');
-          }}>
+          <IonButton
+            shape="round"
+            fill="clear"
+            color="light"
+            size="large"
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("Compartiendo frase...");
+            }}
+          >
             <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>
           </IonButton>
         </div>
       </div>
-
     </motion.div>
   );
 };

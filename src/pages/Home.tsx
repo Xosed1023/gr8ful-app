@@ -8,7 +8,7 @@ import "./Home.css";
 import { AppHomeScreenLanguage } from "../persistence/languages";
 
 const Home = ({ phrase }: { phrase: Phrase }) => {
-  
+
   const [greetingsText, setGreetingsText] = useState(["Hi"]);
   const [inspirationText, setInspirationText] = useState([
     "Here's some inspiration for your today!",
@@ -25,12 +25,12 @@ const Home = ({ phrase }: { phrase: Phrase }) => {
   useEffect(() => {
     setGreetingsText(
       AppHomeScreenLanguage.greetings[
-        userLanguage as keyof typeof AppHomeScreenLanguage.greetings
+      userLanguage as keyof typeof AppHomeScreenLanguage.greetings
       ]
     );
     setInspirationText(
       AppHomeScreenLanguage.inspirationText[
-        userLanguage as keyof typeof AppHomeScreenLanguage.inspirationText
+      userLanguage as keyof typeof AppHomeScreenLanguage.inspirationText
       ]
     );
   }, [userLanguage]);
@@ -44,9 +44,7 @@ const Home = ({ phrase }: { phrase: Phrase }) => {
             inspiration={inspirationText[0]}
           />
           {phrase && (
-            <div className="flex flex-col items-center justify-center -mt-6">
-              <CardsContainer phrase={phrase} />
-            </div>
+            <CardsContainer phrase={phrase} />
           )}
         </div>
       </IonContent>

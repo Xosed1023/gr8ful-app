@@ -124,8 +124,8 @@ const CardPhrase = ({ phrase, color }: CardPhraseProps) => {
         }
       }}
     >
-      <IonIcon icon={ellipsisHorizontal} className={`absolute top-3 right-6 text-xl ${text}`} />
-      <h1 className={`${text} text-lg font-medium mt-2`}>{phrase.content.es}</h1>
+      <IonIcon icon={ellipsisHorizontal} className={`absolute top-4 right-6 text-xl ${text}`} />
+      <h1 className={`${text} text-lg font-medium mt-4 min-h-32`}>{phrase.content.es}</h1>
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
         <div className="flex -space-x-2">

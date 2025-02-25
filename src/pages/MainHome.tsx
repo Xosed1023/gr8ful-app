@@ -1,12 +1,11 @@
-import {
-  AdMob
-} from "@capacitor-community/admob";
+import { AdMob } from "@capacitor-community/admob";
 import {
   IonIcon,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs
+  IonTabs,
+  useIonToast,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { settings, sync } from "ionicons/icons";
@@ -25,11 +24,18 @@ import QuoteTime from "./QuoteTime";
 import QuoteTopics from "./QuoteTopics";
 import Settings from "./Settings";
 import UserName from "./UserName";
+import {
+  RewardAdOptions,
+  AdLoadInfo,
+  RewardAdPluginEvents,
+  AdMobRewardItem,
+} from "@capacitor-community/admob";
 
 const MainHome = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
   const [activeTab, setActiveTab] = useState<string>("home");
   const [homeRefreshTrigger, setHomeRefreshTrigger] = useState<number>(0);
+  const [present] = useIonToast();
 
   useEffect(() => {
     initializeAdMob();
@@ -41,17 +47,52 @@ const MainHome = () => {
     });
   }, []);
 
-  
-
   const initializeAdMob = async () => {
     try {
       await AdMob.initialize({
         testingDevices: [],
         initializeForTesting: true,
       });
-      console.log("AdMob inicializado");
     } catch (error) {
       console.error("Error al inicializar AdMob", error);
+    }
+  };
+
+  const loadRandomPhraseWithAd = async () => {
+    present({
+      message: `lanzando rewarded`,
+      duration: 5000,
+      position: "bottom",
+    });
+    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+      present({
+        message: `Anuncio cargado ${JSON.stringify(info)}`,
+        duration: 5000,
+        position: "bottom",
+      });
+    });
+
+    AdMob.addListener(
+      RewardAdPluginEvents.Rewarded,
+      (rewardItem: AdMobRewardItem) => {
+        present({
+          message: `rewardItem: ${JSON.stringify(rewardItem)}`,
+          duration: 5000,
+          position: "bottom",
+        });
+      }
+    );
+
+    const options: RewardAdOptions = {
+      adId: import.meta.env.VITE_ANDROID_INTERSTICIAL_REWARDED,
+      isTesting: import.meta.env.VITE_IS_TESTING,
+    };
+
+    await AdMob.prepareRewardVideoAd(options);
+    const rewardItem = await AdMob.showRewardVideoAd();
+    if (rewardItem.amount > 0) {
+      // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
+      await loadRandomPhrase();
     }
   };
 
@@ -74,9 +115,7 @@ const MainHome = () => {
 
   const handleTabChange = (tab: string) => {
     // Detectar si estás tocando la tab "home" nuevamente
-    console.log("Tab de Home tocado nuevamente.");
     if (tab === "home" && activeTab === "home") {
-      console.log("Tab de Home tocado nuevamente.");
       setHomeRefreshTrigger((prev) => prev + 1); // Actualizar estado
     }
     setActiveTab(tab);
@@ -116,7 +155,7 @@ const MainHome = () => {
             onClick={() => {
               // TODO: Verificar que esté en el home para cargar nueva frase
               // TODO: Solicitar anuncio para nueva frase
-              loadRandomPhrase();
+              loadRandomPhraseWithAd();
             }}
           >
             <IonIcon aria-hidden="true" icon={sync} />

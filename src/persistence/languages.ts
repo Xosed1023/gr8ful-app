@@ -1,4 +1,11 @@
-import { language } from "ionicons/icons"
+type LanguageKeys = "es" | "en" | "fr";
+
+type AppTopicsScreenLanguageType = {
+  title: Record<LanguageKeys, string[]>;
+  note: Record<LanguageKeys, string[]>;
+  topics: Record<LanguageKeys, Topic[]>; // Aquí aseguramos que cada idioma sea un array de Topic
+  buttons: Record<LanguageKeys, string[]>;
+};
 
 export const AppGenderScreenLanguage = {
   title: {
@@ -33,7 +40,7 @@ export const AppTimeScreenLanguage = {
   },
 }
 
-export const AppTopicsScreenLanguage = {
+export const AppTopicsScreenLanguage: AppTopicsScreenLanguageType = {
   title: {
     es: ["Elige los", "temas", "que más te interesan"],
     en: ["Choose the", "topics", "that matter to you the most"],
@@ -45,9 +52,9 @@ export const AppTopicsScreenLanguage = {
     fr: ["*Nous adapterons vos citations quotidiennes à vos centres d'intérêt. Sélectionnez autant de sujets que vous le souhaitez!"]
   },
   topics: {
-    es: ["Motivación", "Amor", "Felicidad", "Éxito", "Conciencia plena", "Humor", "Creatividad", "Espiritualidad", "Liderazgo", "Inversión"],
-    en: ["Motivation", "Love", "Happiness", "Success", "Mindfulness", "Humor", "Creativity", "Spirituality", "Leadership", "Investing"],
-    fr: ["Motivation", "Amour", "Bonheur", "Succès", "Pleine conscience", "Humour", "Créativité", "Spiritualité", "Leadership", "Investissement"]
+    es: [{ key: "motivation", value: "Motivación" }, { key: "love", value: "Amor" }, { key: "happiness", value: "Felicidad" }, { key: "success", value: "Éxito" }, { key: "mindfulness", value: "Conciencia plena" }, { key: "humor", value: "Humor" }, { key: "creativity", value: "Creatividad" }, { key: "spirituality", value: "Espiritualidad" }, { key: "leadership", value: "Liderazgo" }, { key: "investing", value: "Inversión" }],
+    en: [{ key: "motivation", value: "Motivation" }, { key: "love", value: "Love" }, { key: "happiness", value: "Happiness" }, { key: "success", value: "Success" }, { key: "mindfulness", value: "Mindfulness" }, { key: "humor", value: "Humor" }, { key: "creativity", value: "Creativity" }, { key: "spirituality", value: "Spirituality" }, { key: "leadership", value: "Leadership" }, { key: "investing", value: "Investing" }],
+    fr: [{ key: "motivation", value: "Motivation" }, { key: "love", value: "Amour" }, { key: "happiness", value: "Bonheur" }, { key: "success", value: "Succès" }, { key: "mindfulness", value: "Pleine conscience" }, { key: "humor", value: "Humour" }, { key: "creativity", value: "Créativité" }, { key: "spirituality", value: "Spiritualité" }, { key: "leadership", value: "Leadership" }, { key: "investing", value: "Investissement" }]
   },
   buttons: {
     es: ["Continuar"],

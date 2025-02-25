@@ -1,0 +1,1 @@
+type Topic = { key: string; value: string };

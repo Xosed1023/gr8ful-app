@@ -90,6 +90,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
     adSize: BannerAdSize.BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
     margin: colorConfig[color].bottomAdSpace,
+    isTesting: import.meta.env.VITE_IS_TESTING,
   };
 
   const presentToast = (message: string) => {
@@ -102,7 +103,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
 
   async function showBanner(): Promise<void> {
     AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-      presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
+      // presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
     });
 
     AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
@@ -188,7 +189,6 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
             size="large"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("Guardando frase...");
             }}
           >
             <IonIcon slot="icon-only" icon={bookmarkOutline}></IonIcon>
@@ -200,7 +200,6 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
             size="large"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("Compartiendo frase...");
             }}
           >
             <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>

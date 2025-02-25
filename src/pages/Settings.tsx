@@ -162,23 +162,23 @@ const Settings = () => {
                   );
                   presentAlert({
                     header: pushNotificationsOptText[0],
-                    message: "Para poder enviarte notificaciones push necesitamos algunos permisos.",
-                    buttons: [{
-                      text: "Cancelar",
-                      handler: () => {
-                        console.log("Cancelado");
-                      }
-                    },{
-                      text: "Permitir",
-                      handler: () => {
-                        console.log("Permitido");
-                      }
-                    }],
+                    message:
+                      "Para poder enviarte notificaciones push necesitamos algunos permisos.",
+                    buttons: [
+                      {
+                        text: "Cancelar",
+                        handler: () => {},
+                      },
+                      {
+                        text: "Permitir",
+                        handler: () => {},
+                      },
+                    ],
                   });
                 }}
               />
             </IonItem>
-            <IonItem>
+            {/* <IonItem>
               <IonLabel>{darkmodeOptText[0]}</IonLabel>
               <IonToggle
                 enableOnOffLabels={true}
@@ -195,7 +195,7 @@ const Settings = () => {
                   );
                 }}
               />
-            </IonItem>
+            </IonItem> */}
           </IonList>
         </div>
 

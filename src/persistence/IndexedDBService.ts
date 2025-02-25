@@ -46,7 +46,7 @@ export async function toggleFavorite(id: number, isFavorite: boolean) {
   }
 }
 
-export async function getRandomPhrase(typesToFilter: string[] = []): Promise<Phrase | null> {
+export async function getRandomPhrase(typesToFilter: Topic[] = []): Promise<Phrase | null> {
   if (!db) throw new Error('Database not initialized');
   const phrases = await db.getAll(STORE_NAME);
   if (phrases.length === 0) return null;
@@ -54,13 +54,9 @@ export async function getRandomPhrase(typesToFilter: string[] = []): Promise<Phr
 
   // Se filtran por las frases que no se han mostrado
   let finalPhrases = phrases.filter(phrase => phrase.hasShown === false);
-  console.log("Frases sin mostrar: ", finalPhrases.length);
-
   // Se filtran las frases por los topicos seleccinados
   if(typesToFilter.length > 0) {
-    console.log({typesToFilter})
-    finalPhrases = finalPhrases.filter(phrase => typesToFilter.includes(phrase.type));
-    console.log("Frases con topicos de usuario: ", finalPhrases.length);
+    finalPhrases = finalPhrases.filter(phrase => typesToFilter.some(topic => topic.key.toLowerCase() === phrase.type.toLowerCase()));
   }
 
   // Si se encuentra que las frases han sido mostradas todas se reinicia el atributo hasShown

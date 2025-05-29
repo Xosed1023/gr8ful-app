@@ -29,3 +29,7 @@ yarn-error.log*
 
 # Optional eslint cache
 .eslintcache
+.qodo
+
+resources/ios/**/*
+resources/android/**/*

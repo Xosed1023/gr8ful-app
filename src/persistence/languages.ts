@@ -27,6 +27,14 @@ export const AppGenderScreenLanguage = {
   }
 }
 
+export const AppSelectLanguage = {
+  title: {
+    es: ["Selecciona", "tu", "idioma"],
+    en: ["Select", "your", "language"],
+    fr: ["Choisissez", "votre", "langue"]
+  }
+}
+
 export const AppTimeScreenLanguage = {
   title: {
     es: ["¿Cuándo deberíamos enviarte tu frase", "diaria?*"],

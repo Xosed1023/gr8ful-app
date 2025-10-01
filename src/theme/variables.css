@@ -1,2 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+    /* Colores predeterminados (neutros o genéricos) */
+    --background-color: #F8F6F6;
+    --text-color: #000000;
+    --primary-color: #000000;
+    --secondary-color: #ffffff;
+    --button-hover: #ffffff;
+
+    /* Colores para hombre */
+    --male-text-light-color: #506A7B;
+
+    /* Colores para mujer */
+    --woman-dark-purple: #19104C;
+    --woman-light-purple: #6C5997;
+    --woman-lighter-purple: #897DA4;
+    --woman-vibrant-purple: #6F36EB;
+
+    --ion-safe-area-top: 25px;
+}
+
+.ionic-button {
+    background-color: #000000;
+    height: 50px;
+    width: clamp(130px, 90%, 280px);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    border-radius: 130px;
+}
+
+.ionic-button:hover {
+    background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.ionic-button:active {
+    background-color: var(--button-hover);
+    color: #000000;
+    transform: scale(0.95);
+}
+
+/* Fondo mujer */
+.background-woman {
+    background:
+        /* Degradado púrpura de arriba hacia abajo */
+        linear-gradient(to top,
+            rgba(111, 54, 235, 0.1) 0.5%,
+            rgba(111, 54, 235, 0) 20%,
+            rgba(111, 54, 235, 0) 100%),
+        /* Color de fondo base */
+        var(--background-color);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Fondo hombre */
+.background-man {
+    background:
+        /* Degradado azul de abajo hacia arriba */
+        linear-gradient(to top,
+            rgba(0, 217, 255, 0.2) 1%,
+            rgba(0, 217, 255, 0) 20%,
+            rgba(0, 217, 255, 0) 100%),
+        /* Color de fondo base */
+        var(--background-color);
+    font-family: 'Montserrat', sans-serif;
+}
+
+ion-toast.custom-toast {
+    --background: #f4f4fa;
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: #4b4a50;
+}
+
+ion-toast.custom-toast::part(message) {
+    font-style: italic;
+}
+
+ion-toast.custom-toast::part(button) {
+    border-left: 1px solid #d2d2d2;
+    color: #030207;
+    font-size: 15px;
+}
+
+
+html {
+    --ion-safe-area-left: 25px;
+}
+
+ion-modal {
+    --ion-safe-area-top: 0;
+}
+
+/* Fondo ajustado para cubrir toda el área desplazable */
+.background-woman,
+.background-man {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Contenedor general del contenido */
+.scroll-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* Contenedor principal */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 16px;
+    text-align: center;
+    align-self: center;
+}
+
+* {
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+}
+
+.safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    box-sizing: border-box;
+    height: 100%;
+}
+
+html {
+    --ion-safe-area-left: 25px;
+}
+
+ion-modal {
+    --ion-safe-area-top: 0;
+}

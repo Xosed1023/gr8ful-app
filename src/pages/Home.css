@@ -1,0 +1,8 @@
+@import "../theme/variables.css";
+
+.backgroundHome {
+    background: var(--background-color);
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+    padding-top: var(--ion-safe-area-top);
+}

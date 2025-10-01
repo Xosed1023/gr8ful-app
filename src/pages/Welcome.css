@@ -1,0 +1,32 @@
+/* Fondo con ambos degradados */
+.background {
+    background:
+        /* Degradado azul de abajo hacia arriba */
+        linear-gradient(to top,
+            rgba(0, 217, 255, 0.2) 1%,
+            rgba(0, 217, 255, 0) 20%,
+            rgba(0, 217, 255, 0) 100%),
+        /* Degradado púrpura de arriba hacia abajo */
+        linear-gradient(to bottom,
+            rgba(111, 54, 235, 0.1) 0.5%,
+            rgba(111, 54, 235, 0) 20%,
+            rgba(111, 54, 235, 0) 100%),
+        /* Color de fondo base */
+        var(--background-color);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logo {
+    padding: 3rem;
+}
+
+.description {
+    color: var(--male-text-light-color);
+    max-width: 600px;
+    line-height: 1.5;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    font-size: 18px;
+}

@@ -1,0 +1,31 @@
+.dots1 {
+    width: 120px;
+    height: auto;
+}
+
+.buttons-container {
+    margin-top: 50px;
+}
+
+.language-button {
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: 500;
+    border: 2px solid var(--text-color);
+    border-radius: 20px;
+    background-color: transparent;
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.language-button:hover {
+    background-color: var(--button-hover);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+.language-button:active {
+    background-color: #000000;
+    color: #ffffff;
+    transform: scale(0.95);
+}

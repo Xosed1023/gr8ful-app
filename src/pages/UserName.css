@@ -1,0 +1,131 @@
+.input-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.name-input {
+    width: 90%;
+    max-width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    color: black;
+    border: 1px solid var(--woman-lighter-purple);
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: var(--button-hover);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.finish-button {
+    padding: 12px 24px;
+    background-color: var(--woman-vibrant-purple);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.finish-button:hover {
+    background-color: var(--button-hover);
+    color: #000000;
+}
+
+.finish-button:active {
+    transform: scale(0.95);
+}
+
+.note-container {
+    font-size: 14px;
+    color: var(--woman-light-purple);
+    text-align: center;
+    font-style: italic;
+    padding: 0 20px;
+}
+
+
+/* Fondo mujer */
+.background-woman {
+    background:
+        /* Degradado púrpura de arriba hacia abajo */
+        linear-gradient(to top,
+            rgba(111, 54, 235, 0.1) 0.5%,
+            rgba(111, 54, 235, 0) 20%,
+            rgba(111, 54, 235, 0) 100%),
+        /* Color de fondo base */
+        var(--background-color);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Fondo hombre */
+.background-man {
+    background:
+        /* Degradado púrpura de arriba hacia abajo */
+        linear-gradient(to top,
+            rgba(19, 142, 173, 0.1) 0.5%,
+            rgba(54, 235, 199, 0) 20%,
+            rgba(13, 189, 160, 0) 100%),
+        /* Color de fondo base */
+        var(--background-color);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+/* Botón de continuar */
+.next-button {
+    margin-top: 10px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    width: clamp(170px, 90%, 280px);
+    border-radius: 50px;
+    /* Limita el ancho máximo */
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Botón de continuar - Mujer */
+.next-button.woman-button {
+    background-color: var(--woman-vibrant-purple);
+    color: white;
+}
+
+.next-button.woman-button:hover:not(.disabled) {
+    background-color: rgb(217, 172, 253);
+    color: #000000;
+    border: 2px solid #000000;
+}
+
+/* Botón de continuar - Hombre */
+.next-button.man-button {
+    background-color: #3C91C7;
+    color: white;
+}
+
+.next-button.man-button:hover:not(.disabled) {
+    background-color: #12324a;
+    color: #ffffff;
+}
+
+/* Botón deshabilitado */
+.next-button.disabled {
+    background-color: #d3d3d3;
+    color: #a1a1a1;
+    pointer-events: none;
+    cursor: not-allowed;
+}

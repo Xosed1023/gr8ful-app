@@ -13,11 +13,6 @@ const QuoteTime = ({ backTo }: { backTo: string }) => {
   const [title, setTitle] = useState(["When should we send your daily", "quote?"]);
   const [note, setNote] = useState(["*You can change this later in settings."]);
 
-  const handleGenderChange = (gender: string) => {
-    localStorage.setItem("gender", gender);
-    navigate.push("/quoteTime", "forward");
-  };
-
   useEffect(() => {
     setTitle(
       AppTimeScreenLanguage.title[

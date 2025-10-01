@@ -1,4 +1,4 @@
-package io.zen.gr8ful;
+package com.zen.gr8ful;
 
 import com.getcapacitor.BridgeActivity;
 

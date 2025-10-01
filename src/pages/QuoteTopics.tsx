@@ -90,7 +90,17 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
           <div className="absolute top-6 left-6 z-10">
             <IoArrowBack
               className="text-black text-3xl cursor-pointer"
-              onClick={() => navigate.push(backTo || "/quoteTime", "back")}
+              /* onClick={() => navigate.push(backTo || "/quoteTime", "back")} */
+
+              onClick={() => {
+                
+                if (import.meta.env.VITE_SHOW_PUSH_NOTIFICACIONS_SCREEN === "true") {
+                  navigate.push(backTo || "/quoteTime", "back")
+                } else {
+                  navigate.push(backTo || "/gender", "back")
+                }
+              
+              }}
             />
           </div>
 

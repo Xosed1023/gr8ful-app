@@ -102,15 +102,20 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
   };
 
   async function showBanner(): Promise<void> {
-    AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-      // presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
-    });
-
-    AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
-      presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
-    });
-
-    AdMob.showBanner(options);
+    try {
+      AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
+        // presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
+      });
+  
+      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
+        presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
+      });
+  
+      AdMob.showBanner(options);
+      
+    } catch (error) {
+      presentToast(`Error showing banner: ${error}`);
+    }
   }
 
   const toggleCard = async () => {

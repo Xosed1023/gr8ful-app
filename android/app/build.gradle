@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "io.zen.gr8ful"
+    namespace "com.zen.gr8ful"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.zen.gr8ful"
+        applicationId "com.zen.gr8ful"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -2,7 +2,7 @@ import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { IoArrowBack } from "react-icons/io5";
 
 const Gender: React.FC = () => {
@@ -15,21 +15,25 @@ const Gender: React.FC = () => {
   const navigate = useIonRouter();
   const handleGenderChange = (gender: string) => {
     localStorage.setItem("gender", gender);
-    navigate.push("/quoteTime", "forward");
+    if (import.meta.env.VITE_SHOW_PUSH_NOTIFICACIONS_SCREEN === "true") {
+      navigate.push("/quoteTime", "forward");
+    } else {
+      navigate.push("/quoteTopics", "forward");
+    }
   };
 
   useEffect(() => {
     setTitle(
       AppGenderScreenLanguage.title[
-      userLanguage as keyof typeof AppGenderScreenLanguage.title
+        userLanguage as keyof typeof AppGenderScreenLanguage.title
       ]
     );
     setOptions([
       AppGenderScreenLanguage.options.woman[
-      userLanguage as keyof typeof AppGenderScreenLanguage.options.woman
+        userLanguage as keyof typeof AppGenderScreenLanguage.options.woman
       ],
       AppGenderScreenLanguage.options.man[
-      userLanguage as keyof typeof AppGenderScreenLanguage.options.man
+        userLanguage as keyof typeof AppGenderScreenLanguage.options.man
       ],
     ]);
   }, []);
@@ -66,7 +70,7 @@ const Gender: React.FC = () => {
               <button
                 className="gender-button"
                 onClick={async () => {
-                  handleGenderChange("W")
+                  handleGenderChange("W");
                   await Haptics.impact({ style: ImpactStyle.Medium });
                 }}
               >
@@ -75,7 +79,7 @@ const Gender: React.FC = () => {
               <button
                 className="gender-button"
                 onClick={async () => {
-                  handleGenderChange("M")
+                  handleGenderChange("M");
                   await Haptics.impact({ style: ImpactStyle.Medium });
                 }}
               >

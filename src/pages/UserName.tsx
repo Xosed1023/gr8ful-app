@@ -8,7 +8,7 @@ import { IoArrowBack } from "react-icons/io5"; // Importa el icono de flecha
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
-  const [title, setTitle] = useState(["What's your", "name?"]);
+  const [title, setTitle] = useState(["What's your", "name"]);
   const [note, setNote] = useState(["*Your name will appear with your daily quotes for a personalized experience."]);
   const [placeholder, setPlaceholder] = useState(["Your name here..."]);
   const [button, setButton] = useState(["Finish"]);
@@ -69,9 +69,12 @@ const UserName = ({ backTo }: { backTo?: string }) => {
             />
           }
           {/* Texto principal */}
-          <div className="text-container flex flex-col items-center mt-12 px-16 pb-8 pt-6">
+          <div className="text-container flex flex-row items-center mt-12 px-16 pb-8 pt-6">
             <p className="text-normal">
-              {title[0]} <span className="text-highlight"> {title[1]}</span>
+              {title[0]}
+            </p>
+            <p className="text-highlight">
+              {title[1]}
             </p>
           </div>
           {/* Input para el nombre */}

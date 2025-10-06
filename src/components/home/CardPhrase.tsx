@@ -1,17 +1,15 @@
 import {
-  AdMob,
   BannerAdOptions,
-  BannerAdPluginEvents,
   BannerAdPosition,
-  BannerAdSize,
+  BannerAdSize
 } from "@capacitor-community/admob";
+import { Clipboard } from '@capacitor/clipboard';
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { IonButton, IonChip, IonIcon, isPlatform, useIonToast } from "@ionic/react";
 import { motion } from "framer-motion";
 import {
-  bookmarkOutline,
-  ellipsisHorizontal,
-  shareSocialOutline,
+  copyOutline,
+  ellipsisHorizontal
 } from "ionicons/icons";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
@@ -85,14 +83,6 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
   const [present] = useIonToast();
 
-  const options: BannerAdOptions = {
-    adId: adBannerId,
-    adSize: BannerAdSize.BANNER,
-    position: BannerAdPosition.BOTTOM_CENTER,
-    margin: colorConfig[color].bottomAdSpace,
-    isTesting: import.meta.env.VITE_IS_TESTING,
-  };
-
   const presentToast = (message: string) => {
     present({
       message,
@@ -101,28 +91,9 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
     });
   };
 
-  async function showBanner(): Promise<void> {
-    try {
-      AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-        // presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
-      });
-  
-      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
-        presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
-      });
-  
-      AdMob.showBanner(options);
-      
-    } catch (error) {
-      presentToast(`Error showing banner: ${error}`);
-    }
-  }
-
   const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
     await Haptics.impact({ style: ImpactStyle.Medium });
-    if (isExpanded) AdMob.hideBanner();
-    else showBanner();
   };
 
   const {
@@ -187,7 +158,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
         <div className="flex -space-x-2">
-          <IonButton
+          {/* <IonButton
             shape="round"
             fill="clear"
             color="light"
@@ -208,6 +179,25 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
             }}
           >
             <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>
+          </IonButton> */}
+          <IonButton
+            shape="round"
+            fill="clear"
+            color="light"
+            size="large"
+            onClick={async (e) => {
+              e.stopPropagation();
+              try {
+                await Clipboard.write({
+                  string: phrase.content.es
+                });
+                presentToast("Frase copiada al portapapeles");
+              } catch (err) {
+                presentToast("Error al copiar al portapapeles");
+              }
+            }}
+          >
+            <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
           </IonButton>
         </div>
       </div>

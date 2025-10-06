@@ -1,10 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+SAS:wght@400;700&display=swap');
+
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Definición global de fuentes personalizadas */
+.playwrite-de-sas {
+  font-family: "Playwrite DE SAS", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.playwrite-de-sas-bold {
+  font-family: "Playwrite DE SAS", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
 
 :root {
     /* Colores predeterminados (neutros o genéricos) */
@@ -93,7 +110,6 @@ ion-toast.custom-toast::part(button) {
     font-size: 15px;
 }
 
-
 html {
     --ion-safe-area-left: 25px;
 }
@@ -139,8 +155,9 @@ ion-modal {
     align-self: center;
 }
 
-* {
-    font-family: 'Montserrat', sans-serif;
+/* Regla global con especificidad */
+*:not(.playwrite-de-sas):not(.playwrite-de-sas-bold):not(.text-highlight) {
+    font-family: 'Montserrat', sans-serif !important;
     overflow: hidden;
 }
 

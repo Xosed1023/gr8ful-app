@@ -1,16 +1,19 @@
 import {
   BannerAdOptions,
   BannerAdPosition,
-  BannerAdSize
+  BannerAdSize,
 } from "@capacitor-community/admob";
-import { Clipboard } from '@capacitor/clipboard';
+import { Clipboard } from "@capacitor/clipboard";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { IonButton, IonChip, IonIcon, isPlatform, useIonToast } from "@ionic/react";
-import { motion } from "framer-motion";
 import {
-  copyOutline,
-  ellipsisHorizontal
-} from "ionicons/icons";
+  IonButton,
+  IonChip,
+  IonIcon,
+  isPlatform,
+  useIonToast,
+} from "@ionic/react";
+import { motion } from "framer-motion";
+import { copyOutline, ellipsisHorizontal } from "ionicons/icons";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
@@ -189,7 +192,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
               e.stopPropagation();
               try {
                 await Clipboard.write({
-                  string: phrase.content.es
+                  string: phrase.content.es,
                 });
                 presentToast("Frase copiada al portapapeles");
               } catch (err) {

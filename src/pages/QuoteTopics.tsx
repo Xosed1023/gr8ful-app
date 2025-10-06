@@ -43,6 +43,8 @@ const QuoteTopics = ({ backTo }: { backTo: string }) => {
   };
 
   useEffect(() => {
+    // verificar si los elementos del localStorage (por lo menos el language están cargados)
+
     setTitle(
       AppTopicsScreenLanguage.title[
         userLanguage as keyof typeof AppTopicsScreenLanguage.title

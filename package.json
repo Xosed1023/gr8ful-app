@@ -12,7 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@capacitor-community/admob": "^6.2.0",
+    "@capacitor-community/admob": "^5.0.0",
     "@capacitor/android": "^7.0.0",
     "@capacitor/app": "^7.0.0",
     "@capacitor/clipboard": "^7.0.2",

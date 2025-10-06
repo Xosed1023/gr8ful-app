@@ -1,4 +1,8 @@
-import { AdMob } from "@capacitor-community/admob";
+import {
+  AdMob,
+  AdOptions,
+  InterstitialAdPluginEvents,
+} from "@capacitor-community/admob";
 import {
   IonIcon,
   IonRouterOutlet,
@@ -30,12 +34,14 @@ import {
   RewardAdPluginEvents,
   AdMobRewardItem,
 } from "@capacitor-community/admob";
+import { Capacitor } from "@capacitor/core";
 
 const MainHome = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
   const [activeTab, setActiveTab] = useState<string>("home");
   const [homeRefreshTrigger, setHomeRefreshTrigger] = useState<number>(0);
-  const [present] = useIonToast();
+  /* const [present] = useIonToast(); */
+  const [isAdVisible, setIsAdVisible] = useState(false);
 
   useEffect(() => {
     initializeAdMob();
@@ -46,6 +52,71 @@ const MainHome = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const onDismissListener = AdMob.addListener(
+      InterstitialAdPluginEvents.Dismissed,
+      () => {
+        setIsAdVisible(false);
+      }
+    );
+    const onFailedListener = AdMob.addListener(
+      InterstitialAdPluginEvents.FailedToLoad,
+      () => {
+        setIsAdVisible(false);
+      }
+    );
+
+    const onLoadListener = AdMob.addListener(
+      InterstitialAdPluginEvents.Showed,
+      () => {
+        setIsAdVisible(true);
+      }
+    );
+
+    return () => {
+      onDismissListener.remove();
+      onFailedListener.remove();
+      onLoadListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    /* present({
+      message: `isAdVisible: ${isAdVisible}`,
+      duration: 5000,
+      position: "bottom",
+    }); */
+    if (!isAdVisible) {
+      setTimeout(() => {
+        showAdMobInterstitial();
+      }, 45000);
+    } else {
+    }
+  }, [isAdVisible]);
+
+  const showAdMobInterstitial = async (): Promise<void> => {
+    let adId: string = "";
+    try {
+      const platform = Capacitor.getPlatform();
+      if (platform === "ios") {
+        adId = "ca-app-pub-6255300430204769/6703967819";
+      } else if (platform === "android") {
+        adId = "ca-app-pub-6255300430204769/3997913426";
+      }
+      const options: AdOptions = {
+        adId: adId,
+        isTesting: false,
+      };
+      await AdMob.prepareInterstitial(options);
+      AdMob.showInterstitial().then(() => {
+        setIsAdVisible(true);
+      });
+    } catch (error) {
+      console.error("Error mostrando intersticial", error);
+      setIsAdVisible(false);
+    }
+  };
 
   const initializeAdMob = async () => {
     try {
@@ -59,27 +130,27 @@ const MainHome = () => {
   };
 
   const loadRandomPhraseWithAd = async () => {
-    present({
+    /* present({
       message: `lanzando rewarded`,
       duration: 5000,
       position: "bottom",
-    });
+    }); */
     AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      present({
+      /* present({
         message: `Anuncio cargado ${JSON.stringify(info)}`,
         duration: 5000,
         position: "bottom",
-      });
+      }); */
     });
 
     AdMob.addListener(
       RewardAdPluginEvents.Rewarded,
       (rewardItem: AdMobRewardItem) => {
-        present({
+        /* present({
           message: `rewardItem: ${JSON.stringify(rewardItem)}`,
           duration: 5000,
           position: "bottom",
-        });
+        }); */
       }
     );
 

@@ -36,6 +36,18 @@ import {
 } from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
 
+// IDs de prueba oficiales de Google AdMob — https://developers.google.com/admob/ios/test-ads
+// y https://developers.google.com/admob/android/test-ads. Devuelven anuncios de test
+// para toda solicitud, sin depender de configuración de cuenta/consentimiento.
+const TEST_INTERSTITIAL_AD_ID =
+  Capacitor.getPlatform() === "ios"
+    ? "ca-app-pub-3940256099942544/4411468910"
+    : "ca-app-pub-3940256099942544/1033173712";
+const TEST_REWARDED_AD_ID =
+  Capacitor.getPlatform() === "ios"
+    ? "ca-app-pub-3940256099942544/1712485313"
+    : "ca-app-pub-3940256099942544/5224354917";
+
 const MainHome = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
   const [activeTab, setActiveTab] = useState<string>("home");
@@ -62,7 +74,8 @@ const MainHome = () => {
     );
     const onFailedListener = AdMob.addListener(
       InterstitialAdPluginEvents.FailedToLoad,
-      () => {
+      (error) => {
+        console.error("Intersticial: fallo al cargar", error);
         setIsAdVisible(false);
       }
     );
@@ -96,18 +109,12 @@ const MainHome = () => {
   }, [isAdVisible]);
 
   const showAdMobInterstitial = async (): Promise<void> => {
-    let adId: string = "";
     try {
-      const platform = Capacitor.getPlatform();
-      if (platform === "ios") {
-        adId = "ca-app-pub-6255300430204769/6703967819";
-      } else if (platform === "android") {
-        adId = "ca-app-pub-6255300430204769/3997913426";
-      }
       const options: AdOptions = {
-        adId: adId,
-        isTesting: false,
+        adId: TEST_INTERSTITIAL_AD_ID,
+        isTesting: true,
       };
+      console.log("Intersticial: solicitando anuncio de prueba", options);
       await AdMob.prepareInterstitial(options);
       AdMob.showInterstitial().then(() => {
         setIsAdVisible(true);
@@ -130,40 +137,43 @@ const MainHome = () => {
   };
 
   const loadRandomPhraseWithAd = async () => {
-    /* present({
-      message: `lanzando rewarded`,
-      duration: 5000,
-      position: "bottom",
-    }); */
-    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      /* present({
-        message: `Anuncio cargado ${JSON.stringify(info)}`,
-        duration: 5000,
-        position: "bottom",
-      }); */
-    });
-
-    AdMob.addListener(
+    const onLoadedListener = AdMob.addListener(
+      RewardAdPluginEvents.Loaded,
+      (info: AdLoadInfo) => {
+        console.log("Rewarded: anuncio de prueba cargado", info);
+      }
+    );
+    const onFailedListener = AdMob.addListener(
+      RewardAdPluginEvents.FailedToLoad,
+      (error) => {
+        console.error("Rewarded: fallo al cargar", error);
+      }
+    );
+    const onRewardedListener = AdMob.addListener(
       RewardAdPluginEvents.Rewarded,
       (rewardItem: AdMobRewardItem) => {
-        /* present({
-          message: `rewardItem: ${JSON.stringify(rewardItem)}`,
-          duration: 5000,
-          position: "bottom",
-        }); */
+        console.log("Rewarded: recompensa otorgada", rewardItem);
       }
     );
 
-    const options: RewardAdOptions = {
-      adId: import.meta.env.VITE_ANDROID_INTERSTICIAL_REWARDED,
-      isTesting: import.meta.env.VITE_IS_TESTING,
-    };
-
-    await AdMob.prepareRewardVideoAd(options);
-    const rewardItem = await AdMob.showRewardVideoAd();
-    if (rewardItem.amount > 0) {
-      // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
-      await loadRandomPhrase();
+    try {
+      const options: RewardAdOptions = {
+        adId: TEST_REWARDED_AD_ID,
+        isTesting: true,
+      };
+      console.log("Rewarded: solicitando anuncio de prueba", options);
+      await AdMob.prepareRewardVideoAd(options);
+      const rewardItem = await AdMob.showRewardVideoAd();
+      if (rewardItem.amount > 0) {
+        // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
+        await loadRandomPhrase();
+      }
+    } catch (error) {
+      console.error("Error mostrando rewarded", error);
+    } finally {
+      onLoadedListener.remove();
+      onFailedListener.remove();
+      onRewardedListener.remove();
     }
   };
 

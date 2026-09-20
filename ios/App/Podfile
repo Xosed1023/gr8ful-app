@@ -1,6 +1,6 @@
 require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
 
-platform :ios, '14.0'
+platform :ios, '17.0'
 use_frameworks!
 
 # workaround to avoid Xcode caching of Pods that requires
@@ -23,8 +23,19 @@ end
 target 'App' do
   capacitor_pods
   # Add your Pods here
+  # Fijado a < 3.0: la 3.0.0 renombró `UMPConsentStatus` -> `ConsentStatus`,
+  # API que ConsentExecutor.swift de @capacitor-community/admob aún no adoptó (rompe la compilación con 3.x)
+  pod 'GoogleUserMessagingPlatform', '< 3.0'
 end
 
 post_install do |installer|
   assertDeploymentTarget(installer)
+  # assertDeploymentTarget (arriba) solo sube el target si queda por debajo de 14.0;
+  # no lo alinea al valor real de `platform :ios` (17.0). Forzamos ese valor acá
+  # para que todos los Pods compartan el mismo deployment target que el target App.
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+    end
+  end
 end

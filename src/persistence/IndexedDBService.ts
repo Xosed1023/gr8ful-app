@@ -1,4 +1,5 @@
 import { Phrase } from "../models/Phrase";
+import { Topic } from "../models/Topic";
 import { openDB, IDBPDatabase } from 'idb';
 
 const DB_NAME = 'motivationalPhrasesDB';

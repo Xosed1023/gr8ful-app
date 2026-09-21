@@ -1,4 +1,6 @@
-type LanguageKeys = "es" | "en" | "fr";
+import { Topic } from "../models/Topic";
+
+export type LanguageKeys = "es" | "en" | "fr";
 
 type AppTopicsScreenLanguageType = {
   title: Record<LanguageKeys, string[]>;

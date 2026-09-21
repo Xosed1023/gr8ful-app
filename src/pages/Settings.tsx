@@ -12,7 +12,7 @@ import {
 import { alarmOutline, arrowForward, language, list } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import "./Settings.css";
-import { AppSetttingsScreenLanguage } from "../persistence/languages";
+import { AppSetttingsScreenLanguage, LanguageKeys } from "../persistence/languages";
 
 const Settings = () => {
   const navigate = useIonRouter();
@@ -26,8 +26,11 @@ const Settings = () => {
     "Push Notifications",
   ]);
   const [darkmodeOptText, setDarkmodeOptText] = useState(["Dark Mode"]);
-  const [userLanguage, setUserLanguage] = useState(
-    localStorage.getItem("language")
+  // No usa useAppLanguage(): Settings se revisita sin remount (p. ej. al volver
+  // tras cambiar el idioma) y necesita releer localStorage en cada navegación —
+  // ver research.md A1 (Edge Case), misma excepción deliberada que Home.tsx.
+  const [userLanguage, setUserLanguage] = useState<LanguageKeys | null>(
+    localStorage.getItem("language") as LanguageKeys | null
   );
   const [presentAlert] = useIonAlert();
 
@@ -39,55 +42,22 @@ const Settings = () => {
   }, []);
 
   useEffect(() => {
-    setUserLanguage(localStorage.getItem("language"));
+    setUserLanguage(localStorage.getItem("language") as LanguageKeys | null);
   }, [navigate]);
 
   useEffect(() => {
-    setTitle(
-      AppSetttingsScreenLanguage.title[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.title
-      ]
-    );
+    if (!userLanguage) return;
 
-    setChangeNameBtnText(
-      AppSetttingsScreenLanguage.editNameButton[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.editNameButton
-      ]
-    );
-
-    setLanguageOptText(
-      AppSetttingsScreenLanguage.languageButton[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.languageButton
-      ]
-    );
-
-    setHourOptText(
-      AppSetttingsScreenLanguage.TimeButton[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.TimeButton
-      ]
-    );
-
-    setTopicsOptText(
-      AppSetttingsScreenLanguage.topicsButton[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.topicsButton
-      ]
-    );
+    setTitle(AppSetttingsScreenLanguage.title[userLanguage]);
+    setChangeNameBtnText(AppSetttingsScreenLanguage.editNameButton[userLanguage]);
+    setLanguageOptText(AppSetttingsScreenLanguage.languageButton[userLanguage]);
+    setHourOptText(AppSetttingsScreenLanguage.TimeButton[userLanguage]);
+    setTopicsOptText(AppSetttingsScreenLanguage.topicsButton[userLanguage]);
     setPushNotificationsOptText(
-      AppSetttingsScreenLanguage.pushNotificationsButton[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.pushNotificationsButton
-      ]
+      AppSetttingsScreenLanguage.pushNotificationsButton[userLanguage]
     );
-    setDarkmodeOptText(
-      AppSetttingsScreenLanguage.darkModeButton[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.darkModeButton
-      ]
-    );
-
-    setVersionText(
-      AppSetttingsScreenLanguage.versionLabel[
-        userLanguage as keyof typeof AppSetttingsScreenLanguage.versionLabel
-      ]
-    );
+    setDarkmodeOptText(AppSetttingsScreenLanguage.darkModeButton[userLanguage]);
+    setVersionText(AppSetttingsScreenLanguage.versionLabel[userLanguage]);
   }, [userLanguage]);
 
   return (

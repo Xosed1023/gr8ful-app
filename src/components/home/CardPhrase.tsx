@@ -4,7 +4,6 @@ import {
   BannerAdSize,
 } from "@capacitor-community/admob";
 import { Clipboard } from "@capacitor/clipboard";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import {
   IonButton,
   IonChip,
@@ -17,6 +16,7 @@ import { copyOutline, ellipsisHorizontal } from "ionicons/icons";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
+import { hapticTap } from "../../hooks/useHaptics";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type">;
@@ -96,7 +96,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
 
   const toggleCard = async () => {
     setIsExpanded((prev) => !prev);
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    await hapticTap();
   };
 
   const {
@@ -107,14 +107,6 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
     expandedPosition,
     expandedHeight,
   } = colorConfig[color];
-
-  const triggerHapticFeedback = async () => {
-    try {
-      await Haptics.impact({ style: ImpactStyle.Medium });
-    } catch {
-      if (navigator.vibrate) navigator.vibrate(50); // Fallback para navegadores
-    }
-  };
 
   // Calcula el delay invertido basado en `initialPosition`
   const calculateDelay = (position: string) => {
@@ -147,7 +139,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
       onAnimationComplete={() => {
         if (!isInitialAnimationDone) {
           setIsInitialAnimationDone(true); // Marca como completada la animación inicial
-          triggerHapticFeedback(); // Vibra al finalizar la animación de entrada
+          hapticTap(); // Vibra al finalizar la animación de entrada
         }
       }}
     >

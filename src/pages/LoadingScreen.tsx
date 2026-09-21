@@ -2,23 +2,20 @@ import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./LoadingScreen.css";
 import { useEffect, useState } from "react";
 import { AppLoadingScreenLanguage } from '../persistence/languages';
+import { useAppLanguage } from "../hooks/useAppLanguage";
+import { useUserGender } from "../hooks/useUserGender";
 
 const LoadingScreen: React.FC = () => {
   const navigate = useIonRouter();
   const [title, setTitle] = useState(["Good things take time. Your quote is on its", "way!"]);
-  const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
-  const isMale = localStorage.gender === "M";
+  const { userLanguage } = useAppLanguage();
+  const { isMale, isWoman } = useUserGender();
 
   useEffect(() => {
-    setTitle(
-      AppLoadingScreenLanguage.title[
-      userLanguage as keyof typeof AppLoadingScreenLanguage.title
-      ]
-    );
-  }, []);
+    setTitle(AppLoadingScreenLanguage.title[userLanguage]);
+  }, [userLanguage]);
 
-  const backgroundClass =
-    localStorage.gender === "W" ? "background-waiting" : "loading-man";
+  const backgroundClass = isWoman ? "background-waiting" : "loading-man";
 
   return (
     <IonPage>

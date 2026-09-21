@@ -1,20 +1,19 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./Languages.css";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
 import { IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { AppSelectLanguage } from "../persistence/languages";
+import { useAppLanguage } from "../hooks/useAppLanguage";
+import { hapticTap } from "../hooks/useHaptics";
 
-const Languages = ({ backTo }: { backTo: string }) => {
+const Languages = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
   const [title, setTitle] = useState(["Select", "your", "language"]);
-  const [userLanguage, setUserLanguage] = useState(
-    localStorage.getItem("language")
-  );
+  const { userLanguage } = useAppLanguage();
 
   const handleLanguageChange = async (language: string) => {
     localStorage.setItem("language", language);
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    await hapticTap();
     if (backTo) {
       navigate.push(backTo, "back");
     } else {
@@ -23,16 +22,8 @@ const Languages = ({ backTo }: { backTo: string }) => {
   };
 
   useEffect(() => {
-    if (userLanguage) {
-      setTitle(
-        AppSelectLanguage.title[
-        userLanguage as keyof typeof AppSelectLanguage.title
-        ]
-      );
-    } else {
-      setTitle(AppSelectLanguage.title["en"]);
-    }
-  }, []);
+    setTitle(AppSelectLanguage.title[userLanguage]);
+  }, [userLanguage]);
 
   return (
     <IonPage>

@@ -6,6 +6,7 @@ import { Phrase } from "../models/Phrase";
 
 import "./Home.css";
 import { AppHomeScreenLanguage } from "../persistence/languages";
+import { LanguageKeys } from "../persistence/languages";
 
 const Home = ({ phrase }: { phrase: Phrase }) => {
 
@@ -13,26 +14,23 @@ const Home = ({ phrase }: { phrase: Phrase }) => {
   const [inspirationText, setInspirationText] = useState([
     "Here's some inspiration for your today!",
   ]);
-  const [userLanguage, setUserLanguage] = useState(
-    localStorage.getItem("language")
+  // No usa useAppLanguage(): a diferencia de las pantallas de onboarding,
+  // Home se revisita sin remount (p. ej. al volver de Ajustes tras cambiar
+  // idioma) y necesita releer localStorage en cada navegación — ver
+  // research.md A1 (Edge Case) para el detalle de esta excepción deliberada.
+  const [userLanguage, setUserLanguage] = useState<LanguageKeys | null>(
+    localStorage.getItem("language") as LanguageKeys | null
   );
   const navigate = useIonRouter();
 
   useEffect(() => {
-    setUserLanguage(localStorage.getItem("language"));
+    setUserLanguage(localStorage.getItem("language") as LanguageKeys | null);
   }, [navigate]);
 
   useEffect(() => {
-    setGreetingsText(
-      AppHomeScreenLanguage.greetings[
-      userLanguage as keyof typeof AppHomeScreenLanguage.greetings
-      ]
-    );
-    setInspirationText(
-      AppHomeScreenLanguage.inspirationText[
-      userLanguage as keyof typeof AppHomeScreenLanguage.inspirationText
-      ]
-    );
+    if (!userLanguage) return;
+    setGreetingsText(AppHomeScreenLanguage.greetings[userLanguage]);
+    setInspirationText(AppHomeScreenLanguage.inspirationText[userLanguage]);
   }, [userLanguage]);
 
   return (

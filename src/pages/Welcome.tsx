@@ -2,7 +2,7 @@ import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import "./Welcome.css";
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { hapticTap } from "../hooks/useHaptics";
 
 const Welcome: React.FC = () => {
   const welcomeTexts = [
@@ -59,7 +59,7 @@ const Welcome: React.FC = () => {
               className='ionic-button'
               onClick={async () => {
                 navigate.push("/languages", "forward")
-                await Haptics.impact({ style: ImpactStyle.Medium });
+                await hapticTap();
               }
               }
             >

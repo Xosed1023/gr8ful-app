@@ -12,7 +12,7 @@ import {
   useIonToast,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { settings, sync } from "ionicons/icons";
+import { bookmark, home, settings, sync } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router";
 import { Phrase } from "../models/Phrase";
@@ -22,6 +22,7 @@ import {
   getRandomPhrase,
   initDB,
 } from "../persistence/IndexedDBService";
+import Favorites from "./Favorites";
 import Home from "./Home";
 import Languages from "./Languages";
 import QuoteTime from "./QuoteTime";
@@ -50,10 +51,12 @@ const TEST_REWARDED_AD_ID =
 
 const MainHome = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("home");
-  const [homeRefreshTrigger, setHomeRefreshTrigger] = useState<number>(0);
   /* const [present] = useIonToast(); */
   const [isAdVisible, setIsAdVisible] = useState(false);
+  // Rastreado a mano (no vía useLocation) porque MainHome monta su propio
+  // <IonReactRouter> anidado dentro del router principal de App.tsx; leer la
+  // ubicación desde ahí quedaba desincronizada con los taps reales del usuario.
+  const [selectedTab, setSelectedTab] = useState<"home" | "favorites" | "settings">("home");
 
   useEffect(() => {
     initializeAdMob();
@@ -194,14 +197,6 @@ const MainHome = () => {
     }
   };
 
-  const handleTabChange = (tab: string) => {
-    // Detectar si estás tocando la tab "home" nuevamente
-    if (tab === "home" && activeTab === "home") {
-      setHomeRefreshTrigger((prev) => prev + 1); // Actualizar estado
-    }
-    setActiveTab(tab);
-  };
-
   return (
     <IonReactRouter>
       <IonTabs className="bg-indigo-950">
@@ -209,6 +204,7 @@ const MainHome = () => {
           <Route exact path="/tabs/home">
             <Home phrase={phrase!} />
           </Route>
+          <Route exact path="/tabs/favorites" component={Favorites} />
           <Route exact path="/tabs/settings" component={Settings} />
           <Route exact path="/languages">
             <Languages backTo="/tabs/settings" />
@@ -234,17 +230,30 @@ const MainHome = () => {
             href="/tabs/home"
             className="bg-slate-900"
             onClick={() => {
-              // TODO: Verificar que esté en el home para cargar nueva frase
-              // TODO: Solicitar anuncio para nueva frase
-              loadRandomPhraseWithAd();
+              // Si ya estábamos en Home, el tap pide una frase nueva (con
+              // anuncio rewarded). Si veníamos de otro tab, es navegación
+              // normal: no se dispara ningún anuncio.
+              if (selectedTab === "home") {
+                loadRandomPhraseWithAd();
+              }
+              setSelectedTab("home");
             }}
           >
-            <IonIcon aria-hidden="true" icon={sync} />
+            <IonIcon aria-hidden="true" icon={selectedTab === "home" ? sync : home} />
+          </IonTabButton>
+          <IonTabButton
+            tab="favorites"
+            href="/tabs/favorites"
+            className="bg-slate-900"
+            onClick={() => setSelectedTab("favorites")}
+          >
+            <IonIcon aria-hidden="true" icon={bookmark} />
           </IonTabButton>
           <IonTabButton
             tab="settings"
             href="/tabs/settings"
             className="bg-slate-900"
+            onClick={() => setSelectedTab("settings")}
           >
             <IonIcon aria-hidden="true" icon={settings} />
           </IonTabButton>

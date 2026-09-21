@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: ⚠️ Deuda técnica — backend de datos listo, sin UI
+**Status**: 🔀 Superada — fusionada en `specs/017-completar-favoritos` junto con `specs/010-completar-bug-favoritos-indexeddb`. No trabajar sobre esta spec directamente.
 
 **Input**: Deuda técnica identificada en exploración de código.
 

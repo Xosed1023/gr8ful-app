@@ -12,7 +12,7 @@ import {
   useIonToast,
 } from "@ionic/react";
 import { motion } from "framer-motion";
-import { copyOutline, ellipsisHorizontal } from "ionicons/icons";
+import { bookmark, bookmarkOutline, copyOutline, ellipsisHorizontal } from "ionicons/icons";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
@@ -22,6 +22,8 @@ interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type">;
   color: CardColors;
   adBannerId: string;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
 const colorConfig = {
@@ -81,7 +83,13 @@ const colorConfig = {
   },
 };
 
-const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
+const CardPhrase = ({
+  phrase,
+  color,
+  adBannerId,
+  isFavorite,
+  onToggleFavorite,
+}: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
   const [present] = useIonToast();
@@ -153,18 +161,22 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
         <div className="flex -space-x-2">
-          {/* <IonButton
+          <IonButton
             shape="round"
             fill="clear"
             color="light"
             size="large"
             onClick={(e) => {
               e.stopPropagation();
+              onToggleFavorite();
             }}
           >
-            <IonIcon slot="icon-only" icon={bookmarkOutline}></IonIcon>
+            <IonIcon
+              slot="icon-only"
+              icon={isFavorite ? bookmark : bookmarkOutline}
+            ></IonIcon>
           </IonButton>
-          <IonButton
+          {/* <IonButton
             shape="round"
             fill="clear"
             color="light"

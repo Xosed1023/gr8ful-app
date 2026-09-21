@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: 🐛 Bug confirmado en código (TODO explícito del autor original)
+**Status**: 🔀 Superada — fusionada en `specs/017-completar-favoritos` junto con `specs/007-completar-favoritos`. No trabajar sobre esta spec directamente.
 
 **Input**: Deuda técnica identificada en exploración de código.
 

@@ -4,6 +4,7 @@ import {
   BannerAdSize,
 } from "@capacitor-community/admob";
 import { Clipboard } from "@capacitor/clipboard";
+import { Share } from "@capacitor/share";
 import {
   IonButton,
   IonChip,
@@ -12,16 +13,24 @@ import {
   useIonToast,
 } from "@ionic/react";
 import { motion } from "framer-motion";
-import { bookmark, bookmarkOutline, copyOutline, ellipsisHorizontal } from "ionicons/icons";
+import {
+  bookmark,
+  bookmarkOutline,
+  copyOutline,
+  ellipsisHorizontal,
+  shareSocialOutline,
+} from "ionicons/icons";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
 import { hapticTap } from "../../hooks/useHaptics";
+import { LanguageKeys } from "../../persistence/languages";
 
 interface CardPhraseProps {
-  phrase: Pick<Phrase, "content" | "type">;
+  phrase: Pick<Phrase, "content" | "type" | "author">;
   color: CardColors;
   adBannerId: string;
+  language: LanguageKeys;
   isFavorite: boolean;
   onToggleFavorite: () => void;
 }
@@ -87,6 +96,7 @@ const CardPhrase = ({
   phrase,
   color,
   adBannerId,
+  language,
   isFavorite,
   onToggleFavorite,
 }: CardPhraseProps) => {
@@ -156,7 +166,7 @@ const CardPhrase = ({
         className={`absolute top-4 right-6 text-xl ${text}`}
       />
       <h1 className={`${text} text-lg font-medium mt-4 min-h-32`}>
-        {phrase.content.es}
+        {phrase.content[language]}
       </h1>
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
@@ -176,17 +186,27 @@ const CardPhrase = ({
               icon={isFavorite ? bookmark : bookmarkOutline}
             ></IonIcon>
           </IonButton>
-          {/* <IonButton
+          <IonButton
             shape="round"
             fill="clear"
             color="light"
             size="large"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
+              try {
+                await Share.share({
+                  text: `${phrase.content[language]}\n\n— ${phrase.author}`,
+                });
+              } catch (error) {
+                // Cancelar el share sheet nativo también rechaza la promesa
+                // en algunas plataformas (ej. iOS) — no es necesariamente un
+                // error real, así que no se muestra toast (research.md Decisión 4).
+                console.error("Error al compartir", error);
+              }
             }}
           >
             <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>
-          </IonButton> */}
+          </IonButton>
           <IonButton
             shape="round"
             fill="clear"
@@ -196,7 +216,7 @@ const CardPhrase = ({
               e.stopPropagation();
               try {
                 await Clipboard.write({
-                  string: phrase.content.es,
+                  string: phrase.content[language],
                 });
                 presentToast("Frase copiada al portapapeles");
               } catch (err) {

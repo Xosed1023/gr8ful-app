@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: ⚠️ Deuda técnica — sin implementación
+**Status**: 🔀 Superada — reemplazada por `specs/018-completar-compartir`. No trabajar sobre esta spec directamente.
 
 **Input**: Deuda técnica identificada en exploración de código.
 

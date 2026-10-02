@@ -32,6 +32,7 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
         color={isMale ? CardColors.MAN_SKY_BLUE : CardColors.WOMAN_BLUE}
         phrase={phrase}
         adBannerId={isPlatform("ios") ? import.meta.env.VITE_IOS_EN_CARD : import.meta.env.VITE_ANDROID_EN_CARD}
+        language="en"
         isFavorite={isFavorite}
         onToggleFavorite={handleToggleFavorite}
       />
@@ -39,6 +40,7 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
         color={isMale ? CardColors.MAN_LIGHT_SKY_BLUE : CardColors.WOMAN_PURPLE}
         phrase={phrase}
         adBannerId={isPlatform("ios") ? import.meta.env.VITE_IOS_ES_CARD : import.meta.env.VITE_ANDROID_ES_CARD}
+        language="es"
         isFavorite={isFavorite}
         onToggleFavorite={handleToggleFavorite}
       />
@@ -46,6 +48,7 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
         color={isMale ? CardColors.MAN_DEEP_SKY_BLUE : CardColors.WOMAN_VIOLETTE}
         phrase={phrase}
         adBannerId={isPlatform("ios") ? import.meta.env.VITE_IOS_FR_CARD : import.meta.env.VITE_ANDROID_FR_CARD}
+        language="fr"
         isFavorite={isFavorite}
         onToggleFavorite={handleToggleFavorite}
       />

@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-21
 
-**Status**: Draft
+**Status**: ✅ Implementado
 
 **Input**: User description: "Completar la funcionalidad de favoritos de gr8ful, fusionando specs/007-completar-favoritos y specs/010-completar-bug-favoritos-indexeddb en una sola spec. Corregir el bug de tipo en getFavoritePhrases, cablear el botón de bookmark en CardPhrase, y crear un tercer tab de Favoritos en la barra inferior donde se puede desmarcar directamente. Considerar casos de prueba completos."
 

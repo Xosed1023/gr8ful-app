@@ -44,8 +44,8 @@ const Favorites: React.FC = () => {
   };
 
   return (
-    <IonPage className="bg-slate-900">
-      <div className="bg-slate-900 h-1/5 flex items-center pl-10">
+    <IonPage className="bg-[color:var(--header-bg)]">
+      <div className="bg-[color:var(--header-bg)] h-1/5 flex items-center pl-10">
         <h1 className="text-3xl font-bold text-white">
           {userLanguage === "es"
             ? "Favoritos"
@@ -54,9 +54,9 @@ const Favorites: React.FC = () => {
             : "Favorites"}
         </h1>
       </div>
-      <IonContent className="bg-white rounded-t-3xl">
+      <IonContent className="bg-[color:var(--surface)] rounded-t-3xl">
         {favorites.length === 0 ? (
-          <div className="flex items-center justify-center h-full px-10 pt-16 text-center text-slate-500">
+          <div className="flex items-center justify-center h-full px-10 pt-16 text-center text-[color:var(--empty-text)]">
             <p>{EMPTY_STATE_TEXT[userLanguage]}</p>
           </div>
         ) : (
@@ -69,7 +69,7 @@ const Favorites: React.FC = () => {
                 <IonIcon
                   slot="end"
                   icon={bookmark}
-                  className="text-2xl text-slate-900 cursor-pointer"
+                  className="text-2xl text-[color:var(--icon-color)] cursor-pointer"
                   onClick={() => handleUnfavorite(favorite)}
                 />
               </IonItem>

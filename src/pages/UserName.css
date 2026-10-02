@@ -10,10 +10,10 @@
     max-width: 300px;
     padding: 12px;
     font-size: 16px;
-    color: black;
+    color: var(--input-text);
     border: 1px solid var(--woman-lighter-purple);
     border-radius: 10px;
-    background-color: white;
+    background-color: var(--input-bg);
     text-align: center;
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
@@ -21,7 +21,7 @@
 .name-input:focus {
     outline: none;
     border-color: var(--button-hover);
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--input-focus-bg);
 }
 
 .finish-button {
@@ -36,8 +36,8 @@
 }
 
 .finish-button:hover {
-    background-color: var(--button-hover);
-    color: #000000;
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
 }
 
 .finish-button:active {
@@ -58,9 +58,9 @@
     background:
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to top,
-            rgba(111, 54, 235, 0.1) 0.5%,
-            rgba(111, 54, 235, 0) 20%,
-            rgba(111, 54, 235, 0) 100%),
+            var(--g-woman-s) 0.5%,
+            var(--g-woman-z) 20%,
+            var(--g-woman-z) 100%),
         /* Color de fondo base */
         var(--background-color);
     height: 100vh;
@@ -73,9 +73,9 @@
     background:
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to top,
-            rgba(19, 142, 173, 0.1) 0.5%,
-            rgba(54, 235, 199, 0) 20%,
-            rgba(13, 189, 160, 0) 100%),
+            var(--g-man2-s) 0.5%,
+            var(--g-man2-m) 20%,
+            var(--g-man2-e) 100%),
         /* Color de fondo base */
         var(--background-color);
     height: 100vh;
@@ -113,7 +113,7 @@
 
 /* Botón de continuar - Hombre */
 .next-button.man-button {
-    background-color: #3C91C7;
+    background-color: var(--btn-man-bg);
     color: white;
 }
 
@@ -124,8 +124,8 @@
 
 /* Botón deshabilitado */
 .next-button.disabled {
-    background-color: #d3d3d3;
-    color: #a1a1a1;
+    background-color: var(--btn-disabled-bg);
+    color: var(--btn-disabled-text);
     pointer-events: none;
     cursor: not-allowed;
 }

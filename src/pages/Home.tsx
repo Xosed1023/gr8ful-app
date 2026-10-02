@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import CardsContainer from "../components/home/CardsContainer";
 import Greetings from "../components/home/Greetings";
 import { Phrase } from "../models/Phrase";
+import { useUserGender } from "../hooks/useUserGender";
 
 import "./Home.css";
 import { AppHomeScreenLanguage } from "../persistence/languages";
 import { LanguageKeys } from "../persistence/languages";
 
 const Home = ({ phrase }: { phrase: Phrase }) => {
+  const { isMale } = useUserGender();
 
   const [greetingsText, setGreetingsText] = useState(["Hi"]);
   const [inspirationText, setInspirationText] = useState([
@@ -36,7 +38,11 @@ const Home = ({ phrase }: { phrase: Phrase }) => {
   return (
     <IonPage className="overflow-hidden">
       <IonContent fullscreen>
-        <div className="backgroundHome flex flex-col overflow-hidden h-4/5">
+        <div
+          className={`backgroundHome ${
+            isMale ? "home-man" : ""
+          } flex flex-col overflow-hidden h-4/5`}
+        >
           <Greetings
             greeting={greetingsText[0]}
             inspiration={inspirationText[0]}

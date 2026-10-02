@@ -33,7 +33,7 @@ const Languages = ({ backTo }: { backTo?: string }) => {
             {/* Flecha de retroceso */}
             {/* <div className="absolute top-4 left-4">
               <IoArrowBack
-                className="text-black text-3xl cursor-pointer"
+                className="text-[color:var(--text-color)] text-3xl cursor-pointer"
                 onClick={() => navigate.push(backTo || "/", "back")}
               />
             </div> */}

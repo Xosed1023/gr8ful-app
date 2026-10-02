@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: ⚠️ Deuda técnica — lectura implementada, sin control de UI
+**Status**: 🔀 Superada — reemplazada por `specs/019-completar-dark-mode-toggle`. No trabajar sobre esta spec directamente.
 
 **Input**: Deuda técnica identificada en exploración de código.
 

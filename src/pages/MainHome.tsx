@@ -199,7 +199,7 @@ const MainHome = () => {
 
   return (
     <IonReactRouter>
-      <IonTabs className="bg-indigo-950">
+      <IonTabs className="bg-[color:var(--tabs-bg)]">
         <IonRouterOutlet>
           <Route exact path="/tabs/home">
             <Home phrase={phrase!} />
@@ -224,11 +224,11 @@ const MainHome = () => {
             render={() => <Redirect to="/tabs/home" />}
           />
         </IonRouterOutlet>
-        <IonTabBar slot="bottom" className="bg-slate-900">
+        <IonTabBar slot="bottom" className="bg-[color:var(--nav-bg)]">
           <IonTabButton
             tab="home"
             href="/tabs/home"
-            className="bg-slate-900"
+            className="bg-[color:var(--nav-bg)]"
             onClick={() => {
               // Si ya estábamos en Home, el tap pide una frase nueva (con
               // anuncio rewarded). Si veníamos de otro tab, es navegación
@@ -244,7 +244,7 @@ const MainHome = () => {
           <IonTabButton
             tab="favorites"
             href="/tabs/favorites"
-            className="bg-slate-900"
+            className="bg-[color:var(--nav-bg)]"
             onClick={() => setSelectedTab("favorites")}
           >
             <IonIcon aria-hidden="true" icon={bookmark} />
@@ -252,7 +252,7 @@ const MainHome = () => {
           <IonTabButton
             tab="settings"
             href="/tabs/settings"
-            className="bg-slate-900"
+            className="bg-[color:var(--nav-bg)]"
             onClick={() => setSelectedTab("settings")}
           >
             <IonIcon aria-hidden="true" icon={settings} />

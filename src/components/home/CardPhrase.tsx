@@ -37,8 +37,8 @@ interface CardPhraseProps {
 
 const colorConfig = {
   [CardColors.WOMAN_BLUE]: {
-    background: "bg-sky-500",
-    text: "text-sky-900",
+    background: "bg-[color:var(--card-woman-blue-bg)]",
+    text: "text-[color:var(--card-woman-blue-text)]",
     initialPosition: "35vh",
     initialHeight: "65vh",
     expandedHeight: "90vh",
@@ -46,8 +46,8 @@ const colorConfig = {
     bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.WOMAN_PURPLE]: {
-    background: "bg-violet-400",
-    text: "text-purple-900",
+    background: "bg-[color:var(--card-woman-purple-bg)]",
+    text: "text-[color:var(--card-woman-purple-text)]",
     initialPosition: "53vh",
     initialHeight: "47vh",
     expandedHeight: "72vh",
@@ -55,8 +55,8 @@ const colorConfig = {
     bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.WOMAN_VIOLETTE]: {
-    background: "bg-violet-300",
-    text: "text-indigo-900",
+    background: "bg-[color:var(--card-woman-violette-bg)]",
+    text: "text-[color:var(--card-woman-violette-text)]",
     initialPosition: "70vh",
     initialHeight: "30vh",
     expandedHeight: "54vh",
@@ -64,8 +64,8 @@ const colorConfig = {
     bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
   [CardColors.MAN_SKY_BLUE]: {
-    background: "bg-[#61B2E4]",
-    text: "text-[#17537A]",
+    background: "bg-[color:var(--card-man-sky-bg)]",
+    text: "text-[color:var(--card-man-sky-text)]",
     initialPosition: "35vh",
     initialHeight: "65vh",
     expandedHeight: "90vh",
@@ -73,8 +73,8 @@ const colorConfig = {
     bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
-    background: "bg-[#5A9ABE]",
-    text: "text-[#154C6B]",
+    background: "bg-[color:var(--card-man-light-bg)]",
+    text: "text-[color:var(--card-man-light-text)]",
     initialPosition: "53vh",
     initialHeight: "47vh",
     expandedHeight: "72vh",
@@ -82,8 +82,8 @@ const colorConfig = {
     bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
-    background: "bg-[#95C5DE]",
-    text: "text-[#0D4461]",
+    background: "bg-[color:var(--card-man-deep-bg)]",
+    text: "text-[color:var(--card-man-deep-text)]",
     initialPosition: "70vh",
     initialHeight: "30vh",
     expandedHeight: "54vh",

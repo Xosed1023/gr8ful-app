@@ -10,6 +10,7 @@ Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se
 - **Historial de frases vistas** — pantalla que liste todas las frases ya mostradas (`hasShown: true`), no solo las favoritas.
 - **Exportar/importar datos locales** — dado que todo es local (sin backend), permitir exportar favoritos/preferencias a un archivo para respaldo o cambio de dispositivo.
 - **Selección de fuente/tamaño de texto** — accesibilidad para usuarios que necesitan texto más grande al leer las frases.
+- **Vectorizar el logo de Gr8ful** — hoy es una imagen estática que no se puede recolorear, así que en modo oscuro (spec 019) se ve con menos contraste; vectorizarlo permitiría tokenizar sus colores y adaptarlo a ambos temas.
 
 ## Relación con deuda técnica existente
 

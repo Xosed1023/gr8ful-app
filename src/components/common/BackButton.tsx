@@ -12,7 +12,7 @@ const BackButton = ({
 }: BackButtonProps) => (
   <div className={className}>
     <IoArrowBack
-      className="text-black text-3xl cursor-pointer"
+      className="text-[color:var(--text-color)] text-3xl cursor-pointer"
       onClick={onClick}
     />
   </div>

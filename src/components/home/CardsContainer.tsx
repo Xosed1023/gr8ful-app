@@ -55,7 +55,9 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
 
       <div
         className={`${
-          isMale ? "bg-[#1C2742]" : "bg-indigo-950"
+          isMale
+            ? "bg-[color:var(--author-bar-man)]"
+            : "bg-[color:var(--author-bar-woman)]"
         } rounded-t-3xl p-6 shadow-[rgba(0,0,0,0.55)_-2px_-2px_10px_-2px] absolute ${
           isPlatform("ios") ? "bottom-16 pb-10" : "bottom-14"
         } z-9 w-full flex justify-center items-center h-3`}

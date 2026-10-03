@@ -1,3 +1,4 @@
+import { markOnboardingComplete } from "../persistence/onboardingState";
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./UserName.css";
 import { useEffect, useState } from "react";
@@ -20,6 +21,8 @@ const UserName = ({ backTo }: { backTo?: string }) => {
   const handleFinish = async () => {
     if (name.trim() === "") return;
     localStorage.setItem("name", name);
+    // Último paso del onboarding: a partir de aquí la app abre directo en Home.
+    markOnboardingComplete();
     await hapticTap();
     navigate.push("/loadingScreen", "forward");
     await new Promise((resolve) => setTimeout(resolve, 1000));

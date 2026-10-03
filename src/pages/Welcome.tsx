@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import "./Welcome.css";
 import { hapticTap } from "../hooks/useHaptics";
+import { isOnboardingComplete } from "../persistence/onboardingState";
 
 const Welcome: React.FC = () => {
   const welcomeTexts = [
@@ -15,7 +16,10 @@ const Welcome: React.FC = () => {
   const navigate = useIonRouter();
 
   useEffect(() => {
-    if(localStorage.getItem("gr8fulFirstTime") === "true"){
+    // gr8fulFirstTime solo indica que las frases iniciales ya se cargaron; el
+    // onboarding se considera terminado únicamente al pulsar «Finalizar»
+    // (spec 022).
+    if (isOnboardingComplete()) {
       navigate.push("/mainHome", "forward");
     }
 

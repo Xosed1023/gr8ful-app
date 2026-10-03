@@ -1,17 +1,6 @@
-import {
-  BannerAdOptions,
-  BannerAdPosition,
-  BannerAdSize,
-} from "@capacitor-community/admob";
 import { Clipboard } from "@capacitor/clipboard";
 import { Share } from "@capacitor/share";
-import {
-  IonButton,
-  IonChip,
-  IonIcon,
-  isPlatform,
-  useIonToast,
-} from "@ionic/react";
+import { IonButton, IonChip, IonIcon, useIonToast } from "@ionic/react";
 import { motion } from "framer-motion";
 import {
   bookmark,
@@ -20,11 +9,13 @@ import {
   ellipsisHorizontal,
   shareSocialOutline,
 } from "ionicons/icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
 import { hapticTap } from "../../hooks/useHaptics";
 import { LanguageKeys } from "../../persistence/languages";
+import { computeBannerMargin } from "../../ads/bannerMargin";
+import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type" | "author">;
@@ -43,7 +34,6 @@ const colorConfig = {
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
-    bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-[color:var(--card-woman-purple-bg)]",
@@ -52,7 +42,6 @@ const colorConfig = {
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
-    bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-[color:var(--card-woman-violette-bg)]",
@@ -61,7 +50,6 @@ const colorConfig = {
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
-    bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-[color:var(--card-man-sky-bg)]",
@@ -70,7 +58,6 @@ const colorConfig = {
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
-    bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
     background: "bg-[color:var(--card-man-light-bg)]",
@@ -79,7 +66,6 @@ const colorConfig = {
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
-    bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
     background: "bg-[color:var(--card-man-deep-bg)]",
@@ -88,7 +74,6 @@ const colorConfig = {
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
-    bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
 };
 
@@ -102,6 +87,10 @@ const CardPhrase = ({
 }: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
+  // Verdadero solo cuando la tarjeta terminó de abrirse: el banner no aparece
+  // a mitad de la animación y desaparece en cuanto se pulsa para cerrar.
+  const [isSettledOpen, setIsSettledOpen] = useState(false);
+  const bannerSlotRef = useRef<HTMLDivElement>(null);
   const [present] = useIonToast();
 
   const presentToast = (message: string) => {
@@ -113,6 +102,7 @@ const CardPhrase = ({
   };
 
   const toggleCard = async () => {
+    if (isExpanded) setIsSettledOpen(false);
     setIsExpanded((prev) => !prev);
     await hapticTap();
   };
@@ -125,6 +115,18 @@ const CardPhrase = ({
     expandedPosition,
     expandedHeight,
   } = colorConfig[color];
+
+  // Banner de la tarjeta (spec 020): se pide al terminar de abrirse y se
+  // oculta al cerrar, al desmontar o al salir de Home (ver cardBanner.ts).
+  useEffect(() => {
+    if (!isSettledOpen || !bannerSlotRef.current) return;
+    showCardBanner({
+      ownerId: language,
+      adId: adBannerId,
+      margin: computeBannerMargin(bannerSlotRef.current.getBoundingClientRect()),
+    });
+    return () => hideCardBanner(language);
+  }, [isSettledOpen, language, adBannerId]);
 
   // Calcula el delay invertido basado en `initialPosition`
   const calculateDelay = (position: string) => {
@@ -159,6 +161,7 @@ const CardPhrase = ({
           setIsInitialAnimationDone(true); // Marca como completada la animación inicial
           hapticTap(); // Vibra al finalizar la animación de entrada
         }
+        if (isExpanded) setIsSettledOpen(true);
       }}
     >
       <IonIcon
@@ -228,6 +231,8 @@ const CardPhrase = ({
           </IonButton>
         </div>
       </div>
+      {/* Espacio reservado para el banner nativo (spec 020); transparente. */}
+      <div ref={bannerSlotRef} aria-hidden="true" className="mt-4 min-h-[60px]" />
     </motion.div>
   );
 };

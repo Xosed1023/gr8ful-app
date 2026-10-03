@@ -1,10 +1,16 @@
-import { isPlatform, useIonViewWillEnter } from "@ionic/react";
+import {
+  isPlatform,
+  useIonViewDidEnter,
+  useIonViewWillEnter,
+  useIonViewWillLeave,
+} from "@ionic/react";
 import { useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
 import CardPhrase from "./CardPhrase";
 import { useUserGender } from "../../hooks/useUserGender";
 import { getPhraseById, toggleFavorite } from "../../persistence/IndexedDBService";
+import { setHomeVisible } from "../../ads/cardBanner";
 
 const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
   const { isMale } = useUserGender();
@@ -18,6 +24,11 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
       if (p) setIsFavorite(p.isFavorite);
     });
   });
+
+  // El banner nativo flota sobre toda la app: se oculta al salir de Home y
+  // reaparece al volver si hay una tarjeta abierta (spec 020, FR-007).
+  useIonViewWillLeave(() => setHomeVisible(false));
+  useIonViewDidEnter(() => setHomeVisible(true));
 
   const handleToggleFavorite = async () => {
     if (phrase.id == null) return;

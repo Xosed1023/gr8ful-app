@@ -11,6 +11,7 @@ Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se
 - **Exportar/importar datos locales** — dado que todo es local (sin backend), permitir exportar favoritos/preferencias a un archivo para respaldo o cambio de dispositivo.
 - **Selección de fuente/tamaño de texto** — accesibilidad para usuarios que necesitan texto más grande al leer las frases.
 - **Vectorizar el logo de Gr8ful** — hoy es una imagen estática que no se puede recolorear, así que en modo oscuro (spec 019) se ve con menos contraste; vectorizarlo permitiría tokenizar sus colores y adaptarlo a ambos temas.
+- **Validar la posición de los banners por tarjeta en Android** — `specs/020-completar-banners-admob-card` se verificó solo en un iPhone 17 Pro. En Android (sobre todo con pantalla completa/borde a borde) el contenedor del plugin puede no coincidir con `window.innerHeight`; si el banner sale desplazado, ajustar `PLATFORM_OFFSET` en `src/ads/bannerMargin.ts` (quickstart.md §5). También conviene revisar tamaños de pantalla pequeños en iOS.
 
 ## Relación con deuda técnica existente
 

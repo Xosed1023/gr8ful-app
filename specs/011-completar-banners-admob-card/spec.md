@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: ⚠️ Deuda técnica — IDs calculados, sin render real
+**Status**: 🔀 Superada — reemplazada por `specs/020-completar-banners-admob-card`. No trabajar sobre esta spec directamente.
 
 **Input**: Deuda técnica identificada en exploración de código.
 

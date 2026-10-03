@@ -2,14 +2,14 @@
 .background-waiting {
     background:
         linear-gradient(to top right,
-            rgba(111, 54, 235, 0.1) 10%,
-            rgba(111, 54, 235, 0) 20%,
-            rgba(111, 54, 235, 0) 100%),
+            var(--g-woman-s) 10%,
+            var(--g-woman-z) 20%,
+            var(--g-woman-z) 100%),
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to bottom left,
-            rgba(111, 54, 235, 0.1) 10%,
-            rgba(111, 54, 235, 0) 20%,
-            rgba(111, 54, 235, 0) 100%),
+            var(--g-woman-s) 10%,
+            var(--g-woman-z) 20%,
+            var(--g-woman-z) 100%),
         /* Color de fondo base */
         var(--background-color);
     height: 100vh;
@@ -20,13 +20,13 @@
 .loading-man {
     background:
         linear-gradient(to top right,
-            rgba(54, 181, 235, 0.2) 10%,
-            rgba(54, 166, 235, 0) 20%,
-            rgba(54, 166, 235, 0) 100%),
+            var(--g-lm1-s) 10%,
+            var(--g-lm1-z) 20%,
+            var(--g-lm1-z) 100%),
         linear-gradient(to bottom left,
-            rgba(54, 166, 235, 0.2) 10%,
-            rgba(54, 160, 235, 0.137) 20%,
-            rgba(54, 187, 235, 0) 100%),
+            var(--g-lm2-s) 10%,
+            var(--g-lm2-m) 20%,
+            var(--g-lm2-e) 100%),
         var(--background-color);
     height: 100vh;
     width: 100vw;

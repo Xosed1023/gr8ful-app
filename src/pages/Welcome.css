@@ -3,14 +3,14 @@
     background:
         /* Degradado azul de abajo hacia arriba */
         linear-gradient(to top,
-            rgba(0, 217, 255, 0.2) 1%,
-            rgba(0, 217, 255, 0) 20%,
-            rgba(0, 217, 255, 0) 100%),
+            var(--g-man-s) 1%,
+            var(--g-man-z) 20%,
+            var(--g-man-z) 100%),
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to bottom,
-            rgba(111, 54, 235, 0.1) 0.5%,
-            rgba(111, 54, 235, 0) 20%,
-            rgba(111, 54, 235, 0) 100%),
+            var(--g-woman-s) 0.5%,
+            var(--g-woman-z) 20%,
+            var(--g-woman-z) 100%),
         /* Color de fondo base */
         var(--background-color);
     height: 100vh;
@@ -23,7 +23,7 @@
 }
 
 .description {
-    color: var(--male-text-light-color);
+    color: var(--text-muted);
     max-width: 600px;
     line-height: 1.5;
     padding-left: 3rem;

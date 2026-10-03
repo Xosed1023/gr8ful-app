@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161326514292",
+    "project_id": "gr8ful-746bb",
+    "storage_bucket": "gr8ful-746bb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161326514292:android:4044fa3b55e59f60bad121",
+        "android_client_info": {
+          "package_name": "com.zen.gr8ful"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdtxa0n2TENpsEMM0kdhgM6WpFeideKYk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

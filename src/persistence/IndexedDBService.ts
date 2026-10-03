@@ -1,4 +1,5 @@
 import { Phrase } from "../models/Phrase";
+import { Topic } from "../models/Topic";
 import { openDB, IDBPDatabase } from 'idb';
 
 const DB_NAME = 'motivationalPhrasesDB';
@@ -33,8 +34,12 @@ export async function addOrUpdatePhrase(phrase: Phrase) {
 
 export async function getFavoritePhrases(): Promise<Phrase[]> {
   if (!db) throw new Error('Database not initialized');
-  // TODO Revisar el true en getAllFromIndex
-  return await db.getAllFromIndex(STORE_NAME, 'isFavorite', "true");
+  // No se usa el índice 'isFavorite': IndexedDB no admite `boolean` como tipo
+  // de clave válido (spec: solo number/string/Date/binario/array de esos), por
+  // lo que un índice sobre un campo boolean nunca indexa ningún registro. Se
+  // filtra en memoria, mismo patrón ya usado para `hasShown` en getRandomPhrase.
+  const phrases = await db.getAll(STORE_NAME);
+  return phrases.filter((phrase) => phrase.isFavorite === true);
 }
 
 export async function toggleFavorite(id: number, isFavorite: boolean) {
@@ -44,6 +49,11 @@ export async function toggleFavorite(id: number, isFavorite: boolean) {
     phrase.isFavorite = isFavorite;
     await addOrUpdatePhrase(phrase); // Actualizamos la frase
   }
+}
+
+export async function getAllPhrases(): Promise<Phrase[]> {
+  if (!db) throw new Error('Database not initialized');
+  return db.getAll(STORE_NAME);
 }
 
 export async function getRandomPhrase(typesToFilter: Topic[] = []): Promise<Phrase | null> {

@@ -1,14 +1,13 @@
-import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { IoArrowBack } from "react-icons/io5";
+import { useAppLanguage } from "../hooks/useAppLanguage";
+import { hapticTap } from "../hooks/useHaptics";
+import BackButton from "../components/common/BackButton";
 
 const Gender: React.FC = () => {
-  const [userLanguage, setUserLanguage] = useState(
-    localStorage.getItem("language")
-  );
+  const { userLanguage } = useAppLanguage();
   const [title, setTitle] = useState(["I", "identify", "as"]);
   const [options, setOptions] = useState(["Woman", "Man"]);
 
@@ -19,20 +18,12 @@ const Gender: React.FC = () => {
   };
 
   useEffect(() => {
-    setTitle(
-      AppGenderScreenLanguage.title[
-      userLanguage as keyof typeof AppGenderScreenLanguage.title
-      ]
-    );
+    setTitle(AppGenderScreenLanguage.title[userLanguage]);
     setOptions([
-      AppGenderScreenLanguage.options.woman[
-      userLanguage as keyof typeof AppGenderScreenLanguage.options.woman
-      ],
-      AppGenderScreenLanguage.options.man[
-      userLanguage as keyof typeof AppGenderScreenLanguage.options.man
-      ],
+      AppGenderScreenLanguage.options.woman[userLanguage],
+      AppGenderScreenLanguage.options.man[userLanguage],
     ]);
-  }, []);
+  }, [userLanguage]);
 
   return (
     <IonPage>
@@ -40,12 +31,7 @@ const Gender: React.FC = () => {
         <div className="safe-area">
           <div className="background flex flex-col items-center justify-center min-h-screen">
             {/* Flecha de retroceso */}
-            <div className="absolute top-4 left-4">
-              <IoArrowBack
-                className="text-black text-3xl cursor-pointer"
-                onClick={() => navigate.push("/languages", "back")}
-              />
-            </div>
+            <BackButton onClick={() => navigate.push("/languages", "back")} />
 
             {/* SVG de los puntos superiores */}
             <img
@@ -66,8 +52,8 @@ const Gender: React.FC = () => {
               <button
                 className="gender-button"
                 onClick={async () => {
-                  handleGenderChange("W")
-                  await Haptics.impact({ style: ImpactStyle.Medium });
+                  handleGenderChange("W");
+                  await hapticTap();
                 }}
               >
                 {options[0]}
@@ -75,8 +61,8 @@ const Gender: React.FC = () => {
               <button
                 className="gender-button"
                 onClick={async () => {
-                  handleGenderChange("M")
-                  await Haptics.impact({ style: ImpactStyle.Medium });
+                  handleGenderChange("M");
+                  await hapticTap();
                 }}
               >
                 {options[1]}

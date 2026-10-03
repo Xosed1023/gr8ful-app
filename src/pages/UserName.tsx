@@ -2,22 +2,25 @@ import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./UserName.css";
 import { useEffect, useState } from "react";
 import { AppNameScreenLanguage } from '../persistence/languages';
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { IoArrowBack } from "react-icons/io5"; // Importa el icono de flecha
+import { useAppLanguage } from "../hooks/useAppLanguage";
+import { useUserGender } from "../hooks/useUserGender";
+import { hapticTap } from "../hooks/useHaptics";
+import BackButton from "../components/common/BackButton";
 
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
-  const [title, setTitle] = useState(["What's your", "name?"]);
+  const [title, setTitle] = useState(["What's your", "name"]);
   const [note, setNote] = useState(["*Your name will appear with your daily quotes for a personalized experience."]);
   const [placeholder, setPlaceholder] = useState(["Your name here..."]);
   const [button, setButton] = useState(["Finish"]);
-  const [userLanguage, setUserLanguage] = useState(localStorage.getItem("language"));
+  const { userLanguage } = useAppLanguage();
+  const { isWoman } = useUserGender();
 
   const handleFinish = async () => {
     if (name.trim() === "") return;
     localStorage.setItem("name", name);
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    await hapticTap();
     navigate.push("/loadingScreen", "forward");
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setTimeout(() => {
@@ -26,39 +29,20 @@ const UserName = ({ backTo }: { backTo?: string }) => {
   };
 
   useEffect(() => {
-    setTitle(
-      AppNameScreenLanguage.title[
-      userLanguage as keyof typeof AppNameScreenLanguage.title
-      ]
-    );
-    setNote(
-      AppNameScreenLanguage.note[
-      userLanguage as keyof typeof AppNameScreenLanguage.note
-      ]);
-    setPlaceholder(
-      AppNameScreenLanguage.placeHolder[
-      userLanguage as keyof typeof AppNameScreenLanguage.placeHolder
-      ]);
-    setButton(
-      AppNameScreenLanguage.buttons[
-      userLanguage as keyof typeof AppNameScreenLanguage.buttons
-      ]);
-  }, []);
+    setTitle(AppNameScreenLanguage.title[userLanguage]);
+    setNote(AppNameScreenLanguage.note[userLanguage]);
+    setPlaceholder(AppNameScreenLanguage.placeHolder[userLanguage]);
+    setButton(AppNameScreenLanguage.buttons[userLanguage]);
+  }, [userLanguage]);
 
-  const backgroundClass =
-    localStorage.gender === "W" ? "background-woman" : "background-man";
+  const backgroundClass = isWoman ? "background-woman" : "background-man";
 
   return (
     <IonPage>
       <IonContent fullscreen>
         <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
           {/* Flecha de retroceso */}
-          <div className="absolute top-4 left-4">
-            <IoArrowBack
-              className="text-black text-3xl cursor-pointer" // Ajusta los estilos según sea necesario
-              onClick={() => navigate.goBack()} // Regresar a la pantalla anterior
-            />
-          </div>
+          <BackButton onClick={() => navigate.goBack()} />
 
           {/* Puntos superiores */}
           {backTo === undefined &&
@@ -69,9 +53,12 @@ const UserName = ({ backTo }: { backTo?: string }) => {
             />
           }
           {/* Texto principal */}
-          <div className="text-container flex flex-col items-center mt-12 px-16 pb-8 pt-6">
+          <div className="text-container flex flex-row items-center mt-12 px-16 pb-8 pt-6">
             <p className="text-normal">
-              {title[0]} <span className="text-highlight"> {title[1]}</span>
+              {title[0]}
+            </p>
+            <p className="text-highlight">
+              {title[1]}
             </p>
           </div>
           {/* Input para el nombre */}
@@ -89,7 +76,7 @@ const UserName = ({ backTo }: { backTo?: string }) => {
           {/* Botones de opciones */}
           <div className="action-container flex gap-4 mt-8 pb-8">
             <button
-              className={`next-button mt-2 rounded-full ${localStorage.gender === "W" ? "woman-button" : "man-button"
+              className={`next-button mt-2 rounded-full ${isWoman ? "woman-button" : "man-button"
                 } ${name.trim() === "" ? "disabled" : ""}`}
               onClick={handleFinish}
               disabled={name.trim() === ""}

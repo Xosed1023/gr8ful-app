@@ -1,10 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+SAS:wght@400;700&display=swap');
+
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Definición global de fuentes personalizadas */
+.playwrite-de-sas {
+  font-family: "Playwrite DE SAS", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.playwrite-de-sas-bold {
+  font-family: "Playwrite DE SAS", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
 
 :root {
     /* Colores predeterminados (neutros o genéricos) */
@@ -24,10 +41,188 @@ http://ionicframework.com/docs/theming/ */
     --woman-vibrant-purple: #6F36EB;
 
     --ion-safe-area-top: 25px;
+
+    /* ---- Tokens de tema (spec 019). Valores claros = colores previos. ---- */
+    --text-muted: #506A7B;
+    --accent-text: #19104C;
+
+    --btn-bg: #000000;
+    --btn-text: #ffffff;
+    --btn-hover-bg: #ffffff;
+    --btn-hover-text: #000000;
+    --btn-hover-border: #000000;
+    --btn-man-bg: #3C91C7;
+    --btn-disabled-bg: #d3d3d3;
+    --btn-disabled-text: #a1a1a1;
+
+    --input-bg: #ffffff;
+    --input-text: #000000;
+    --input-focus-bg: rgba(0, 0, 0, 0.05);
+
+    --chip-woman-bg: rgb(217, 172, 253);
+    --chip-woman-text: #000000;
+    --chip-woman-border: #000000;
+    --chip-man-bg: #c2e4ff;
+    --chip-man-text: #000000;
+    --chip-man-border: #000000;
+
+    --surface: #ffffff;
+    --header-bg: #0f172a;
+    --nav-bg: #0f172a;
+    --tabs-bg: #1e1b4b;
+    --icon-color: #0f172a;
+    --empty-text: #64748b;
+
+    --toast-bg: #f4f4fa;
+    --toast-text: #4b4a50;
+    --toast-border: #d2d2d2;
+    --toast-button: #030207;
+
+    --author-bar-woman: #1e1b4b;
+    --author-bar-man: #1C2742;
+    --greeting-woman: #2e1065;
+    --greeting-man: #1C2742;
+
+    --card-woman-blue-bg: #0ea5e9;
+    --card-woman-blue-text: #0c4a6e;
+    --card-woman-purple-bg: #a78bfa;
+    --card-woman-purple-text: #581c87;
+    --card-woman-violette-bg: #c4b5fd;
+    --card-woman-violette-text: #312e81;
+    --card-man-sky-bg: #61B2E4;
+    --card-man-sky-text: #17537A;
+    --card-man-light-bg: #5A9ABE;
+    --card-man-light-text: #154C6B;
+    --card-man-deep-bg: #95C5DE;
+    --card-man-deep-text: #0D4461;
+
+    /* Degradados de fondo (inicio visible / extremo transparente) */
+    --g-woman-s: rgba(111, 54, 235, 0.1);
+    --g-woman-z: rgba(111, 54, 235, 0);
+    --g-man-s: rgba(0, 217, 255, 0.2);
+    --g-man-z: rgba(0, 217, 255, 0);
+    --g-man2-s: rgba(19, 142, 173, 0.1);
+    --g-man2-m: rgba(54, 235, 199, 0);
+    --g-man2-e: rgba(13, 189, 160, 0);
+    --g-lm1-s: rgba(54, 181, 235, 0.2);
+    --g-lm1-z: rgba(54, 166, 235, 0);
+    --g-lm2-s: rgba(54, 166, 235, 0.2);
+    --g-lm2-m: rgba(54, 160, 235, 0.137);
+    --g-lm2-e: rgba(54, 187, 235, 0);
+}
+
+/* ---- Modo oscuro (spec 019): misma clase que usa la paleta de Ionic ---- */
+.ion-palette-dark {
+    --background-color: #0F1220;
+    --text-color: #ECEAF4;
+    --male-text-light-color: #A9A7BD;
+    --text-muted: #A9A7BD;
+    --accent-text: #C9BDF5;
+    --woman-dark-purple: #C9BDF5;
+    --woman-light-purple: #A9A7BD;
+    --woman-lighter-purple: #A9A7BD;
+    --button-hover: #A58BFF;
+
+    --btn-bg: #ECEAF4;
+    --btn-text: #0F1220;
+    --btn-hover-bg: #2A2D40;
+    --btn-hover-text: #ECEAF4;
+    --btn-hover-border: #ECEAF4;
+    --btn-man-bg: #2A6F96;
+    --btn-disabled-bg: #3A3F55;
+    --btn-disabled-text: #7D8095;
+
+    --input-bg: #1A1D2E;
+    --input-text: #ECEAF4;
+    --input-focus-bg: rgba(255, 255, 255, 0.08);
+
+    --chip-woman-bg: #5B3FA8;
+    --chip-woman-text: #F5F3FF;
+    --chip-woman-border: #A58BFF;
+    --chip-man-bg: #1E5F8A;
+    --chip-man-text: #E6F3FA;
+    --chip-man-border: #8FC4E8;
+
+    --surface: #0F1220;
+    --header-bg: #0B0F1C;
+    --nav-bg: #0B0F1C;
+    --tabs-bg: #0B0F1C;
+    --icon-color: #ECEAF4;
+    --empty-text: #A9A7BD;
+
+    --toast-bg: #2A2D40;
+    --toast-text: #ECEAF4;
+    --toast-border: #4A4D60;
+    --toast-button: #ECEAF4;
+
+    --author-bar-woman: #141830;
+    --author-bar-man: #101A2E;
+    --greeting-woman: #ECEAF4;
+    --greeting-man: #ECEAF4;
+
+    --card-woman-blue-bg: #1E5F8A;
+    --card-woman-blue-text: #F0F9FF;
+    --card-woman-purple-bg: #4C2A85;
+    --card-woman-purple-text: #F1E9FA;
+    --card-woman-violette-bg: #5B3FA8;
+    --card-woman-violette-text: #F5F3FF;
+    --card-man-sky-bg: #1E5F8A;
+    --card-man-sky-text: #E6F3FA;
+    --card-man-light-bg: #1B5073;
+    --card-man-light-text: #E6F3FA;
+    --card-man-deep-bg: #2A6F96;
+    --card-man-deep-text: #E6F3FA;
+
+    --g-woman-s: rgba(74, 39, 168, 0.4);
+    --g-woman-z: rgba(74, 39, 168, 0);
+    --g-man-s: rgba(30, 95, 138, 0.45);
+    --g-man-z: rgba(30, 95, 138, 0);
+    --g-man2-s: rgba(30, 95, 138, 0.45);
+    --g-man2-m: rgba(30, 95, 138, 0);
+    --g-man2-e: rgba(30, 95, 138, 0);
+    --g-lm1-s: rgba(30, 95, 138, 0.45);
+    --g-lm1-z: rgba(30, 95, 138, 0);
+    --g-lm2-s: rgba(30, 95, 138, 0.45);
+    --g-lm2-m: rgba(30, 95, 138, 0.2);
+    --g-lm2-e: rgba(30, 95, 138, 0);
+}
+
+/* Variables de Ionic: la paleta oscura estándar las define bajo
+   `.ion-palette-dark.ios|.md` (mayor especificidad que `.ion-palette-dark`),
+   por eso se sobrescriben con el mismo nivel de especificidad. Usa negro puro
+   (#000) para el fondo de contenido e items; se alinean con el diseño. */
+:root.ion-palette-dark.ios,
+:root.ion-palette-dark.md {
+    --ion-background-color: #0F1220;
+    --ion-item-background: transparent;
+    --ion-card-background: #1A1D2E;
+    --ion-toolbar-background: #0B0F1C;
+    --ion-tab-bar-background: #0B0F1C;
+}
+
+/* Imágenes SVG con colores propios (se cargan con <img>, el CSS no llega a su
+   interior): en oscuro se invierten. `hue-rotate(180deg)` conserva el tono al
+   invertir la luminosidad. El logo es negro sobre transparente, basta invertir. */
+.ion-palette-dark .logo {
+    filter: invert(1);
+}
+
+.ion-palette-dark .dots1,
+.ion-palette-dark .dots-top,
+.ion-palette-dark .feather,
+.ion-palette-dark .img-themed {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+/* Base de pantalla propia de la paleta de hombre */
+.ion-palette-dark .background-man,
+.ion-palette-dark .loading-man,
+.ion-palette-dark .backgroundHome.home-man {
+    --background-color: #0C1520;
 }
 
 .ionic-button {
-    background-color: #000000;
+    background-color: var(--btn-bg);
     height: 50px;
     width: clamp(130px, 90%, 280px);
     border: none;
@@ -35,19 +230,19 @@ http://ionicframework.com/docs/theming/ */
     transition: background-color 0.3s ease-in-out;
     font-size: 18px;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--btn-text);
     border-radius: 130px;
 }
 
 .ionic-button:hover {
-    background-color: var(--button-hover);
-    color: #000000;
-    border: 2px solid #000000;
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
+    border: 2px solid var(--btn-hover-border);
 }
 
 .ionic-button:active {
-    background-color: var(--button-hover);
-    color: #000000;
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
     transform: scale(0.95);
 }
 
@@ -56,9 +251,9 @@ http://ionicframework.com/docs/theming/ */
     background:
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to top,
-            rgba(111, 54, 235, 0.1) 0.5%,
-            rgba(111, 54, 235, 0) 20%,
-            rgba(111, 54, 235, 0) 100%),
+            var(--g-woman-s) 0.5%,
+            var(--g-woman-z) 20%,
+            var(--g-woman-z) 100%),
         /* Color de fondo base */
         var(--background-color);
     font-family: 'Montserrat', sans-serif;
@@ -69,18 +264,18 @@ http://ionicframework.com/docs/theming/ */
     background:
         /* Degradado azul de abajo hacia arriba */
         linear-gradient(to top,
-            rgba(0, 217, 255, 0.2) 1%,
-            rgba(0, 217, 255, 0) 20%,
-            rgba(0, 217, 255, 0) 100%),
+            var(--g-man-s) 1%,
+            var(--g-man-z) 20%,
+            var(--g-man-z) 100%),
         /* Color de fondo base */
         var(--background-color);
     font-family: 'Montserrat', sans-serif;
 }
 
 ion-toast.custom-toast {
-    --background: #f4f4fa;
+    --background: var(--toast-bg);
     --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
-    --color: #4b4a50;
+    --color: var(--toast-text);
 }
 
 ion-toast.custom-toast::part(message) {
@@ -88,11 +283,10 @@ ion-toast.custom-toast::part(message) {
 }
 
 ion-toast.custom-toast::part(button) {
-    border-left: 1px solid #d2d2d2;
-    color: #030207;
+    border-left: 1px solid var(--toast-border);
+    color: var(--toast-button);
     font-size: 15px;
 }
-
 
 html {
     --ion-safe-area-left: 25px;
@@ -139,8 +333,9 @@ ion-modal {
     align-self: center;
 }
 
-* {
-    font-family: 'Montserrat', sans-serif;
+/* Regla global con especificidad */
+*:not(.playwrite-de-sas):not(.playwrite-de-sas-bold):not(.text-highlight) {
+    font-family: 'Montserrat', sans-serif !important;
     overflow: hidden;
 }
 

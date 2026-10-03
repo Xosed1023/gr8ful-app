@@ -2,55 +2,45 @@ import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./QuoteTime.css";
 import { useEffect, useState } from "react";
 import { AppTimeScreenLanguage } from '../persistence/languages';
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { IoArrowBack } from "react-icons/io5";
+import { useAppLanguage } from "../hooks/useAppLanguage";
+import { useUserGender } from "../hooks/useUserGender";
+import { hapticTap } from "../hooks/useHaptics";
+import { enableDailyQuotes, refreshDailyQuotes } from "../notifications/dailyQuote";
+import BackButton from "../components/common/BackButton";
 
-const QuoteTime = ({ backTo }: { backTo: string }) => {
+const QuoteTime = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
-  const [userLanguage, setUserLanguage] = useState(
-    localStorage.getItem("language")
-  );
+  const { userLanguage } = useAppLanguage();
+  const { isWoman } = useUserGender();
   const [title, setTitle] = useState(["When should we send your daily", "quote?"]);
   const [note, setNote] = useState(["*You can change this later in settings."]);
 
-  const handleGenderChange = (gender: string) => {
-    localStorage.setItem("gender", gender);
-    navigate.push("/quoteTime", "forward");
-  };
-
   useEffect(() => {
-    setTitle(
-      AppTimeScreenLanguage.title[
-      userLanguage as keyof typeof AppTimeScreenLanguage.title
-      ]
-    );
-    setNote(
-      AppTimeScreenLanguage.note[
-      userLanguage as keyof typeof AppTimeScreenLanguage.note
-      ]);
-  }, []);
+    setTitle(AppTimeScreenLanguage.title[userLanguage]);
+    setNote(AppTimeScreenLanguage.note[userLanguage]);
+  }, [userLanguage]);
 
   const handleTimeChange = async (time: string) => {
     localStorage.setItem("time", time);
+    // Onboarding: las notificaciones quedan activadas y el permiso se pide aquí
+    // (spec 021, FR-005). Desde Ajustes solo se reprograman si ya están activas.
+    if (backTo) await refreshDailyQuotes();
+    else await enableDailyQuotes();
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/quoteTopics", "forward");
-    await Haptics.impact({ style: ImpactStyle.Medium });
+    await hapticTap();
   };
 
-  const backgroundClass =
-    localStorage.gender === "W" ? "background-woman" : "background-man";
+  const backgroundClass = isWoman ? "background-woman" : "background-man";
 
   return (
     <IonPage>
       <IonContent fullscreen>
         <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
           {/* Flecha de retroceso */}
-          <div className="absolute top-4 left-4">
-            <IoArrowBack
-              className="text-black text-3xl cursor-pointer"
-              onClick={() => navigate.push(backTo || "/gender", "back")}
-            />
-          </div>
+          <BackButton
+            onClick={() => navigate.push(backTo || "/gender", "back")}
+          />
 
           {/* SVG de los puntos superiores */}
           {backTo === undefined &&

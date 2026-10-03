@@ -19,13 +19,13 @@
 }
 
 .language-button:hover {
-    background-color: var(--button-hover);
-    color: #000000;
-    border: 2px solid #000000;
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
+    border: 2px solid var(--btn-hover-border);
 }
 
 .language-button:active {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
     transform: scale(0.95);
 }

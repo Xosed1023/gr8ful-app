@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "io.zen.gr8ful"
+    namespace "com.zen.gr8ful"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.zen.gr8ful"
+        applicationId "com.zen.gr8ful"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -40,6 +40,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+    implementation 'com.google.android.gms:play-services-ads:23.0.0'
 }
 
 apply from: 'capacitor.build.gradle'

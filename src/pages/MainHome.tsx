@@ -1,14 +1,17 @@
-import { AdMob } from "@capacitor-community/admob";
+import {
+  AdMob,
+  AdOptions,
+  InterstitialAdPluginEvents,
+} from "@capacitor-community/admob";
 import {
   IonIcon,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
-  useIonToast,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { settings, sync } from "ionicons/icons";
+import { bookmark, home, settings, sync } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router";
 import { Phrase } from "../models/Phrase";
@@ -18,6 +21,7 @@ import {
   getRandomPhrase,
   initDB,
 } from "../persistence/IndexedDBService";
+import Favorites from "./Favorites";
 import Home from "./Home";
 import Languages from "./Languages";
 import QuoteTime from "./QuoteTime";
@@ -30,12 +34,28 @@ import {
   RewardAdPluginEvents,
   AdMobRewardItem,
 } from "@capacitor-community/admob";
+import { Capacitor } from "@capacitor/core";
+
+// IDs de prueba oficiales de Google AdMob — https://developers.google.com/admob/ios/test-ads
+// y https://developers.google.com/admob/android/test-ads. Devuelven anuncios de test
+// para toda solicitud, sin depender de configuración de cuenta/consentimiento.
+const TEST_INTERSTITIAL_AD_ID =
+  Capacitor.getPlatform() === "ios"
+    ? "ca-app-pub-3940256099942544/4411468910"
+    : "ca-app-pub-3940256099942544/1033173712";
+const TEST_REWARDED_AD_ID =
+  Capacitor.getPlatform() === "ios"
+    ? "ca-app-pub-3940256099942544/1712485313"
+    : "ca-app-pub-3940256099942544/5224354917";
 
 const MainHome = () => {
   const [phrase, setPhrase] = useState<Phrase | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("home");
-  const [homeRefreshTrigger, setHomeRefreshTrigger] = useState<number>(0);
-  const [present] = useIonToast();
+  /* const [present] = useIonToast(); */
+  const [isAdVisible, setIsAdVisible] = useState(false);
+  // Rastreado a mano (no vía useLocation) porque MainHome monta su propio
+  // <IonReactRouter> anidado dentro del router principal de App.tsx; leer la
+  // ubicación desde ahí quedaba desincronizada con los taps reales del usuario.
+  const [selectedTab, setSelectedTab] = useState<"home" | "favorites" | "settings">("home");
 
   useEffect(() => {
     initializeAdMob();
@@ -46,6 +66,66 @@ const MainHome = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const onDismissListener = AdMob.addListener(
+      InterstitialAdPluginEvents.Dismissed,
+      () => {
+        setIsAdVisible(false);
+      }
+    );
+    const onFailedListener = AdMob.addListener(
+      InterstitialAdPluginEvents.FailedToLoad,
+      (error) => {
+        console.error("Intersticial: fallo al cargar", error);
+        setIsAdVisible(false);
+      }
+    );
+
+    const onLoadListener = AdMob.addListener(
+      InterstitialAdPluginEvents.Showed,
+      () => {
+        setIsAdVisible(true);
+      }
+    );
+
+    return () => {
+      onDismissListener.remove();
+      onFailedListener.remove();
+      onLoadListener.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    /* present({
+      message: `isAdVisible: ${isAdVisible}`,
+      duration: 5000,
+      position: "bottom",
+    }); */
+    if (!isAdVisible) {
+      setTimeout(() => {
+        showAdMobInterstitial();
+      }, 45000);
+    } else {
+    }
+  }, [isAdVisible]);
+
+  const showAdMobInterstitial = async (): Promise<void> => {
+    try {
+      const options: AdOptions = {
+        adId: TEST_INTERSTITIAL_AD_ID,
+        isTesting: true,
+      };
+      console.log("Intersticial: solicitando anuncio de prueba", options);
+      await AdMob.prepareInterstitial(options);
+      AdMob.showInterstitial().then(() => {
+        setIsAdVisible(true);
+      });
+    } catch (error) {
+      console.error("Error mostrando intersticial", error);
+      setIsAdVisible(false);
+    }
+  };
 
   const initializeAdMob = async () => {
     try {
@@ -59,40 +139,43 @@ const MainHome = () => {
   };
 
   const loadRandomPhraseWithAd = async () => {
-    present({
-      message: `lanzando rewarded`,
-      duration: 5000,
-      position: "bottom",
-    });
-    AdMob.addListener(RewardAdPluginEvents.Loaded, (info: AdLoadInfo) => {
-      present({
-        message: `Anuncio cargado ${JSON.stringify(info)}`,
-        duration: 5000,
-        position: "bottom",
-      });
-    });
-
-    AdMob.addListener(
+    const onLoadedListener = AdMob.addListener(
+      RewardAdPluginEvents.Loaded,
+      (info: AdLoadInfo) => {
+        console.log("Rewarded: anuncio de prueba cargado", info);
+      }
+    );
+    const onFailedListener = AdMob.addListener(
+      RewardAdPluginEvents.FailedToLoad,
+      (error) => {
+        console.error("Rewarded: fallo al cargar", error);
+      }
+    );
+    const onRewardedListener = AdMob.addListener(
       RewardAdPluginEvents.Rewarded,
       (rewardItem: AdMobRewardItem) => {
-        present({
-          message: `rewardItem: ${JSON.stringify(rewardItem)}`,
-          duration: 5000,
-          position: "bottom",
-        });
+        console.log("Rewarded: recompensa otorgada", rewardItem);
       }
     );
 
-    const options: RewardAdOptions = {
-      adId: import.meta.env.VITE_ANDROID_INTERSTICIAL_REWARDED,
-      isTesting: import.meta.env.VITE_IS_TESTING,
-    };
-
-    await AdMob.prepareRewardVideoAd(options);
-    const rewardItem = await AdMob.showRewardVideoAd();
-    if (rewardItem.amount > 0) {
-      // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
-      await loadRandomPhrase();
+    try {
+      const options: RewardAdOptions = {
+        adId: TEST_REWARDED_AD_ID,
+        isTesting: true,
+      };
+      console.log("Rewarded: solicitando anuncio de prueba", options);
+      await AdMob.prepareRewardVideoAd(options);
+      const rewardItem = await AdMob.showRewardVideoAd();
+      if (rewardItem.amount > 0) {
+        // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
+        await loadRandomPhrase();
+      }
+    } catch (error) {
+      console.error("Error mostrando rewarded", error);
+    } finally {
+      onLoadedListener.remove();
+      onFailedListener.remove();
+      onRewardedListener.remove();
     }
   };
 
@@ -113,21 +196,14 @@ const MainHome = () => {
     }
   };
 
-  const handleTabChange = (tab: string) => {
-    // Detectar si estás tocando la tab "home" nuevamente
-    if (tab === "home" && activeTab === "home") {
-      setHomeRefreshTrigger((prev) => prev + 1); // Actualizar estado
-    }
-    setActiveTab(tab);
-  };
-
   return (
     <IonReactRouter>
-      <IonTabs className="bg-indigo-950">
+      <IonTabs className="bg-[color:var(--tabs-bg)]">
         <IonRouterOutlet>
           <Route exact path="/tabs/home">
             <Home phrase={phrase!} />
           </Route>
+          <Route exact path="/tabs/favorites" component={Favorites} />
           <Route exact path="/tabs/settings" component={Settings} />
           <Route exact path="/languages">
             <Languages backTo="/tabs/settings" />
@@ -147,23 +223,36 @@ const MainHome = () => {
             render={() => <Redirect to="/tabs/home" />}
           />
         </IonRouterOutlet>
-        <IonTabBar slot="bottom" className="bg-slate-900">
+        <IonTabBar slot="bottom" className="bg-[color:var(--nav-bg)]">
           <IonTabButton
             tab="home"
             href="/tabs/home"
-            className="bg-slate-900"
+            className="bg-[color:var(--nav-bg)]"
             onClick={() => {
-              // TODO: Verificar que esté en el home para cargar nueva frase
-              // TODO: Solicitar anuncio para nueva frase
-              loadRandomPhraseWithAd();
+              // Si ya estábamos en Home, el tap pide una frase nueva (con
+              // anuncio rewarded). Si veníamos de otro tab, es navegación
+              // normal: no se dispara ningún anuncio.
+              if (selectedTab === "home") {
+                loadRandomPhraseWithAd();
+              }
+              setSelectedTab("home");
             }}
           >
-            <IonIcon aria-hidden="true" icon={sync} />
+            <IonIcon aria-hidden="true" icon={selectedTab === "home" ? sync : home} />
+          </IonTabButton>
+          <IonTabButton
+            tab="favorites"
+            href="/tabs/favorites"
+            className="bg-[color:var(--nav-bg)]"
+            onClick={() => setSelectedTab("favorites")}
+          >
+            <IonIcon aria-hidden="true" icon={bookmark} />
           </IonTabButton>
           <IonTabButton
             tab="settings"
             href="/tabs/settings"
-            className="bg-slate-900"
+            className="bg-[color:var(--nav-bg)]"
+            onClick={() => setSelectedTab("settings")}
           >
             <IonIcon aria-hidden="true" icon={settings} />
           </IonTabButton>

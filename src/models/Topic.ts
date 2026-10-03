@@ -1,1 +1,1 @@
-type Topic = { key: string; value: string };
+export type Topic = { key: string; value: string };

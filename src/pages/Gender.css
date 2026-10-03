@@ -14,15 +14,20 @@
   color: var(--text-color);
 }
 
-.text-highlight {
+/* Aseguramos que esta regla tenga mayor especificidad */
+.text-container .text-highlight {
   color: var(--text-color);
-  font-family: "Playwrite DE SAS", cursive;
-  font-weight: 400;
-  font-weight: 700;
+  font-family: "Playwrite DE SAS", cursive !important;
+  font-weight: 700 !important; /* Aseguramos que el peso se aplique */
+  font-style: normal;
+  font-optical-sizing: auto;
+  display: inline-block; /* Aseguramos que el elemento sea inline-block */
+  line-height: 1.2; /* Aseguramos que la altura de línea sea consistente */
+  vertical-align: middle; /* Alineación vertical consistente */
 }
 
 .gender-button {
-  background-color: #000000;
+  background-color: var(--btn-bg);
   height: 50px;
   padding: 12px 16px;
   border: none;
@@ -30,7 +35,7 @@
   transition: background-color 0.3s ease-in-out;
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--btn-text);
   border-radius: 20px;
   width: 100%;
 }

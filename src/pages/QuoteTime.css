@@ -20,14 +20,14 @@
 }
 
 .time-button:hover {
-    background-color: var(--button-hover);
-    color: #000000;
-    border: 2px solid #000000;
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
+    border: 2px solid var(--btn-hover-border);
 }
 
 .time-button:active {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
     transform: scale(0.95);
 }
 
@@ -45,9 +45,9 @@
     background:
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to top,
-            rgba(111, 54, 235, 0.1) 0.5%,
-            rgba(111, 54, 235, 0) 20%,
-            rgba(111, 54, 235, 0) 100%),
+            var(--g-woman-s) 0.5%,
+            var(--g-woman-z) 20%,
+            var(--g-woman-z) 100%),
         /* Color de fondo base */
         var(--background-color);
     height: 100vh;
@@ -60,9 +60,9 @@
     background:
         /* Degradado púrpura de arriba hacia abajo */
         linear-gradient(to top,
-            rgba(19, 142, 173, 0.1) 0.5%,
-            rgba(54, 235, 199, 0) 20%,
-            rgba(13, 189, 160, 0) 100%),
+            var(--g-man2-s) 0.5%,
+            var(--g-man2-m) 20%,
+            var(--g-man2-e) 100%),
         /* Color de fondo base */
         var(--background-color);
     height: 100vh;

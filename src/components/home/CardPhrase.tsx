@@ -1,97 +1,97 @@
-import {
-  AdMob,
-  BannerAdOptions,
-  BannerAdPluginEvents,
-  BannerAdPosition,
-  BannerAdSize,
-} from "@capacitor-community/admob";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { IonButton, IonChip, IonIcon, isPlatform, useIonToast } from "@ionic/react";
+import { Clipboard } from "@capacitor/clipboard";
+import { Share } from "@capacitor/share";
+import { IonButton, IonChip, IonIcon, useIonToast } from "@ionic/react";
 import { motion } from "framer-motion";
 import {
+  bookmark,
   bookmarkOutline,
+  copyOutline,
   ellipsisHorizontal,
   shareSocialOutline,
 } from "ionicons/icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
+import { hapticTap } from "../../hooks/useHaptics";
+import { LanguageKeys } from "../../persistence/languages";
+import { computeBannerMargin } from "../../ads/bannerMargin";
+import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 
 interface CardPhraseProps {
-  phrase: Pick<Phrase, "content" | "type">;
+  phrase: Pick<Phrase, "content" | "type" | "author">;
   color: CardColors;
   adBannerId: string;
+  language: LanguageKeys;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
 const colorConfig = {
   [CardColors.WOMAN_BLUE]: {
-    background: "bg-sky-500",
-    text: "text-sky-900",
+    background: "bg-[color:var(--card-woman-blue-bg)]",
+    text: "text-[color:var(--card-woman-blue-text)]",
     initialPosition: "35vh",
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
-    bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.WOMAN_PURPLE]: {
-    background: "bg-violet-400",
-    text: "text-purple-900",
+    background: "bg-[color:var(--card-woman-purple-bg)]",
+    text: "text-[color:var(--card-woman-purple-text)]",
     initialPosition: "53vh",
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
-    bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.WOMAN_VIOLETTE]: {
-    background: "bg-violet-300",
-    text: "text-indigo-900",
+    background: "bg-[color:var(--card-woman-violette-bg)]",
+    text: "text-[color:var(--card-woman-violette-text)]",
     initialPosition: "70vh",
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
-    bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
   [CardColors.MAN_SKY_BLUE]: {
-    background: "bg-[#61B2E4]",
-    text: "text-[#17537A]",
+    background: "bg-[color:var(--card-man-sky-bg)]",
+    text: "text-[color:var(--card-man-sky-text)]",
     initialPosition: "35vh",
     initialHeight: "65vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
-    bottomAdSpace: isPlatform("ios") ? 400 : 450,
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
-    background: "bg-[#5A9ABE]",
-    text: "text-[#154C6B]",
+    background: "bg-[color:var(--card-man-light-bg)]",
+    text: "text-[color:var(--card-man-light-text)]",
     initialPosition: "53vh",
     initialHeight: "47vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
-    bottomAdSpace: isPlatform("ios") ? 250 : 300,
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
-    background: "bg-[#95C5DE]",
-    text: "text-[#0D4461]",
+    background: "bg-[color:var(--card-man-deep-bg)]",
+    text: "text-[color:var(--card-man-deep-text)]",
     initialPosition: "70vh",
     initialHeight: "30vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
-    bottomAdSpace: isPlatform("ios") ? 120 : 170,
   },
 };
 
-const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
+const CardPhrase = ({
+  phrase,
+  color,
+  adBannerId,
+  language,
+  isFavorite,
+  onToggleFavorite,
+}: CardPhraseProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isInitialAnimationDone, setIsInitialAnimationDone] = useState(false);
+  // Verdadero solo cuando la tarjeta terminó de abrirse: el banner no aparece
+  // a mitad de la animación y desaparece en cuanto se pulsa para cerrar.
+  const [isSettledOpen, setIsSettledOpen] = useState(false);
+  const bannerSlotRef = useRef<HTMLDivElement>(null);
   const [present] = useIonToast();
-
-  const options: BannerAdOptions = {
-    adId: adBannerId,
-    adSize: BannerAdSize.BANNER,
-    position: BannerAdPosition.BOTTOM_CENTER,
-    margin: colorConfig[color].bottomAdSpace,
-    isTesting: import.meta.env.VITE_IS_TESTING,
-  };
 
   const presentToast = (message: string) => {
     present({
@@ -101,23 +101,10 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
     });
   };
 
-  async function showBanner(): Promise<void> {
-    AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
-      // presentToast(`Banner Loaded ${colorConfig[color].bottomAdSpace}`);
-    });
-
-    AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (e) => {
-      presentToast(`Banner Failed to Load ${JSON.stringify(e)}`);
-    });
-
-    AdMob.showBanner(options);
-  }
-
   const toggleCard = async () => {
+    if (isExpanded) setIsSettledOpen(false);
     setIsExpanded((prev) => !prev);
-    await Haptics.impact({ style: ImpactStyle.Medium });
-    if (isExpanded) AdMob.hideBanner();
-    else showBanner();
+    await hapticTap();
   };
 
   const {
@@ -129,13 +116,17 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
     expandedHeight,
   } = colorConfig[color];
 
-  const triggerHapticFeedback = async () => {
-    try {
-      await Haptics.impact({ style: ImpactStyle.Medium });
-    } catch {
-      if (navigator.vibrate) navigator.vibrate(50); // Fallback para navegadores
-    }
-  };
+  // Banner de la tarjeta (spec 020): se pide al terminar de abrirse y se
+  // oculta al cerrar, al desmontar o al salir de Home (ver cardBanner.ts).
+  useEffect(() => {
+    if (!isSettledOpen || !bannerSlotRef.current) return;
+    showCardBanner({
+      ownerId: language,
+      adId: adBannerId,
+      margin: computeBannerMargin(bannerSlotRef.current.getBoundingClientRect()),
+    });
+    return () => hideCardBanner(language);
+  }, [isSettledOpen, language, adBannerId]);
 
   // Calcula el delay invertido basado en `initialPosition`
   const calculateDelay = (position: string) => {
@@ -168,8 +159,9 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
       onAnimationComplete={() => {
         if (!isInitialAnimationDone) {
           setIsInitialAnimationDone(true); // Marca como completada la animación inicial
-          triggerHapticFeedback(); // Vibra al finalizar la animación de entrada
+          hapticTap(); // Vibra al finalizar la animación de entrada
         }
+        if (isExpanded) setIsSettledOpen(true);
       }}
     >
       <IonIcon
@@ -177,7 +169,7 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
         className={`absolute top-4 right-6 text-xl ${text}`}
       />
       <h1 className={`${text} text-lg font-medium mt-4 min-h-32`}>
-        {phrase.content.es}
+        {phrase.content[language]}
       </h1>
       <div className="mt-2 flex justify-between items-center">
         <IonChip className="text-sm italic">{phrase.type}</IonChip>
@@ -189,23 +181,58 @@ const CardPhrase = ({ phrase, color, adBannerId }: CardPhraseProps) => {
             size="large"
             onClick={(e) => {
               e.stopPropagation();
+              onToggleFavorite();
             }}
           >
-            <IonIcon slot="icon-only" icon={bookmarkOutline}></IonIcon>
+            <IonIcon
+              slot="icon-only"
+              icon={isFavorite ? bookmark : bookmarkOutline}
+            ></IonIcon>
           </IonButton>
           <IonButton
             shape="round"
             fill="clear"
             color="light"
             size="large"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
+              try {
+                await Share.share({
+                  text: `${phrase.content[language]}\n\n— ${phrase.author}`,
+                });
+              } catch (error) {
+                // Cancelar el share sheet nativo también rechaza la promesa
+                // en algunas plataformas (ej. iOS) — no es necesariamente un
+                // error real, así que no se muestra toast (research.md Decisión 4).
+                console.error("Error al compartir", error);
+              }
             }}
           >
             <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>
           </IonButton>
+          <IonButton
+            shape="round"
+            fill="clear"
+            color="light"
+            size="large"
+            onClick={async (e) => {
+              e.stopPropagation();
+              try {
+                await Clipboard.write({
+                  string: phrase.content[language],
+                });
+                presentToast("Frase copiada al portapapeles");
+              } catch (err) {
+                presentToast("Error al copiar al portapapeles");
+              }
+            }}
+          >
+            <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
+          </IonButton>
         </div>
       </div>
+      {/* Espacio reservado para el banner nativo (spec 020); transparente. */}
+      <div ref={bannerSlotRef} aria-hidden="true" className="mt-4 min-h-[60px]" />
     </motion.div>
   );
 };

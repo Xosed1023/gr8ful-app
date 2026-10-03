@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route, useHistory } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { initialData } from "./persistence/initialData";
 import "./tailwind.css";
 
@@ -34,7 +34,6 @@ import "@ionic/react/css/palettes/dark.class.css";
 /* Theme variables */
 import { useEffect } from "react";
 import Gender from "./pages/Gender";
-import Home from "./pages/Home";
 import Languages from "./pages/Languages";
 import LoadingScreen from "./pages/LoadingScreen";
 import MainHome from "./pages/MainHome";
@@ -44,6 +43,8 @@ import UserName from "./pages/UserName";
 import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
+import { PushNotifications } from "@capacitor/push-notifications";
+import { refreshDailyQuotes } from "./notifications/dailyQuote";
 
 setupIonicReact();
 
@@ -63,6 +64,54 @@ const App: React.FC = () => {
     } else {
       console.log("No se cargaron las frases iniciales");
     }
+    addListeners();
+    registerNotifications();
+    getDeliveredNotifications();
+    refreshDailyQuotes();
+  };
+
+  const addListeners = async () => {
+    await PushNotifications.addListener("registration", (token) => {
+      console.info("Registration token: ", token.value);
+    });
+
+    await PushNotifications.addListener("registrationError", (err) => {
+      console.error("Registration error: ", err.error);
+    });
+
+    await PushNotifications.addListener(
+      "pushNotificationReceived",
+      (notification) => {
+        console.log("Push notification received: ", notification);
+      }
+    );
+
+    await PushNotifications.addListener(
+      "pushNotificationActionPerformed",
+      (notification) => {
+        console.log(
+          "Push notification action performed",
+          notification.actionId,
+          notification.inputValue
+        );
+      }
+    );
+  };
+
+  const registerNotifications = async () => {
+    // Ya no se pide el permiso al arrancar (spec 021, FR-009): se solicita al
+    // elegir la hora en el onboarding o al activar el interruptor de Ajustes.
+    // El registro remoto solo se hace si el permiso ya fue concedido.
+    const permStatus = await PushNotifications.checkPermissions();
+    if (permStatus.receive !== "granted") return;
+
+    await PushNotifications.register();
+  };
+
+  const getDeliveredNotifications = async () => {
+    const notificationList =
+      await PushNotifications.getDeliveredNotifications();
+    console.log("delivered notifications", notificationList);
   };
 
   return (

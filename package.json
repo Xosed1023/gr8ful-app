@@ -20,6 +20,7 @@
     "@capacitor/haptics": "^7.0.0",
     "@capacitor/ios": "^7.0.0",
     "@capacitor/keyboard": "^7.0.0",
+    "@capacitor/local-notifications": "^7.0.7",
     "@capacitor/push-notifications": "^7.0.1",
     "@capacitor/share": "^7.0.4",
     "@capacitor/status-bar": "^7.0.0",

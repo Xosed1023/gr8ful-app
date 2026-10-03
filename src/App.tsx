@@ -45,6 +45,7 @@ import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
 import { PushNotifications } from "@capacitor/push-notifications";
+import { refreshDailyQuotes } from "./notifications/dailyQuote";
 
 setupIonicReact();
 
@@ -67,6 +68,7 @@ const App: React.FC = () => {
     addListeners();
     registerNotifications();
     getDeliveredNotifications();
+    refreshDailyQuotes();
   };
 
   const addListeners = async () => {
@@ -98,15 +100,11 @@ const App: React.FC = () => {
   };
 
   const registerNotifications = async () => {
-    let permStatus = await PushNotifications.checkPermissions();
-
-    if (permStatus.receive === "prompt") {
-      permStatus = await PushNotifications.requestPermissions();
-    }
-
-    if (permStatus.receive !== "granted") {
-      throw new Error("User denied permissions!");
-    }
+    // Ya no se pide el permiso al arrancar (spec 021, FR-009): se solicita al
+    // elegir la hora en el onboarding o al activar el interruptor de Ajustes.
+    // El registro remoto solo se hace si el permiso ya fue concedido.
+    const permStatus = await PushNotifications.checkPermissions();
+    if (permStatus.receive !== "granted") return;
 
     await PushNotifications.register();
   };

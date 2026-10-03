@@ -154,9 +154,9 @@ export const AppSetttingsScreenLanguage = {
     fr: ["Sujets"]
   },
   pushNotificationsButton: {
-    es: ["Notificaciones Push"],
-    en: ["Push Notifications"],
-    fr: ["Notifications Push"]
+    es: ["Notificaciones"],
+    en: ["Notifications"],
+    fr: ["Notifications"]
   },
   darkModeButton: {
     es: ["Tema oscuro"],
@@ -169,3 +169,26 @@ export const AppSetttingsScreenLanguage = {
     fr: ["Version"]
   }
 }
+
+export const AppNotificationsLanguage = {
+  channelName: {
+    es: "Frase diaria",
+    en: "Daily quote",
+    fr: "Citation du jour",
+  },
+  permissionDeniedTitle: {
+    es: "Notificaciones desactivadas",
+    en: "Notifications are off",
+    fr: "Notifications désactivées",
+  },
+  permissionDeniedMessage: {
+    es: "Para recibir tu frase diaria, permite las notificaciones de Gr8ful en los ajustes de tu dispositivo.",
+    en: "To receive your daily quote, allow Gr8ful notifications in your device settings.",
+    fr: "Pour recevoir ta citation du jour, autorise les notifications de Gr8ful dans les réglages de ton appareil.",
+  },
+  permissionDeniedButton: {
+    es: "Entendido",
+    en: "Got it",
+    fr: "Compris",
+  },
+};

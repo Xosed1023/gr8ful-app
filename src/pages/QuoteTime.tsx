@@ -5,6 +5,7 @@ import { AppTimeScreenLanguage } from '../persistence/languages';
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
+import { enableDailyQuotes, refreshDailyQuotes } from "../notifications/dailyQuote";
 import BackButton from "../components/common/BackButton";
 
 const QuoteTime = ({ backTo }: { backTo?: string }) => {
@@ -21,6 +22,10 @@ const QuoteTime = ({ backTo }: { backTo?: string }) => {
 
   const handleTimeChange = async (time: string) => {
     localStorage.setItem("time", time);
+    // Onboarding: las notificaciones quedan activadas y el permiso se pide aquí
+    // (spec 021, FR-005). Desde Ajustes solo se reprograman si ya están activas.
+    if (backTo) await refreshDailyQuotes();
+    else await enableDailyQuotes();
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/quoteTopics", "forward");
     await hapticTap();

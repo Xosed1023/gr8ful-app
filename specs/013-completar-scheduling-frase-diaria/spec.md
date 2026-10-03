@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: ⚠️ Deuda técnica — valor capturado, sin consumidor
+**Status**: 🔀 Superada — reemplazada por `specs/021-completar-scheduling-frase-diaria`. No trabajar sobre esta spec directamente.
 
 **Input**: Deuda técnica identificada en exploración de código.
 

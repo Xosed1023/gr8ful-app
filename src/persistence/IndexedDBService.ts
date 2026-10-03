@@ -51,6 +51,11 @@ export async function toggleFavorite(id: number, isFavorite: boolean) {
   }
 }
 
+export async function getAllPhrases(): Promise<Phrase[]> {
+  if (!db) throw new Error('Database not initialized');
+  return db.getAll(STORE_NAME);
+}
+
 export async function getRandomPhrase(typesToFilter: Topic[] = []): Promise<Phrase | null> {
   if (!db) throw new Error('Database not initialized');
   const phrases = await db.getAll(STORE_NAME);

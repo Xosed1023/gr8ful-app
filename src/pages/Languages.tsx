@@ -1,3 +1,4 @@
+import { refreshDailyQuotes } from "../notifications/dailyQuote";
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./Languages.css";
 import { IoArrowBack } from "react-icons/io5";
@@ -13,6 +14,7 @@ const Languages = ({ backTo }: { backTo?: string }) => {
 
   const handleLanguageChange = async (language: string) => {
     localStorage.setItem("language", language);
+    await refreshDailyQuotes();
     await hapticTap();
     if (backTo) {
       navigate.push(backTo, "back");

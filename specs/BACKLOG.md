@@ -12,6 +12,8 @@ Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se
 - **Selección de fuente/tamaño de texto** — accesibilidad para usuarios que necesitan texto más grande al leer las frases.
 - **Vectorizar el logo de Gr8ful** — hoy es una imagen estática que no se puede recolorear, así que en modo oscuro (spec 019) se ve con menos contraste; vectorizarlo permitiría tokenizar sus colores y adaptarlo a ambos temas.
 - **Validar la posición de los banners por tarjeta en Android** — `specs/020-completar-banners-admob-card` se verificó solo en un iPhone 17 Pro. En Android (sobre todo con pantalla completa/borde a borde) el contenedor del plugin puede no coincidir con `window.innerHeight`; si el banner sale desplazado, ajustar `PLATFORM_OFFSET` en `src/ads/bannerMargin.ts` (quickstart.md §5). También conviene revisar tamaños de pantalla pequeños en iOS.
+- **Validar las notificaciones de frase diaria en Android** — `specs/021-completar-scheduling-frase-diaria` se verificó solo en iPhone. Revisar entrega con la app cerrada, tras reiniciar el dispositivo, y en fabricantes con optimización agresiva de batería.
+- **Icono propio para las notificaciones en Android** — hoy se usa el icono por defecto del plugin; añadir un icono monocromo de la app (`smallIcon`).
 
 ## Relación con deuda técnica existente
 

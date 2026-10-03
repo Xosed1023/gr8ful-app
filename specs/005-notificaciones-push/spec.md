@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: ⚠️ Parcial (línea base retroactiva) — registro implementado, sin scheduling real
+**Status**: ✅ Implementado — el scheduling de la frase diaria quedó cubierto por `specs/021-completar-scheduling-frase-diaria` (notificaciones locales); el registro remoto solo se hace si el permiso ya está concedido
 
 **Input**: Documentación del estado actual del código, no una nueva feature.
 
@@ -37,7 +37,7 @@ Al iniciar, la app solicita permisos y se registra para recibir push notificatio
 
 - **FR-001**: El sistema DEBE solicitar permisos de push notifications al iniciar la app.
 - **FR-002**: El sistema DEBE registrar listeners para recepción y acción sobre notificaciones push.
-- **FR-003** *(no cumplido actualmente)*: El sistema DEBERÍA usar el horario seleccionado en `QuoteTime` para programar el envío de la frase diaria — **no implementado**, requiere spec de deuda técnica separada si se decide priorizar.
+- **FR-003** *(cumplido por la spec 021)*: El sistema DEBERÍA usar el horario seleccionado en `QuoteTime` para programar el envío de la frase diaria — **no implementado**, requiere spec de deuda técnica separada si se decide priorizar.
 
 ## Success Criteria *(mandatory)*
 

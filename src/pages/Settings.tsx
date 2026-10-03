@@ -13,7 +13,15 @@ import { alarmOutline, arrowForward, language, list } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import "./Settings.css";
 import { applyStoredTheme } from "../theme/applyStoredTheme";
-import { AppSetttingsScreenLanguage, LanguageKeys } from "../persistence/languages";
+import {
+  disableDailyQuotes,
+  enableDailyQuotes,
+} from "../notifications/dailyQuote";
+import {
+  AppNotificationsLanguage,
+  AppSetttingsScreenLanguage,
+  LanguageKeys,
+} from "../persistence/languages";
 
 const Settings = () => {
   const navigate = useIonRouter();
@@ -34,6 +42,32 @@ const Settings = () => {
     localStorage.getItem("language") as LanguageKeys | null
   );
   const [presentAlert] = useIonAlert();
+  const [notificationsOn, setNotificationsOn] = useState(
+    localStorage.getItem("pushNotifications") === "true"
+  );
+
+  // El interruptor controla las notificaciones diarias (spec 021): activar pide
+  // el permiso y programa; desactivar cancela. Con permiso denegado vuelve a
+  // apagarse y explica cómo permitirlo en los ajustes del sistema.
+  const handleNotificationsToggle = async (checked: boolean) => {
+    if (checked === notificationsOn) return;
+    setNotificationsOn(checked);
+    if (!checked) {
+      await disableDailyQuotes();
+      return;
+    }
+    const result = await enableDailyQuotes();
+    if (result === "scheduled") return;
+    setNotificationsOn(false);
+    if (result === "denied") {
+      const lang = userLanguage ?? "en";
+      presentAlert({
+        header: AppNotificationsLanguage.permissionDeniedTitle[lang],
+        message: AppNotificationsLanguage.permissionDeniedMessage[lang],
+        buttons: [AppNotificationsLanguage.permissionDeniedButton[lang]],
+      });
+    }
+  };
 
   useEffect(() => {
     setUserLanguage(localStorage.getItem("language") as LanguageKeys | null);
@@ -114,32 +148,8 @@ const Settings = () => {
                 enableOnOffLabels={true}
                 color="tertiary"
                 slot="end"
-                value={
-                  localStorage.getItem("pushNotifications") === "true"
-                    ? "true"
-                    : "false"
-                }
-                onIonChange={(e) => {
-                  localStorage.setItem(
-                    "pushNotifications",
-                    e.detail.checked.toString()
-                  );
-                  presentAlert({
-                    header: pushNotificationsOptText[0],
-                    message:
-                      "Para poder enviarte notificaciones push necesitamos algunos permisos.",
-                    buttons: [
-                      {
-                        text: "Cancelar",
-                        handler: () => {},
-                      },
-                      {
-                        text: "Permitir",
-                        handler: () => {},
-                      },
-                    ],
-                  });
-                }}
+                checked={notificationsOn}
+                onIonChange={(e) => handleNotificationsToggle(e.detail.checked)}
               />
             </IonItem>
             <IonItem>

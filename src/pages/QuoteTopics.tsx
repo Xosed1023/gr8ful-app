@@ -5,6 +5,7 @@ import { AppTopicsScreenLanguage } from "../persistence/languages";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
+import { refreshDailyQuotes } from "../notifications/dailyQuote";
 import BackButton from "../components/common/BackButton";
 import { Topic } from "../models/Topic";
 
@@ -56,6 +57,7 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
 
   const handleTopicsChange = async () => {
     localStorage.setItem("topics", JSON.stringify(selectedTopics));
+    await refreshDailyQuotes();
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/userName", "forward");
     await hapticTap();
@@ -77,11 +79,7 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
           <BackButton
             className="absolute top-6 left-6 z-10"
             onClick={() => {
-              if (import.meta.env.VITE_SHOW_PUSH_NOTIFICACIONS_SCREEN === "true") {
-                navigate.push(backTo || "/quoteTime", "back");
-              } else {
-                navigate.push(backTo || "/gender", "back");
-              }
+              navigate.push(backTo || "/quoteTime", "back");
             }}
           />
 

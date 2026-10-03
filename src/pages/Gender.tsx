@@ -14,11 +14,7 @@ const Gender: React.FC = () => {
   const navigate = useIonRouter();
   const handleGenderChange = (gender: string) => {
     localStorage.setItem("gender", gender);
-    if (import.meta.env.VITE_SHOW_PUSH_NOTIFICACIONS_SCREEN === "true") {
-      navigate.push("/quoteTime", "forward");
-    } else {
-      navigate.push("/quoteTopics", "forward");
-    }
+    navigate.push("/quoteTime", "forward");
   };
 
   useEffect(() => {

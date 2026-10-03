@@ -9,6 +9,9 @@ PODS:
     - Capacitor
     - Google-Mobile-Ads-SDK (= 10.12.0)
   - CapacitorCordova (7.6.9)
+  - CapacitorFilesystem (7.1.9):
+    - Capacitor
+    - IONFilesystemLib (~> 1.1.4)
   - CapacitorHaptics (7.0.5):
     - Capacitor
   - CapacitorKeyboard (7.0.6):
@@ -70,6 +73,7 @@ PODS:
   - GoogleUtilities/Reachability (7.13.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - IONFilesystemLib (1.1.4)
   - nanopb (2.30910.0):
     - nanopb/decode (= 2.30910.0)
     - nanopb/encode (= 2.30910.0)
@@ -83,6 +87,7 @@ DEPENDENCIES:
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCommunityAdmob (from `../../node_modules/@capacitor-community/admob`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
@@ -97,6 +102,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUserMessagingPlatform
     - GoogleUtilities
+    - IONFilesystemLib
     - nanopb
     - PromisesObjC
 
@@ -111,6 +117,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/admob"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorFilesystem:
+    :path: "../../node_modules/@capacitor/filesystem"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
@@ -130,6 +138,7 @@ SPEC CHECKSUMS:
   CapacitorClipboard: d1f123674cf413125db816a45e8f70e8770972fc
   CapacitorCommunityAdmob: 8e577c66f05a62f1e00038a102ce6167fa6b3eb0
   CapacitorCordova: 2080fc0d6bfbc9dcc0e6d88e77fa624190d343ca
+  CapacitorFilesystem: 35da521d3fc5159ecaf4ae0b877ec3db7f4adb0d
   CapacitorHaptics: 1b145fa83c622e5383a3bac04ea81e2514f0b0f5
   CapacitorKeyboard: a2e0869edd229490ce36aed2549c0d6b95e27ee8
   CapacitorLocalNotifications: 71124afe526ac00585314bff34651bd023f86e37
@@ -140,9 +149,10 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: f9de05ee17401e3355f68e8fc8b5064d429f5918
   GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
+  IONFilesystemLib: e6610c2b260d15e4b9cb9d5e37a87095479b669e
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
 
-PODFILE CHECKSUM: b996cfed4b6049f629ea51d7c9c3628176642f49
+PODFILE CHECKSUM: ef78886b836aff48052cac3c21443f5b9274bd46
 
 COCOAPODS: 1.17.0

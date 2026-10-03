@@ -1,0 +1,593 @@
+/* Fondo del onboarding: lienzo liso con manchas de color difuminadas
+   (diseño de Stitch). Los colores son tokens y cambian en modo oscuro. */
+.onboarding-background {
+    position: relative;
+    overflow: hidden;
+    background: var(--background-color);
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Contenido por encima de las manchas. Se excluyen los elementos que ya van
+   en posición absoluta (barra superior y botón atrás). */
+.onboarding-background > *:not(.glow-layer):not(.onboarding-topbar):not(.back-glass) {
+    position: relative;
+    z-index: 1;
+}
+
+.glow-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(64px);
+}
+
+.glow-top {
+    top: -8rem;
+    left: -5rem;
+    width: 24rem;
+    height: 24rem;
+    background: var(--glow-a);
+}
+
+.glow-right {
+    top: 50%;
+    right: -6rem;
+    width: 22rem;
+    height: 22rem;
+    background: var(--glow-b);
+}
+
+.glow-bottom {
+    bottom: -5rem;
+    left: 25%;
+    width: 24rem;
+    height: 24rem;
+    background: var(--glow-c);
+}
+
+.glow-center-a {
+    top: 50%;
+    left: 50%;
+    width: 18rem;
+    height: 18rem;
+    margin: -9rem 0 0 -9rem;
+    transform: translateY(-4rem);
+    background: var(--glow-center-a);
+    animation: glow-pulse 7s ease-in-out infinite;
+}
+
+.glow-center-b {
+    top: 50%;
+    left: 50%;
+    width: 20rem;
+    height: 20rem;
+    margin: -10rem 0 0 -10rem;
+    transform: translate(3rem, 6rem);
+    background: var(--glow-center-b);
+}
+
+@keyframes glow-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ---- Indicador de pasos: píldora de vidrio con puntos ---- */
+.step-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow-sm);
+}
+
+.step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--step-dot);
+}
+
+.step-active {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+}
+
+.step-core {
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background: var(--step-active);
+    animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.step-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    background: var(--step-glow);
+    filter: blur(2px);
+}
+
+/* ---- Etiqueta de paso sobre el título ---- */
+.step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow-sm);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+}
+
+.step-badge-dot {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--step-active);
+}
+
+/* Anillo que se expande y se desvanece alrededor del punto (sin ocultar el punto) */
+.step-badge-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: badge-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes badge-ping {
+    75%, 100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
+
+/* variables.css fuerza `overflow: hidden` en todos los elementos; aquí debe
+   verse el brillo, el anillo y las sombras que sobresalen de su caja. */
+.step-indicator,
+.step-active,
+.step-badge,
+.step-badge-dot,
+.onboarding-topbar {
+    overflow: visible !important;
+}
+
+/* ---- Botón atrás circular de vidrio ---- */
+.back-glass {
+    position: absolute;
+    left: 1.5rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--text-color);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.15s ease;
+}
+
+.back-glass:active {
+    transform: scale(0.95);
+}
+
+/* Barra superior del onboarding (indicador centrado) */
+.onboarding-topbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+}
+
+/* Bloque central de las pantallas de opciones del onboarding */
+.onboarding-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 0 1.5rem;
+}
+
+/* Sin recorte: la sombra de las tarjetas (sobre todo la última) sobresale de la
+   lista, y variables.css fuerza `overflow: hidden` en todos los elementos. */
+.onboarding-content,
+.option-list {
+    overflow: visible !important;
+}
+
+.option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    margin-top: 2.5rem;
+    padding-bottom: 1rem;
+}
+
+/* Tarjeta de vidrio de ancho completo (idioma, género) */
+.option-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 64px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.option-card:active {
+    transform: scale(0.95);
+}
+
+/* Círculo de selección a la derecha */
+.option-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 9999px;
+    font-size: 16px;
+    color: transparent;
+    background: var(--glass-check-off);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.option-check.selected {
+    color: var(--btn-text);
+    background: var(--step-active);
+}
+
+/* Variante con icono: más alta, con burbuja de color a la izquierda */
+.option-card.with-icon {
+    height: 80px;
+    padding: 0 20px;
+}
+
+.option-card-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    font-size: 24px;
+}
+
+.option-icon.woman {
+    color: var(--icon-bubble-woman);
+    background: var(--icon-bubble-woman-bg);
+}
+
+.option-icon.man {
+    color: var(--icon-bubble-man);
+    background: var(--icon-bubble-man-bg);
+}
+
+/* Subtítulo bajo el título */
+.onboarding-subtitle {
+    max-width: 20rem;
+    margin-top: 0.75rem;
+    font-size: 14px;
+    line-height: 1.625;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* Botón principal del onboarding: píldora con degradado y flecha. El color sale de
+   --cta-bg / --cta-text (por defecto, los de la bienvenida). */
+.cta-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 290px;
+    height: 52px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--cta-text, var(--welcome-btn-text));
+    background-color: var(--cta-bg, var(--welcome-btn-bg));
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.2),
+        transparent,
+        rgba(255, 255, 255, 0.2)
+    );
+    box-shadow: 0 20px 25px -5px var(--welcome-btn-shadow);
+    transition: transform 0.2s ease;
+}
+
+.cta-button:active {
+    transform: scale(0.96);
+}
+
+.cta-button.cta-woman {
+    --cta-bg: var(--woman-vibrant-purple);
+    --cta-text: #ffffff;
+}
+
+.cta-button.cta-man {
+    --cta-bg: var(--btn-man-bg);
+    --cta-text: #ffffff;
+}
+
+.cta-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.cta-button:disabled:active {
+    transform: none;
+}
+
+/* ---- Temas del onboarding ---- */
+.topics-page {
+    height: auto;
+    min-height: 100vh;
+    padding: calc(env(safe-area-inset-top, 0px) + 4.5rem) 0 2rem;
+}
+
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    margin-top: 2rem;
+    overflow: visible !important;
+}
+
+/* Píldora de vidrio; elegida: se tiñe y muestra el check */
+.topic-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    height: 56px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--glass-shadow-sm);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.topic-card:active {
+    transform: scale(0.95);
+}
+
+.topic-card .topic-check {
+    flex: none;
+    font-size: 20px;
+}
+
+.topic-card.selected {
+    font-weight: 600;
+}
+
+.topic-card.selected.woman {
+    color: var(--topic-woman-text);
+    background: var(--topic-woman-bg);
+}
+
+.topic-card.selected.man {
+    color: var(--topic-man-text);
+    background: var(--topic-man-bg);
+}
+
+.topics-next {
+    margin-top: 2rem;
+}
+
+.topics-note {
+    max-width: 20rem;
+    margin-top: 1rem;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* ---- Campo de nombre ---- */
+.name-card {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 16px 20px;
+    border-radius: 24px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: var(--glass-shadow);
+    overflow: visible !important;
+}
+
+.name-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.name-label svg {
+    color: var(--step-active);
+    font-size: 16px;
+}
+
+.name-input {
+    width: 100%;
+    padding: 10px 0 4px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.name-input::placeholder {
+    font-weight: 400;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.name-chip {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-top: 12px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.name-chip.woman {
+    color: var(--topic-woman-text);
+    background: var(--topic-woman-bg);
+}
+
+.name-chip.man {
+    color: var(--topic-man-text);
+    background: var(--topic-man-bg);
+}
+
+.name-submit {
+    margin-top: 2rem;
+}
+
+/* ---- Respuesta a la elección (idioma, género, hora) ---- */
+.option-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease,
+        background-color 0.3s ease;
+}
+
+/* La tarjeta elegida se tiñe y se enmarca */
+.option-card.chosen {
+    background: var(--option-chosen-bg);
+    box-shadow: 0 0 0 2px var(--step-active), var(--glass-shadow);
+    transform: scale(1.02);
+}
+
+/* Las demás se atenúan mientras tanto */
+.option-list.has-chosen .option-card:not(.chosen) {
+    opacity: 0.4;
+    transform: scale(0.98);
+    pointer-events: none;
+}
+
+/* El check aparece con un pequeño rebote */
+.option-check svg {
+    transform: scale(0);
+}
+
+.option-check.selected svg {
+    transform: scale(1);
+    animation: check-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes check-pop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+/* Al avanzar, el contenido sale deslizándose hacia la izquierda */
+.onboarding-content {
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.onboarding-content.leaving {
+    opacity: 0;
+    transform: translateX(-28px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .option-card,
+    .onboarding-content {
+        transition: none;
+    }
+
+    .option-check.selected svg {
+        animation: none;
+    }
+}
+
+/* ---- Acentos de la paleta de hombre (azules): sobrescriben los tokens violetas ---- */
+.onboarding-background.man {
+    --step-active: #006493;
+    --step-glow: rgba(137, 206, 255, 0.5);
+    --accent-text: #0D4461;
+    --option-chosen-bg: rgba(214, 236, 255, 0.95);
+}
+
+.ion-palette-dark .onboarding-background.man {
+    --step-active: #8FC4E8;
+    --step-glow: rgba(143, 196, 232, 0.35);
+    --accent-text: #8FC4E8;
+    --option-chosen-bg: rgba(24, 60, 92, 0.85);
+}

@@ -3,6 +3,8 @@ import { Topic } from "../models/Topic";
 export type LanguageKeys = "es" | "en" | "fr";
 
 type AppTopicsScreenLanguageType = {
+  stepBadge: Record<LanguageKeys, string>;
+  subtitle: Record<LanguageKeys, string>;
   title: Record<LanguageKeys, string[]>;
   note: Record<LanguageKeys, string[]>;
   topics: Record<LanguageKeys, Topic[]>; // Aquí aseguramos que cada idioma sea un array de Topic
@@ -14,6 +16,16 @@ export const AppGenderScreenLanguage = {
     es: ["Me", "identifico", "como"],
     en: ["I", "identify", "as"],
     fr: ["Je", "m'identifie", "comme"]
+  },
+  stepBadge: {
+    es: "Paso 2 de 5",
+    en: "Step 2 of 5",
+    fr: "Étape 2 sur 5"
+  },
+  subtitle: {
+    es: "Elige la atmósfera visual, el tono y los colores que prefieres.",
+    en: "Select your preferred visual atmosphere, tone, and gentle color vibrations.",
+    fr: "Choisissez l'atmosphère visuelle, le ton et les couleurs que vous préférez."
   },
   options: {
     man: {
@@ -34,14 +46,24 @@ export const AppSelectLanguage = {
     es: ["Selecciona", "tu", "idioma"],
     en: ["Select", "your", "language"],
     fr: ["Choisissez", "votre", "langue"]
+  },
+  stepBadge: {
+    es: "Paso 1 de 5",
+    en: "Step 1 of 5",
+    fr: "Étape 1 sur 5"
   }
 }
 
 export const AppTimeScreenLanguage = {
+  stepBadge: {
+    es: "Paso 3 de 5",
+    en: "Step 3 of 5",
+    fr: "Étape 3 sur 5"
+  },
   title: {
-    es: ["¿Cuándo deberíamos enviarte tu frase", "diaria?*"],
+    es: ["¿Cuándo deberíamos enviarte tu frase", "diaria?"],
     en: ["When should we send your daily", "quote?"],
-    fr: ["Quand devons-nous envoyer votre devis", "quotidien ?*"]
+    fr: ["Quand devons-nous envoyer votre citation", "quotidienne\u00a0?"]
   },
   note: {
     es: ["*Puedes cambiar esto después en las configuraciones."],
@@ -51,6 +73,16 @@ export const AppTimeScreenLanguage = {
 }
 
 export const AppTopicsScreenLanguage: AppTopicsScreenLanguageType = {
+  stepBadge: {
+    es: "Paso 4 de 5",
+    en: "Step 4 of 5",
+    fr: "Étape 4 sur 5"
+  },
+  subtitle: {
+    es: "Toca las áreas de tu vida que hoy piden luz.",
+    en: "Tap the areas of your life calling for light today.",
+    fr: "Touchez les domaines de votre vie qui appellent la lumière aujourd'hui."
+  },
   title: {
     es: ["Elige los", "temas", "que más te interesan"],
     en: ["Choose the", "topics", "that matter to you the most"],
@@ -74,6 +106,26 @@ export const AppTopicsScreenLanguage: AppTopicsScreenLanguageType = {
 }
 
 export const AppNameScreenLanguage = {
+  stepBadge: {
+    es: "Paso 5 de 5",
+    en: "Step 5 of 5",
+    fr: "Étape 5 sur 5"
+  },
+  subtitle: {
+    es: "Tu nombre aparecerá con tus citas diarias para una experiencia cálida y personal.",
+    en: "Your name will appear with your daily quotes for a warm, personal experience.",
+    fr: "Votre prénom apparaîtra avec vos citations quotidiennes pour une expérience chaleureuse et personnelle."
+  },
+  fieldLabel: {
+    es: "Nombre de pila",
+    en: "Preferred first name",
+    fr: "Prénom"
+  },
+  greeting: {
+    es: "¡Qué bien suena, {name}! ✨",
+    en: "Looking good, {name}! ✨",
+    fr: "Ça sonne bien, {name} ! ✨"
+  },
   title: {
     es: ["¿Cuál es tu", "nombre?"],
     en: ["What's your", "name?"],

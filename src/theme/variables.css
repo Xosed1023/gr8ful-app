@@ -46,6 +46,37 @@ http://ionicframework.com/docs/theming/ */
     --text-muted: #506A7B;
     --accent-text: #19104C;
 
+    --option-chosen-bg: rgba(237, 228, 255, 0.95);
+    --topic-woman-bg: rgba(217, 172, 253, 0.4);
+    --topic-woman-text: #19104C;
+    --topic-man-bg: rgba(119, 198, 255, 0.45);
+    --topic-man-text: #0D4461;
+
+    --icon-bubble-woman: #6F36EB;
+    --icon-bubble-woman-bg: rgba(217, 172, 253, 0.3);
+    --icon-bubble-man: #006493;
+    --icon-bubble-man-bg: rgba(202, 230, 255, 0.6);
+
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --glass-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+    --glass-check-off: #efeded;
+    --step-dot: rgba(203, 195, 216, 0.6);
+    --step-active: #5602d3;
+    --step-glow: rgba(207, 189, 255, 0.5);
+
+    --glow-a: rgba(217, 172, 253, 0.35);
+    --glow-b: rgba(141, 205, 255, 0.45);
+    --glow-c: rgba(232, 221, 255, 0.35);
+    --glow-center-a: rgba(217, 172, 253, 0.25);
+    --glow-center-b: rgba(141, 205, 255, 0.35);
+
+    --welcome-btn-bg: #19104C;
+    --welcome-btn-text: #ffffff;
+    --welcome-btn-shadow: rgba(25, 16, 76, 0.2);
+    --dot-active: #19104C;
+    --dot-inactive: rgba(86, 2, 211, 0.7);
+
     --btn-bg: #000000;
     --btn-text: #ffffff;
     --btn-hover-bg: #ffffff;
@@ -122,6 +153,37 @@ http://ionicframework.com/docs/theming/ */
     --woman-light-purple: #A9A7BD;
     --woman-lighter-purple: #A9A7BD;
     --button-hover: #A58BFF;
+
+    --option-chosen-bg: rgba(60, 46, 110, 0.85);
+    --topic-woman-bg: rgba(91, 63, 168, 0.55);
+    --topic-woman-text: #F5F3FF;
+    --topic-man-bg: rgba(30, 95, 138, 0.6);
+    --topic-man-text: #E6F3FA;
+
+    --icon-bubble-woman: #C9BDF5;
+    --icon-bubble-woman-bg: rgba(91, 63, 168, 0.45);
+    --icon-bubble-man: #8FC4E8;
+    --icon-bubble-man-bg: rgba(30, 95, 138, 0.5);
+
+    --glass-bg: rgba(26, 29, 46, 0.7);
+    --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+    --glass-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --glass-check-off: #2A2D40;
+    --step-dot: rgba(169, 167, 189, 0.35);
+    --step-active: #A58BFF;
+    --step-glow: rgba(165, 139, 255, 0.35);
+
+    --glow-a: rgba(74, 39, 168, 0.40);
+    --glow-b: rgba(30, 95, 138, 0.45);
+    --glow-c: rgba(91, 63, 168, 0.30);
+    --glow-center-a: rgba(74, 39, 168, 0.30);
+    --glow-center-b: rgba(30, 95, 138, 0.35);
+
+    --welcome-btn-bg: #ECEAF4;
+    --welcome-btn-text: #0F1220;
+    --welcome-btn-shadow: rgba(0, 0, 0, 0.4);
+    --dot-active: #C9BDF5;
+    --dot-inactive: rgba(165, 139, 255, 0.5);
 
     --btn-bg: #ECEAF4;
     --btn-text: #0F1220;
@@ -207,15 +269,12 @@ http://ionicframework.com/docs/theming/ */
     filter: invert(1);
 }
 
-.ion-palette-dark .dots1,
-.ion-palette-dark .dots-top,
 .ion-palette-dark .feather,
 .ion-palette-dark .img-themed {
     filter: invert(1) hue-rotate(180deg);
 }
 
 /* Base de pantalla propia de la paleta de hombre */
-.ion-palette-dark .background-man,
 .ion-palette-dark .loading-man,
 .ion-palette-dark .backgroundHome.home-man {
     --background-color: #0C1520;
@@ -246,32 +305,6 @@ http://ionicframework.com/docs/theming/ */
     transform: scale(0.95);
 }
 
-/* Fondo mujer */
-.background-woman {
-    background:
-        /* Degradado púrpura de arriba hacia abajo */
-        linear-gradient(to top,
-            var(--g-woman-s) 0.5%,
-            var(--g-woman-z) 20%,
-            var(--g-woman-z) 100%),
-        /* Color de fondo base */
-        var(--background-color);
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* Fondo hombre */
-.background-man {
-    background:
-        /* Degradado azul de abajo hacia arriba */
-        linear-gradient(to top,
-            var(--g-man-s) 1%,
-            var(--g-man-z) 20%,
-            var(--g-man-z) 100%),
-        /* Color de fondo base */
-        var(--background-color);
-    font-family: 'Montserrat', sans-serif;
-}
-
 ion-toast.custom-toast {
     --background: var(--toast-bg);
     --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
@@ -294,20 +327,6 @@ html {
 
 ion-modal {
     --ion-safe-area-top: 0;
-}
-
-/* Fondo ajustado para cubrir toda el área desplazable */
-.background-woman,
-.background-man {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
 }
 
 /* Contenedor general del contenido */

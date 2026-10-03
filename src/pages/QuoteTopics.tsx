@@ -7,6 +7,10 @@ import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
 import { refreshDailyQuotes } from "../notifications/dailyQuote";
 import BackButton from "../components/common/BackButton";
+import GlowBackground from "../components/common/GlowBackground";
+import StepBadge from "../components/common/StepBadge";
+import StepIndicator from "../components/common/StepIndicator";
+import { IoArrowForward, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { Topic } from "../models/Topic";
 
 const QuoteTopics = ({ backTo }: { backTo?: string }) => {
@@ -63,72 +67,89 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
     await hapticTap();
   };
 
-  const backgroundClass = isWoman ? "background-woman" : "background-man";
+  const genderClass = isWoman ? "woman" : "man";
 
   return (
     <IonPage>
       <IonContent fullscreen scroll-y="true">
-        {/* Fondo fijo */}
-        <div
-          className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}
-        />
+        <div className="safe-area">
+          <div className={`onboarding-background topics-page ${
+              isWoman ? "" : "man"
+            } flex flex-col items-center justify-center`}>
+            <GlowBackground />
 
-        {/* Contenido principal */}
-        <div className="content-wrapper">
-          {/* Flecha de retroceso */}
-          <BackButton
-            className="absolute top-6 left-6 z-10"
-            onClick={() => {
-              navigate.push(backTo || "/quoteTime", "back");
-            }}
-          />
-
-          {/* Puntos superiores */}
-          {backTo === undefined && (
-            <div className="dots-container">
-              <img src="./step5.svg" alt="Progress dots" className="dots-top" />
-            </div>
-          )}
-
-          {/* Texto principal */}
-          <div className="text-container">
-            <p className="text-normal">
-              {title[0]} <span className="text-highlight">{title[1]}</span>{" "}
-              {title[2]}
-            </p>
-          </div>
-
-          {/* Botones de temas */}
-          <div className="topics-container">
-            {topics.map((topic) => (
-              <button
-                key={topic.key}
-                className={`topic-button ${
-                  selectedTopics.some((eTopic) => eTopic.key === topic.key)
-                    ? "selected"
-                    : ""
-                } ${isWoman ? "woman-selected" : "man-selected"}`}
-                onClick={() => toggleTopic(topic)}
+            {/* Atrás (a Hora en el onboarding, a Ajustes al editar) e indicador de pasos */}
+            <BackButton
+              variant="glass"
+              onClick={() => navigate.push(backTo || "/quoteTime", "back")}
+            />
+            {backTo === undefined && (
+              <div
+                className="onboarding-topbar"
+                style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
               >
-                {topic.value}
+                <StepIndicator step={4} total={5} />
+              </div>
+            )}
+
+            <div className="onboarding-content">
+              {backTo === undefined && (
+                <StepBadge label={AppTopicsScreenLanguage.stepBadge[userLanguage]} />
+              )}
+
+              {/* Texto principal */}
+              <div className="text-container mt-4">
+                <p className="text-normal">
+                  {title[0]} <span className="text-highlight">{title[1]}</span>{" "}
+                  {title[2]}
+                </p>
+              </div>
+              <p className="onboarding-subtitle">
+                {AppTopicsScreenLanguage.subtitle[userLanguage]}
+              </p>
+
+              {/* Temas */}
+              <div className="topics-grid">
+                {topics.map((topic) => {
+                  const isSelected = selectedTopics.some(
+                    (eTopic) => eTopic.key === topic.key
+                  );
+                  return (
+                    <button
+                      key={topic.key}
+                      type="button"
+                      aria-pressed={isSelected}
+                      className={`topic-card ${genderClass} ${
+                        isSelected ? "selected" : ""
+                      }`}
+                      onClick={() => toggleTopic(topic)}
+                    >
+                      <span>{topic.value}</span>
+                      {isSelected && (
+                        <IoCheckmarkCircleOutline
+                          className="topic-check"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Continuar: deshabilitado hasta elegir al menos un tema */}
+              <button
+                type="button"
+                className={`cta-button topics-next cta-${genderClass}`}
+                onClick={() => handleTopicsChange()}
+                disabled={selectedTopics.length === 0}
+              >
+                <span>{buttonText[0]}</span>
+                <IoArrowForward className="text-xl" aria-hidden="true" />
               </button>
-            ))}
-          </div>
 
-          {/* Botón de continuar */}
-          <button
-            className={`next-button ${
-              isWoman ? "woman-button" : "man-button"
-            } ${selectedTopics.length === 0 ? "disabled" : ""}`}
-            onClick={() => handleTopicsChange()}
-            disabled={selectedTopics.length === 0}
-          >
-            {buttonText[0]}
-          </button>
-
-          {/* Nota */}
-          <div className="note-container-topics">
-            <p className="text-note">{note[0]}</p>
+              {/* Nota */}
+              <p className="topics-note">{note[0]}</p>
+            </div>
           </div>
         </div>
       </IonContent>

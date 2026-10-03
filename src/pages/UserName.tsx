@@ -1,25 +1,28 @@
 import { markOnboardingComplete } from "../persistence/onboardingState";
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./UserName.css";
-import { useEffect, useState } from "react";
-import { AppNameScreenLanguage } from '../persistence/languages';
+import { useState } from "react";
+import { IoArrowForward, IoPerson } from "react-icons/io5";
+import { AppNameScreenLanguage } from "../persistence/languages";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
 import BackButton from "../components/common/BackButton";
+import GlowBackground from "../components/common/GlowBackground";
+import StepBadge from "../components/common/StepBadge";
+import StepIndicator from "../components/common/StepIndicator";
 
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
-  const [title, setTitle] = useState(["What's your", "name"]);
-  const [note, setNote] = useState(["*Your name will appear with your daily quotes for a personalized experience."]);
-  const [placeholder, setPlaceholder] = useState(["Your name here..."]);
-  const [button, setButton] = useState(["Finish"]);
   const { userLanguage } = useAppLanguage();
   const { isWoman } = useUserGender();
+  const text = AppNameScreenLanguage;
+  const genderClass = isWoman ? "woman" : "man";
+  const trimmedName = name.trim();
 
   const handleFinish = async () => {
-    if (name.trim() === "") return;
+    if (trimmedName === "") return;
     localStorage.setItem("name", name);
     // Último paso del onboarding: a partir de aquí la app abre directo en Home.
     markOnboardingComplete();
@@ -31,68 +34,72 @@ const UserName = ({ backTo }: { backTo?: string }) => {
     }, 1000);
   };
 
-  useEffect(() => {
-    setTitle(AppNameScreenLanguage.title[userLanguage]);
-    setNote(AppNameScreenLanguage.note[userLanguage]);
-    setPlaceholder(AppNameScreenLanguage.placeHolder[userLanguage]);
-    setButton(AppNameScreenLanguage.buttons[userLanguage]);
-  }, [userLanguage]);
-
-  const backgroundClass = isWoman ? "background-woman" : "background-man";
-
   return (
     <IonPage>
       <IonContent fullscreen>
-        <div className={`${backgroundClass} flex flex-col items-center justify-center min-h-screen`}>
-          {/* Flecha de retroceso */}
-          <BackButton onClick={() => navigate.goBack()} />
+        <div className="safe-area">
+          <div className={`onboarding-background ${
+            isWoman ? "" : "man"
+          } flex flex-col items-center justify-center min-h-screen`}>
+            <GlowBackground />
 
-          {/* Puntos superiores */}
-          {backTo === undefined &&
-            <img
-              src="./step6.svg"
-              alt="Progress dots"
-              className="dots1 absolute top-20"
-            />
-          }
-          {/* Texto principal */}
-          <div className="text-container flex flex-row items-center mt-12 px-16 pb-8 pt-6">
-            <p className="text-normal">
-              {title[0]}
-            </p>
-            <p className="text-highlight">
-              {title[1]}
-            </p>
-          </div>
-          {/* Input para el nombre */}
-          <div className="input-container pt-8 pb-8">
-            <input
-              type="text"
-              className="name-input"
-              placeholder={placeholder[0]}
-              value={name}
-              maxLength={10}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+            {/* Atrás e indicador de pasos (el indicador solo en el onboarding) */}
+            <BackButton variant="glass" onClick={() => navigate.goBack()} />
+            {backTo === undefined && (
+              <div
+                className="onboarding-topbar"
+                style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
+              >
+                <StepIndicator step={5} total={5} />
+              </div>
+            )}
 
-          {/* Botones de opciones */}
-          <div className="action-container flex gap-4 mt-8 pb-8">
-            <button
-              className={`next-button mt-2 rounded-full ${isWoman ? "woman-button" : "man-button"
-                } ${name.trim() === "" ? "disabled" : ""}`}
-              onClick={handleFinish}
-              disabled={name.trim() === ""}
+            <div className="onboarding-content">
+              {backTo === undefined && (
+                <StepBadge label={text.stepBadge[userLanguage]} />
+              )}
 
-            >
-              {button[0]}
-            </button>
-          </div>
-          {/* Texto de nota */}
-          <div className="note-container-topics mt-8 text-center px-20">
-            <p className="text-note">
-              {note[0]}
-            </p>
+              {/* Texto principal */}
+              <div className="text-container flex flex-row items-center justify-center mt-4">
+                <p className="text-normal">{text.title[userLanguage][0]}</p>
+                <p className="text-highlight">{text.title[userLanguage][1]}</p>
+              </div>
+              <p className="onboarding-subtitle">{text.subtitle[userLanguage]}</p>
+
+              {/* Campo de nombre */}
+              <div className="name-card flex flex-col">
+                <label className="name-label" htmlFor="user-name">
+                  <IoPerson aria-hidden="true" />
+                  {text.fieldLabel[userLanguage]}
+                </label>
+                <input
+                  id="user-name"
+                  type="text"
+                  className="name-input"
+                  placeholder={text.placeHolder[userLanguage][0]}
+                  value={name}
+                  maxLength={10}
+                  autoComplete="given-name"
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {trimmedName !== "" && (
+                  <span className={`name-chip ${genderClass}`}>
+                    {text.greeting[userLanguage].replace("{name}", trimmedName)}
+                  </span>
+                )}
+              </div>
+
+              {/* Finalizar: deshabilitado hasta escribir un nombre */}
+              <button
+                type="button"
+                className={`cta-button name-submit cta-${genderClass}`}
+                onClick={handleFinish}
+                disabled={trimmedName === ""}
+              >
+                <span>{text.buttons[userLanguage][0]}</span>
+                <IoArrowForward className="text-xl" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </div>
       </IonContent>

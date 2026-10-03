@@ -1,17 +1,19 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
-import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import "./Welcome.css";
+import { IoArrowForward } from "react-icons/io5";
 import { hapticTap } from "../hooks/useHaptics";
+import GlowBackground from "../components/common/GlowBackground";
 import { isOnboardingComplete } from "../persistence/onboardingState";
 
+// Fuera del componente: la lista es constante y no debe recrearse en cada render.
+const welcomeTexts = [
+  "Discover daily inspiration and gratitude quotes to brighten your day!",
+  "Descubre frases diarias de inspiración y gratitud para alegrar tu día.",
+  "Découvrez des citations quotidiennes d'inspiration et de gratitude pour illuminer votre journée !",
+];
+
 const Welcome: React.FC = () => {
-  const welcomeTexts = [
-    "Discover daily inspiration and gratitude quotes to brighten your day!",
-    "Descubre frases diarias de inspiración y gratitud para alegrar tu día.",
-    "Découvrez des citations quotidiennes d'inspiration et de gratitude pour illuminer votre journée !",
-  ];
-  const [welcomeText, setWelcomeText] = useState(welcomeTexts[0]);
   const [textIndex, setTextIndex] = useState(0); // Índice del texto actual
   const navigate = useIonRouter();
 
@@ -29,45 +31,52 @@ const Welcome: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    // Actualiza el texto cuando cambia el índice
-    setWelcomeText(welcomeTexts[textIndex]);
-  }, [textIndex]);
-
   return (
     <IonPage>
       <IonContent fullscreen>
         <div className="safe-area">
-          <div className="background flex flex-col items-center justify-center min-h-screen">
+          <div className="onboarding-background flex flex-col items-center justify-center min-h-screen">
+            <GlowBackground />
+
             {/* Logo */}
             <img src="./logo.svg" alt="Gr8ful Logo" className="logo" />
 
-            {/* Descripción */}
-            <div className="text-container mb-6 pb-8 h-44">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={textIndex} // Cambia el componente cuando cambia el índice
-                  className="description text-center"
-                  initial={{ opacity: 0 }} // Estado inicial: invisible
-                  animate={{ opacity: 1 }} // Estado final: visible
-                  exit={{ opacity: 0 }} // Animación de salida
-                  transition={{ duration: 0.8 }} // Duración de la animación
+            {/* Descripción (rota entre EN/ES/FR). Los tres textos comparten la misma
+                celda de una rejilla: el contenedor toma el alto del más largo y los
+                puntos y el botón no se mueven al cambiar de idioma. */}
+            <div className="welcome-copy">
+              {welcomeTexts.map((text, i) => (
+                <p
+                  key={i}
+                  className={`description ${i === textIndex ? "active" : ""}`}
+                  aria-hidden={i !== textIndex}
                 >
-                  {welcomeText}
-                </motion.p>
-              </AnimatePresence>
+                  {text}
+                </p>
+              ))}
+            </div>
+
+            {/* Indicador del texto rotativo: el punto alargado es el visible */}
+            <div className="welcome-dots" aria-hidden="true">
+              {welcomeTexts.map((_, i) => (
+                <span
+                  key={i}
+                  className={`welcome-dot ${i === textIndex ? "active" : ""}`}
+                />
+              ))}
             </div>
 
             {/* Botón */}
             <button
-              className='ionic-button'
+              className="cta-button"
               onClick={async () => {
                 navigate.push("/languages", "forward")
                 await hapticTap();
               }
               }
             >
-              Continue
+              <span>Continue</span>
+              <IoArrowForward className="text-xl" aria-hidden="true" />
             </button>
           </div>
         </div>

@@ -1,72 +1,107 @@
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { IoCheckmark, IoFlower, IoWater } from "react-icons/io5";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";
 import { useAppLanguage } from "../hooks/useAppLanguage";
-import { hapticTap } from "../hooks/useHaptics";
+import { useSelectThenAdvance } from "../hooks/useSelectThenAdvance";
 import BackButton from "../components/common/BackButton";
+import GlowBackground from "../components/common/GlowBackground";
+import StepBadge from "../components/common/StepBadge";
+import StepIndicator from "../components/common/StepIndicator";
 
 const Gender: React.FC = () => {
   const { userLanguage } = useAppLanguage();
-  const [title, setTitle] = useState(["I", "identify", "as"]);
-  const [options, setOptions] = useState(["Woman", "Man"]);
-
+  const title = AppGenderScreenLanguage.title[userLanguage];
   const navigate = useIonRouter();
-  const handleGenderChange = (gender: string) => {
-    localStorage.setItem("gender", gender);
-    navigate.push("/quoteTime", "forward");
-  };
+  // Si se retoma el onboarding, la opción elegida antes aparece marcada.
+  const selectedGender = localStorage.getItem("gender");
 
-  useEffect(() => {
-    setTitle(AppGenderScreenLanguage.title[userLanguage]);
-    setOptions([
-      AppGenderScreenLanguage.options.woman[userLanguage],
-      AppGenderScreenLanguage.options.man[userLanguage],
-    ]);
-  }, [userLanguage]);
+  const options = [
+    {
+      key: "W",
+      label: AppGenderScreenLanguage.options.woman[userLanguage],
+      iconClass: "woman",
+      Icon: IoFlower,
+    },
+    {
+      key: "M",
+      label: AppGenderScreenLanguage.options.man[userLanguage],
+      iconClass: "man",
+      Icon: IoWater,
+    },
+  ] as const;
+
+  const { chosen, leaving, select } = useSelectThenAdvance();
+
+  const handleGenderChange = (gender: "W" | "M") =>
+    select(
+      gender,
+      () => localStorage.setItem("gender", gender),
+      () => navigate.push("/quoteTime", "forward")
+    );
 
   return (
     <IonPage>
       <IonContent fullscreen>
         <div className="safe-area">
-          <div className="background flex flex-col items-center justify-center min-h-screen">
-            {/* Flecha de retroceso */}
-            <BackButton onClick={() => navigate.push("/languages", "back")} />
+          <div className={`onboarding-background ${
+            (chosen ?? selectedGender) === "M" ? "man" : ""
+          } flex flex-col items-center justify-center min-h-screen`}>
+            <GlowBackground />
 
-            {/* SVG de los puntos superiores */}
-            <img
-              src="./step2.svg"
-              alt="Progress dots"
-              className="dots1 absolute top-20"
+            {/* Atrás (vuelve a Idioma) e indicador de pasos */}
+            <BackButton
+              variant="glass"
+              onClick={() => navigate.push("/languages", "back")}
             />
-
-            {/* Texto "I Identify as" */}
-            <div className="text-container flex items-center justify-center mt-16">
-              <p className="text-normal">{title[0]}</p>
-              <p className="text-highlight">{title[1]}</p>
-              <p className="text-normal">{title[2]}</p>
+            <div
+              className="onboarding-topbar"
+              style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
+            >
+              <StepIndicator step={2} total={5} />
             </div>
 
-            {/* Botones de opciones */}
-            <div className="buttons-container flex gap-4 mt-8">
-              <button
-                className="gender-button"
-                onClick={async () => {
-                  handleGenderChange("W");
-                  await hapticTap();
-                }}
-              >
-                {options[0]}
-              </button>
-              <button
-                className="gender-button"
-                onClick={async () => {
-                  handleGenderChange("M");
-                  await hapticTap();
-                }}
-              >
-                {options[1]}
-              </button>
+            <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
+              <StepBadge label={AppGenderScreenLanguage.stepBadge[userLanguage]} />
+
+              {/* Texto "I Identify as" */}
+              <div className="text-container flex items-center justify-center mt-4">
+                <p className="text-normal">{title[0]}</p>
+                <p className="text-highlight">{title[1]}</p>
+                <p className="text-normal">{title[2]}</p>
+              </div>
+
+              <p className="onboarding-subtitle">
+                {AppGenderScreenLanguage.subtitle[userLanguage]}
+              </p>
+
+              {/* Opciones: elegir una avanza al siguiente paso */}
+              <div className={`option-list ${chosen ? "has-chosen" : ""}`}>
+                {options.map(({ key, label, iconClass, Icon }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className={`option-card with-icon ${
+                      chosen === key ? "chosen" : ""
+                    }`}
+                    onClick={() => handleGenderChange(key)}
+                  >
+                    <span className="option-card-main">
+                      <span className={`option-icon ${iconClass}`}>
+                        <Icon aria-hidden="true" />
+                      </span>
+                      <span>{label}</span>
+                    </span>
+                    <span
+                      className={`option-check ${
+                        (chosen ?? selectedGender) === key ? "selected" : ""
+                      }`}
+                    >
+                      <IoCheckmark aria-hidden="true" />
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

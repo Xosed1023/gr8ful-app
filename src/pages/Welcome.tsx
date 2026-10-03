@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import "./Welcome.css";

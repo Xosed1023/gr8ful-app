@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-18
 
-**Status**: 🧹 Deuda técnica — limpieza, no afecta comportamiento
+**Status**: ✅ Implementado
 
 **Input**: Deuda técnica identificada en exploración de código.
 
@@ -27,3 +27,12 @@
 ## Assumptions
 
 - Ninguna de estas eliminaciones afecta comportamiento visible de la app — es limpieza segura de bajo riesgo, salvo `src/mapper/` si todavía se usa manualmente para generar contenido nuevo (confirmar con el usuario antes de borrar).
+
+## Resultado (2026-10-02)
+
+- **FR-001**: `src/hooks/useReactPath.ts` eliminado (cero usos confirmados con búsqueda en todo el proyecto).
+- **FR-002**: decisión del usuario: **eliminar `src/mapper/`** (script `index.js`, `transformed_phrases.json` y `package.json`); su salida usaba categorías en español no sincronizadas con `TypePhraseEnum` y nada lo referenciaba. Las frases se mantienen en `src/persistence/initialData.ts`. El historial de git conserva el script. Se quitó su línea de `CLAUDE.md` y se añadieron `ads/` y `notifications/` a la estructura de `src/`.
+- **FR-003**: resuelto en la spec 020 (banners por tarjeta).
+- **Extra**: imports y variables sin usar eliminados (`React` en `App.test.tsx`, `useHistory` y `Home` en `App.tsx`, `IonButton` en `Gender.tsx` y `Welcome.tsx`, `useIonToast` en `MainHome.tsx`, `IonAlert` en `Settings.tsx`).
+- **SC-001**: `tsc --noEmit --noUnusedLocals` sin avisos; `eslint`, `vitest` (33/33) y `vite build` sin errores.
+- No se tocaron dependencias de `package.json`: varias parecen sin uso directo pero son plugins de plataforma o tipos necesarios; auditarlas es un cambio de riesgo distinto.

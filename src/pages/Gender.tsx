@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonPage, useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { AppGenderScreenLanguage } from "../persistence/languages";
 import "./Gender.css";

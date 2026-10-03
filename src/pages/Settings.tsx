@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonIcon,
   IonItem,
   IonLabel,

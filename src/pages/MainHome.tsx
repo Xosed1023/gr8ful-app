@@ -9,7 +9,6 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  useIonToast,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { bookmark, home, settings, sync } from "ionicons/icons";

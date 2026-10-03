@@ -17,8 +17,9 @@ Publicar la app en App Store (iOS) y Play Store (Android).
 - `components/` — componentes reutilizables de UI
 - `hooks/` — lógica reutilizable con React hooks
 - `persistence/` — capa de almacenamiento local
+- `ads/` — coordinación de los banners AdMob por tarjeta
+- `notifications/` — notificaciones locales de la frase diaria
 - `models/` — tipos/modelos de datos
-- `mapper/` — mapeo entre modelos/datos
 - `theme/` — estilos/tema de Ionic
 
 ## Metodología de desarrollo: Spec-Driven Development (SDD)

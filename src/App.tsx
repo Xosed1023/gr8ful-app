@@ -1,6 +1,6 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route, useHistory } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { initialData } from "./persistence/initialData";
 import "./tailwind.css";
 
@@ -34,7 +34,6 @@ import "@ionic/react/css/palettes/dark.class.css";
 /* Theme variables */
 import { useEffect } from "react";
 import Gender from "./pages/Gender";
-import Home from "./pages/Home";
 import Languages from "./pages/Languages";
 import LoadingScreen from "./pages/LoadingScreen";
 import MainHome from "./pages/MainHome";

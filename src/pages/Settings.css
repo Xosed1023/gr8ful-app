@@ -2,13 +2,263 @@
   font-family: 'Montserrat' !important;
 }
 
-/* ion-button {
-  --color: #010326 !important;
-  --border-radius: 25px !important;
-  --border-color: #010326 !important;
-  --border-style: solid !important;
-  --border-width: 1px !important;
-  text-transform: none !important;
-  font-size: .9rem !important;
-} */
+/* Pantalla de Ajustes (diseño de Stitch): cabecera índigo + tarjeta flotante */
+.settings-page {
+  --background: var(--background-color);
+}
 
+.settings-screen {
+  --s-accent: #5602d3;
+  --s-glow-a: rgba(86, 2, 211, 0.35);
+  --s-glow-b: rgba(167, 139, 250, 0.3);
+  --s-header: var(--settings-header-woman);
+  --tint-a-bg: var(--tint-purple-bg);
+  --tint-a-fg: var(--tint-purple-fg);
+  --tint-c-bg: var(--tint-plum-bg);
+  --tint-c-fg: var(--tint-plum-fg);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  overflow: visible !important;
+}
+
+.settings-screen.man {
+  --s-accent: #006493;
+  --s-glow-a: rgba(0, 170, 255, 0.3);
+  --s-glow-b: rgba(57, 184, 253, 0.28);
+  --s-header: var(--settings-header-man);
+  --tint-a-bg: var(--tint-blue-bg);
+  --tint-a-fg: var(--tint-blue-fg);
+  --tint-c-bg: var(--tint-sky-bg);
+  --tint-c-fg: var(--tint-sky-fg);
+}
+
+/* ---- Cabecera ---- */
+.settings-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(env(safe-area-inset-top, 0px) + 1.5rem) 1.5rem 4.5rem;
+  background: var(--s-header);
+  border-radius: 0 0 2.75rem 2.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.18), 0 8px 10px -6px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+/* Dos manchas de luz difuminadas */
+.settings-header::before,
+.settings-header::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.settings-header::before {
+  top: -3rem;
+  right: -2.5rem;
+  width: 12rem;
+  height: 12rem;
+  background: var(--s-glow-a);
+}
+
+.settings-header::after {
+  bottom: -2rem;
+  left: -2rem;
+  width: 11rem;
+  height: 11rem;
+  background: var(--s-glow-b);
+}
+
+.settings-grabber {
+  width: 4rem;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ---- Tarjeta flotante ---- */
+.settings-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% - 3rem);
+  max-width: 28rem;
+  margin: -3.5rem auto 0;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  color: var(--text-color);
+  background: var(--sheet-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--sheet-shadow);
+  overflow: visible !important;
+}
+
+.settings-name {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.settings-edit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.25rem;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-color);
+  background: var(--pill-bg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s ease;
+}
+
+.settings-edit-pill:active {
+  transform: scale(0.95);
+}
+
+.settings-edit-pill svg {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ---- Filas ---- */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 1.25rem;
+  overflow: visible !important;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 16px;
+  text-align: left;
+  color: var(--text-color);
+  background: var(--row-bg);
+}
+
+button.settings-row {
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+button.settings-row:active {
+  transform: scale(0.98);
+}
+
+.settings-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 22px;
+}
+
+.settings-icon.tint-a { color: var(--tint-a-fg); background: var(--tint-a-bg); }
+.settings-icon.tint-b { color: var(--tint-blue-fg); background: var(--tint-blue-bg); }
+.settings-icon.tint-c { color: var(--tint-c-fg); background: var(--tint-c-bg); }
+.settings-icon.tint-n { color: var(--tint-neutral-fg); background: var(--tint-neutral-bg); }
+
+.settings-row-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.settings-row-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settings-row-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.settings-chevron {
+  flex: none;
+  font-size: 20px;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+/* ---- Interruptor en píldora ---- */
+.settings-switch {
+  flex: none;
+  display: flex;
+  align-items: center;
+  width: 52px;
+  height: 28px;
+  padding: 4px;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  background: var(--switch-off);
+  transition: background-color 0.2s ease;
+}
+
+.settings-screen .settings-switch.on {
+  background: var(--s-accent);
+}
+
+.settings-switch-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.settings-switch.on .settings-switch-thumb {
+  transform: translateX(24px);
+}
+
+/* ---- Pie ---- */
+.settings-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 1.5rem;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.settings-footer span {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-switch,
+  .settings-switch-thumb,
+  button.settings-row,
+  .settings-edit-pill {
+    transition: none;
+  }
+}

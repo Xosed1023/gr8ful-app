@@ -47,6 +47,30 @@ http://ionicframework.com/docs/theming/ */
     --accent-text: #19104C;
 
     --option-chosen-bg: rgba(237, 228, 255, 0.95);
+    --settings-header-woman: #19104C;
+    --settings-header-man: #0D3A5C;
+    --sheet-bg: rgba(255, 255, 255, 0.9);
+    --sheet-shadow: 0 12px 36px -6px rgba(15, 23, 42, 0.12);
+    --row-bg: rgba(245, 243, 243, 0.7);
+    --pill-bg: #f5f3f3;
+    --switch-off: #cbc3d8;
+    --tint-purple-bg: #e8ddff;
+    --tint-purple-fg: #5602d3;
+    --tint-plum-bg: rgba(207, 189, 255, 0.6);
+    --tint-plum-fg: #19104c;
+    --tint-blue-bg: #cae6ff;
+    --tint-blue-fg: #006493;
+    --tint-sky-bg: rgba(137, 206, 255, 0.5);
+    --tint-sky-fg: #0d4461;
+    --tint-neutral-bg: #e4e2e2;
+    --tint-neutral-fg: #494455;
+
+    --card-sheen: rgba(255, 255, 255, 0.28);
+    --card-edge: rgba(255, 255, 255, 0.45);
+    --card-glass: rgba(255, 255, 255, 0.38);
+    --nav-space: calc(env(safe-area-inset-bottom, 0px) + 84px);
+    --slab-height: 96px;
+
     --topic-woman-bg: rgba(217, 172, 253, 0.4);
     --topic-woman-text: #19104C;
     --topic-man-bg: rgba(119, 198, 255, 0.45);
@@ -155,6 +179,28 @@ http://ionicframework.com/docs/theming/ */
     --button-hover: #A58BFF;
 
     --option-chosen-bg: rgba(60, 46, 110, 0.85);
+    --settings-header-woman: #14103D;
+    --settings-header-man: #0A2438;
+    --sheet-bg: rgba(26, 29, 46, 0.88);
+    --sheet-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.5);
+    --row-bg: rgba(255, 255, 255, 0.06);
+    --pill-bg: #2A2D40;
+    --switch-off: #3A3F55;
+    --tint-purple-bg: rgba(91, 63, 168, 0.5);
+    --tint-purple-fg: #C9BDF5;
+    --tint-plum-bg: rgba(76, 42, 133, 0.55);
+    --tint-plum-fg: #D9ACFD;
+    --tint-blue-bg: rgba(30, 95, 138, 0.55);
+    --tint-blue-fg: #8FC4E8;
+    --tint-sky-bg: rgba(27, 80, 115, 0.6);
+    --tint-sky-fg: #8DCDFF;
+    --tint-neutral-bg: #2A2D40;
+    --tint-neutral-fg: #A9A7BD;
+
+    --card-sheen: rgba(255, 255, 255, 0.10);
+    --card-edge: rgba(255, 255, 255, 0.14);
+    --card-glass: rgba(255, 255, 255, 0.14);
+
     --topic-woman-bg: rgba(91, 63, 168, 0.55);
     --topic-woman-text: #F5F3FF;
     --topic-man-bg: rgba(30, 95, 138, 0.6);

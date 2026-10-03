@@ -5,13 +5,14 @@ import {
 } from "@capacitor-community/admob";
 import {
   IonIcon,
+  IonLabel,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { bookmark, home, settings, sync } from "ionicons/icons";
+import { bookmarkOutline, infiniteOutline, optionsOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router";
 import { Phrase } from "../models/Phrase";
@@ -35,6 +36,9 @@ import {
   AdMobRewardItem,
 } from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
+import "../components/home/HomeKit.css";
+import { useUserGender } from "../hooks/useUserGender";
+import { AppHomeNavLanguage } from "../persistence/languages";
 
 // IDs de prueba oficiales de Google AdMob — https://developers.google.com/admob/ios/test-ads
 // y https://developers.google.com/admob/android/test-ads. Devuelven anuncios de test
@@ -49,6 +53,13 @@ const TEST_REWARDED_AD_ID =
     : "ca-app-pub-3940256099942544/5224354917";
 
 const MainHome = () => {
+  const { isMale } = useUserGender();
+  // Se lee en cada render para que los textos sigan al idioma tras cambiarlo en Ajustes.
+  const storedLanguage = localStorage.getItem("language");
+  const navText =
+    AppHomeNavLanguage.tabs[
+      storedLanguage === "es" || storedLanguage === "fr" ? storedLanguage : "en"
+    ];
   const [phrase, setPhrase] = useState<Phrase | null>(null);
   /* const [present] = useIonToast(); */
   const [isAdVisible, setIsAdVisible] = useState(false);
@@ -56,6 +67,7 @@ const MainHome = () => {
   // <IonReactRouter> anidado dentro del router principal de App.tsx; leer la
   // ubicación desde ahí quedaba desincronizada con los taps reales del usuario.
   const [selectedTab, setSelectedTab] = useState<"home" | "favorites" | "settings">("home");
+
 
   useEffect(() => {
     initializeAdMob();
@@ -201,7 +213,7 @@ const MainHome = () => {
       <IonTabs className="bg-[color:var(--tabs-bg)]">
         <IonRouterOutlet>
           <Route exact path="/tabs/home">
-            <Home phrase={phrase!} />
+            <Home phrase={phrase!} onRefresh={loadRandomPhraseWithAd} />
           </Route>
           <Route exact path="/tabs/favorites" component={Favorites} />
           <Route exact path="/tabs/settings" component={Settings} />
@@ -223,11 +235,15 @@ const MainHome = () => {
             render={() => <Redirect to="/tabs/home" />}
           />
         </IonRouterOutlet>
-        <IonTabBar slot="bottom" className="bg-[color:var(--nav-bg)]">
+        {/* Píldora de vidrio flotante con icono y texto (estilos en HomeKit.css) */}
+        <IonTabBar
+          slot="bottom"
+          className={`floating-tabs ${isMale ? "man" : "woman"}`}
+        >
+
           <IonTabButton
             tab="home"
             href="/tabs/home"
-            className="bg-[color:var(--nav-bg)]"
             onClick={() => {
               // Si ya estábamos en Home, el tap pide una frase nueva (con
               // anuncio rewarded). Si veníamos de otro tab, es navegación
@@ -238,23 +254,24 @@ const MainHome = () => {
               setSelectedTab("home");
             }}
           >
-            <IonIcon aria-hidden="true" icon={selectedTab === "home" ? sync : home} />
+            <IonIcon aria-hidden="true" icon={infiniteOutline} />
+            <IonLabel>{navText.home}</IonLabel>
           </IonTabButton>
           <IonTabButton
             tab="favorites"
             href="/tabs/favorites"
-            className="bg-[color:var(--nav-bg)]"
             onClick={() => setSelectedTab("favorites")}
           >
-            <IonIcon aria-hidden="true" icon={bookmark} />
+            <IonIcon aria-hidden="true" icon={bookmarkOutline} />
+            <IonLabel>{navText.favorites}</IonLabel>
           </IonTabButton>
           <IonTabButton
             tab="settings"
             href="/tabs/settings"
-            className="bg-[color:var(--nav-bg)]"
             onClick={() => setSelectedTab("settings")}
           >
-            <IonIcon aria-hidden="true" icon={settings} />
+            <IonIcon aria-hidden="true" icon={optionsOutline} />
+            <IonLabel>{navText.settings}</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

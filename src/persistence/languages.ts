@@ -244,3 +244,59 @@ export const AppNotificationsLanguage = {
     fr: "Compris",
   },
 };
+
+export const AppHomeNavLanguage = {
+  tabs: {
+    es: { home: "Diario", favorites: "Favoritos", settings: "Ajustes" },
+    en: { home: "Daily", favorites: "Favorites", settings: "Settings" },
+    fr: { home: "Quotidien", favorites: "Favoris", settings: "Réglages" },
+  },
+  refresh: {
+    es: "Renovar inspiración",
+    en: "Refresh inspiration",
+    fr: "Nouvelle inspiration",
+  },
+};
+
+export const AppSettingsDetailLanguage = {
+  timeLine: {
+    es: "Cada día a las {time}",
+    en: "Daily at {time}",
+    fr: "Chaque jour à {time}",
+  },
+  allTopics: {
+    es: "Todos los temas",
+    en: "All topics",
+    fr: "Tous les sujets",
+  },
+  notificationsHint: {
+    es: "Recordatorios de tu frase diaria",
+    en: "Daily quote reminders",
+    fr: "Rappels de votre citation quotidienne",
+  },
+};
+
+export const AppFavoritesLanguage = {
+  title: { es: "Favoritos", en: "Favorites", fr: "Favoris" },
+  count: {
+    es: { one: "{n} frase guardada", other: "{n} frases guardadas" },
+    en: { one: "{n} saved quote", other: "{n} saved quotes" },
+    fr: { one: "{n} citation enregistrée", other: "{n} citations enregistrées" },
+  },
+  emptyTitle: {
+    es: "Aún no tienes favoritos",
+    en: "No favorites yet",
+    fr: "Pas encore de favoris",
+  },
+  emptyHint: {
+    es: "Toca el marcador en una tarjeta de Inicio para guardarla aquí.",
+    en: "Tap the bookmark on a Home card to save it here.",
+    fr: "Touchez le marque-page sur une carte d'accueil pour l'enregistrer ici.",
+  },
+  remove: {
+    es: "Quitar de favoritos",
+    en: "Remove from favorites",
+    fr: "Retirer des favoris",
+  },
+};
+

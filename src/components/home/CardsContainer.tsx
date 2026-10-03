@@ -11,9 +11,20 @@ import CardPhrase from "./CardPhrase";
 import { useUserGender } from "../../hooks/useUserGender";
 import { getPhraseById, toggleFavorite } from "../../persistence/IndexedDBService";
 import { setHomeVisible } from "../../ads/cardBanner";
+import { useAppLanguage } from "../../hooks/useAppLanguage";
+import { AppHomeNavLanguage } from "../../persistence/languages";
+import { IoSync } from "react-icons/io5";
+import "./HomeKit.css";
 
-const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
+interface CardsContainerProps {
+  phrase: Phrase;
+  /** Pide otra frase (la misma acción que tocar la pestaña de inicio estando en Home). */
+  onRefresh: () => void;
+}
+
+const CardsContainer = ({ phrase, onRefresh }: CardsContainerProps) => {
   const { isMale } = useUserGender();
+  const { userLanguage } = useAppLanguage();
   const [isFavorite, setIsFavorite] = useState(phrase.isFavorite);
 
   // Re-lee el estado real al revisitar el tab Home (p. ej. tras desmarcar
@@ -39,6 +50,7 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
 
   return (
     <>
+      <div className="cards-layer">
       <CardPhrase
         color={isMale ? CardColors.MAN_SKY_BLUE : CardColors.WOMAN_BLUE}
         phrase={phrase}
@@ -64,16 +76,22 @@ const CardsContainer = ({ phrase }: { phrase: Phrase }) => {
         onToggleFavorite={handleToggleFavorite}
       />
 
-      <div
-        className={`${
-          isMale
-            ? "bg-[color:var(--author-bar-man)]"
-            : "bg-[color:var(--author-bar-woman)]"
-        } rounded-t-3xl p-6 shadow-[rgba(0,0,0,0.55)_-2px_-2px_10px_-2px] absolute ${
-          isPlatform("ios") ? "bottom-16 pb-10" : "bottom-14"
-        } z-9 w-full flex justify-center items-center h-3`}
-      >
-        <h1 className={`text-lg font-semibold text-white`}>{phrase.author}</h1>
+      </div>
+
+      {/* Pie: autor y renovar, sobre el espacio de la barra flotante */}
+      <div className="home-footer">
+        <div className={`author-slab ${isMale ? "man" : "woman"}`}>
+          <div className="author-line">
+            <span className="rule" />
+            <h1>{phrase.author}</h1>
+            <span className="rule" />
+          </div>
+          <button type="button" className="refresh-row" onClick={onRefresh}>
+            <IoSync aria-hidden="true" />
+            {AppHomeNavLanguage.refresh[userLanguage]}
+          </button>
+        </div>
+        <div className="nav-spacer" />
       </div>
     </>
   );

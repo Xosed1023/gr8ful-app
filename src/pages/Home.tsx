@@ -9,7 +9,13 @@ import "./Home.css";
 import { AppHomeScreenLanguage } from "../persistence/languages";
 import { LanguageKeys } from "../persistence/languages";
 
-const Home = ({ phrase }: { phrase: Phrase }) => {
+const Home = ({
+  phrase,
+  onRefresh,
+}: {
+  phrase: Phrase;
+  onRefresh: () => void;
+}) => {
   const { isMale } = useUserGender();
 
   const [greetingsText, setGreetingsText] = useState(["Hi"]);
@@ -48,7 +54,7 @@ const Home = ({ phrase }: { phrase: Phrase }) => {
             inspiration={inspirationText[0]}
           />
           {phrase && (
-            <CardsContainer phrase={phrase} />
+            <CardsContainer phrase={phrase} onRefresh={onRefresh} />
           )}
         </div>
       </IonContent>

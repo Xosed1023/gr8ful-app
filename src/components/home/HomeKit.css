@@ -1,0 +1,262 @@
+/* ---- Home: tarjetas de vidrio, pie con autor y barra flotante (diseño de Stitch) ---- */
+
+/* Capa de tarjetas: termina donde empieza el pie, así las tarjetas no asoman debajo */
+.cards-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--nav-space) + var(--slab-height) - 24px);
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.cards-layer > * {
+    pointer-events: auto;
+}
+
+/* Tarjeta: color del género + brillo suave arriba y filo claro en el borde superior */
+.phrase-card {
+    padding: 1.5rem;
+    border-radius: 24px 24px 0 0;
+    background-image: linear-gradient(180deg, var(--card-sheen) 0%, rgba(255, 255, 255, 0) 55%);
+    border-top: 1px solid var(--card-edge);
+    box-shadow: -2px -2px 10px -2px rgba(0, 0, 0, 0.45);
+}
+
+.card-lang {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.5rem;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.card-more {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    display: flex;
+    font-size: 1.25rem;
+}
+
+.card-quote {
+    margin-top: 1.75rem;
+    min-height: 8rem;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.55;
+}
+
+.card-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-style: italic;
+    background: var(--card-glass);
+    border: 1px solid var(--card-edge);
+}
+
+.card-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--card-edge);
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 20px;
+    color: inherit;
+    background: var(--card-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.15s ease;
+}
+
+.card-action:active {
+    transform: scale(0.92);
+}
+
+/* ---- Pie: autor + renovar, sobre el espacio de la barra flotante ---- */
+.home-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+}
+
+.author-slab {
+    display: flex;
+    flex-direction: column;
+    height: var(--slab-height);
+    border-radius: 24px 24px 0 0;
+    box-shadow: -2px -2px 10px -2px rgba(0, 0, 0, 0.55);
+    color: #fff;
+}
+
+.author-slab.woman {
+    background: var(--author-bar-woman);
+}
+
+.author-slab.man {
+    background: var(--author-bar-man);
+}
+
+.author-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex: 1;
+    padding: 0 1.5rem;
+}
+
+.author-line h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.author-line .rule {
+    width: 28px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.refresh-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 44px;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.refresh-row:active {
+    opacity: 0.7;
+}
+
+.nav-spacer {
+    height: var(--nav-space);
+    background: var(--background-color);
+}
+
+/* ---- Barra de pestañas: píldora de vidrio flotante ---- */
+ion-tab-bar.floating-tabs {
+    position: absolute;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    transform: translateX(-50%);
+    z-index: 20;
+    width: min(320px, calc(100% - 48px));
+    height: 60px;
+    padding: 0 8px;
+    border: none;
+    border-radius: 9999px;
+    contain: none;
+    --background: var(--glass-bg);
+    --border: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: var(--glass-shadow);
+}
+
+ion-tab-bar.floating-tabs ion-tab-button {
+    --color: var(--text-muted);
+    --color-selected: var(--accent-text);
+    --background: transparent;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    margin: 6px 2px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Píldora deslizante: un solo resaltado que viaja entre las tres pestañas.
+   Es un pseudo-elemento de la barra porque IonTabBar solo conserva sus
+   IonTabButton (cualquier otro hijo se descarta). Su posición la decide la
+   clase `tab-selected` que Ionic ya pone según la ruta real. Cada paso mide el
+   ancho de una pestaña (+ sus márgenes de 2 px a cada lado). */
+ion-tab-bar.floating-tabs::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    z-index: 0;
+    width: calc((100% - 16px) / 3 - 4px);
+    margin-left: 2px;
+    border-radius: 9999px;
+    pointer-events: none;
+    transform: translateX(0);
+    /* Curva con un leve rebote, como un resorte */
+    transition: transform 0.5s cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+ion-tab-bar.floating-tabs:has(ion-tab-button[tab="favorites"].tab-selected)::before {
+    transform: translateX(calc(100% + 4px));
+}
+
+ion-tab-bar.floating-tabs:has(ion-tab-button[tab="settings"].tab-selected)::before {
+    transform: translateX(calc(200% + 8px));
+}
+
+ion-tab-bar.floating-tabs.woman::before {
+    background: var(--topic-woman-bg);
+}
+
+ion-tab-bar.floating-tabs.man::before {
+    background: var(--topic-man-bg);
+}
+
+ion-tab-bar.floating-tabs ion-tab-button {
+    position: relative;
+    z-index: 1;
+}
+
+/* El icono activo gana un leve realce */
+ion-tab-bar.floating-tabs ion-tab-button ion-icon {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+ion-tab-bar.floating-tabs ion-tab-button.tab-selected ion-icon {
+    transform: translateY(-1px) scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ion-tab-bar.floating-tabs::before,
+    ion-tab-bar.floating-tabs ion-tab-button ion-icon {
+        transition: none;
+    }
+}
+
+ion-tab-bar.floating-tabs ion-icon {
+    font-size: 22px;
+}
+
+/* ---- Cabecera con brillo (Ajustes y Favoritos) ---- */
+.glow-header {
+    background: var(--header-bg);
+}
+
+.glow-header.woman {
+    background: radial-gradient(ellipse 120% 100% at 50% 0%, rgba(111, 54, 235, 0.45), transparent 70%), var(--header-bg);
+}
+
+.glow-header.man {
+    background: radial-gradient(ellipse 120% 100% at 50% 0%, rgba(0, 170, 255, 0.35), transparent 70%), var(--header-bg);
+}

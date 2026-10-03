@@ -1,19 +1,22 @@
 import { Clipboard } from "@capacitor/clipboard";
 import { Share } from "@capacitor/share";
-import { IonButton, IonChip, IonIcon, useIonToast } from "@ionic/react";
-import { motion } from "framer-motion";
+import { IonIcon, useIonToast } from "@ionic/react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   bookmark,
   bookmarkOutline,
   copyOutline,
   ellipsisHorizontal,
   shareSocialOutline,
+  sparklesOutline,
 } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
 import { hapticTap } from "../../hooks/useHaptics";
 import { LanguageKeys } from "../../persistence/languages";
+import "./HomeKit.css";
+import { QUOTE_MARKS } from "../common/quoteMarks";
 import { computeBannerMargin } from "../../ads/bannerMargin";
 import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 
@@ -26,52 +29,69 @@ interface CardPhraseProps {
   onToggleFavorite: () => void;
 }
 
+/**
+ * Movimiento de las tarjetas: resortes en vez de duraciones fijas, para que el
+ * movimiento acelere y frene de forma natural.
+ * - Entrada: suave y lenta, con un leve asentamiento.
+ * - Abrir: algo más vivo, con un rebote casi imperceptible (~3 %).
+ * - Cerrar: más amortiguado, vuelve a su sitio sin rebotar.
+ */
+const ENTER_SPRING = { type: "spring", stiffness: 130, damping: 19, mass: 1 } as const;
+const OPEN_SPRING = { type: "spring", stiffness: 220, damping: 22, mass: 1 } as const;
+const CLOSE_SPRING = { type: "spring", stiffness: 290, damping: 31, mass: 1 } as const;
+
+const LANGUAGE_LABEL: Record<LanguageKeys, string> = {
+  en: "English · 01",
+  es: "Español · 02",
+  fr: "Français · 03",
+};
+
 const colorConfig = {
   [CardColors.WOMAN_BLUE]: {
     background: "bg-[color:var(--card-woman-blue-bg)]",
     text: "text-[color:var(--card-woman-blue-text)]",
-    initialPosition: "35vh",
-    initialHeight: "65vh",
+    initialPosition: "30vh",
+    initialHeight: "70vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
   },
   [CardColors.WOMAN_PURPLE]: {
     background: "bg-[color:var(--card-woman-purple-bg)]",
     text: "text-[color:var(--card-woman-purple-text)]",
-    initialPosition: "53vh",
-    initialHeight: "47vh",
+    initialPosition: "45vh",
+    initialHeight: "55vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
   },
   [CardColors.WOMAN_VIOLETTE]: {
     background: "bg-[color:var(--card-woman-violette-bg)]",
     text: "text-[color:var(--card-woman-violette-text)]",
-    initialPosition: "70vh",
-    initialHeight: "30vh",
+    initialPosition: "60vh",
+    initialHeight: "40vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
   },
   [CardColors.MAN_SKY_BLUE]: {
     background: "bg-[color:var(--card-man-sky-bg)]",
     text: "text-[color:var(--card-man-sky-text)]",
-    initialPosition: "35vh",
-    initialHeight: "65vh",
+    initialPosition: "30vh",
+    initialHeight: "70vh",
     expandedHeight: "90vh",
     expandedPosition: "10vh",
   },
   [CardColors.MAN_LIGHT_SKY_BLUE]: {
     background: "bg-[color:var(--card-man-light-bg)]",
     text: "text-[color:var(--card-man-light-text)]",
-    initialPosition: "53vh",
-    initialHeight: "47vh",
+    initialPosition: "45vh",
+    initialHeight: "55vh",
     expandedHeight: "72vh",
     expandedPosition: "28vh",
   },
   [CardColors.MAN_DEEP_SKY_BLUE]: {
     background: "bg-[color:var(--card-man-deep-bg)]",
     text: "text-[color:var(--card-man-deep-text)]",
-    initialPosition: "70vh",
-    initialHeight: "30vh",
+    initialPosition: "60vh",
+    initialHeight: "40vh",
     expandedHeight: "54vh",
     expandedPosition: "46vh",
   },
@@ -92,6 +112,7 @@ const CardPhrase = ({
   const [isSettledOpen, setIsSettledOpen] = useState(false);
   const bannerSlotRef = useRef<HTMLDivElement>(null);
   const [present] = useIonToast();
+  const reduceMotion = useReducedMotion();
 
   const presentToast = (message: string) => {
     present({
@@ -128,17 +149,22 @@ const CardPhrase = ({
     return () => hideCardBanner(language);
   }, [isSettledOpen, language, adBannerId]);
 
-  // Calcula el delay invertido basado en `initialPosition`
-  const calculateDelay = (position: string) => {
-    const invertedValue = 100 - parseInt(position.replace("%", ""));
-    return invertedValue * 0.01; // Convierte el porcentaje invertido en segundos
-  };
+  // Entrada escalonada: la tarjeta de más abajo sube primero y las de arriba
+  // la siguen con ~0,12 s de diferencia entre cada una.
+  const animationDelay = Math.max(0, (60 - parseInt(initialPosition)) * 0.008);
 
-  const animationDelay = calculateDelay(initialPosition);
+  // El movimiento depende de la fase: entrada inicial, abrir o cerrar.
+  const transition = reduceMotion
+    ? { duration: 0 }
+    : !isInitialAnimationDone
+    ? { ...ENTER_SPRING, delay: animationDelay }
+    : isExpanded
+    ? OPEN_SPRING
+    : CLOSE_SPRING;
 
   return (
     <motion.div
-      className={`${background} rounded-t-3xl p-6 shadow-[rgba(0,0,0,0.55)_-2px_-2px_10px_-2px] absolute w-full`}
+      className={`phrase-card ${background} ${text} absolute w-full`}
       onClick={toggleCard}
       animate={{
         top: isExpanded ? expandedPosition : initialPosition,
@@ -148,15 +174,18 @@ const CardPhrase = ({
         top: "100%", // Empieza fuera de la pantalla (abajo)
         height: initialHeight,
       }}
-      transition={{
-        top: {
-          duration: 0.4,
-          ease: "easeOut",
-          delay: isInitialAnimationDone ? 0 : animationDelay, // Aplica delay solo en la animación inicial
-        },
-        height: { duration: 0.4, ease: "easeInOut" },
-      }}
-      onAnimationComplete={() => {
+      transition={transition}
+      // Leve «hundimiento» al tocar: confirma el toque sin competir con el resorte.
+      whileTap={{ scale: 0.988 }}
+      onAnimationComplete={(definition) => {
+        // Solo cuenta la animación de posición/alto, no el efecto del toque.
+        if (
+          typeof definition !== "object" ||
+          definition === null ||
+          !("top" in definition)
+        ) {
+          return;
+        }
         if (!isInitialAnimationDone) {
           setIsInitialAnimationDone(true); // Marca como completada la animación inicial
           hapticTap(); // Vibra al finalizar la animación de entrada
@@ -164,36 +193,40 @@ const CardPhrase = ({
         if (isExpanded) setIsSettledOpen(true);
       }}
     >
-      <IonIcon
-        icon={ellipsisHorizontal}
-        className={`absolute top-4 right-6 text-xl ${text}`}
-      />
-      <h1 className={`${text} text-lg font-medium mt-4 min-h-32`}>
+      <span className="card-lang">{LANGUAGE_LABEL[language]}</span>
+      <motion.span
+        className="card-more"
+        animate={{ rotate: isExpanded ? 90 : 0 }}
+        transition={reduceMotion ? { duration: 0 } : OPEN_SPRING}
+      >
+        <IonIcon icon={ellipsisHorizontal} />
+      </motion.span>
+      <h1 className="card-quote">
+        {QUOTE_MARKS[language][0]}
         {phrase.content[language]}
+        {QUOTE_MARKS[language][1]}
       </h1>
       <div className="mt-2 flex justify-between items-center">
-        <IonChip className="text-sm italic">{phrase.type}</IonChip>
-        <div className="flex -space-x-2">
-          <IonButton
-            shape="round"
-            fill="clear"
-            color="light"
-            size="large"
+        <span className="card-chip">
+          <IonIcon icon={sparklesOutline} aria-hidden="true" />
+          {phrase.type}
+        </span>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            className="card-action"
+            aria-label="Favorite"
             onClick={(e) => {
               e.stopPropagation();
               onToggleFavorite();
             }}
           >
-            <IonIcon
-              slot="icon-only"
-              icon={isFavorite ? bookmark : bookmarkOutline}
-            ></IonIcon>
-          </IonButton>
-          <IonButton
-            shape="round"
-            fill="clear"
-            color="light"
-            size="large"
+            <IonIcon icon={isFavorite ? bookmark : bookmarkOutline} />
+          </button>
+          <button
+            type="button"
+            className="card-action"
+            aria-label="Share"
             onClick={async (e) => {
               e.stopPropagation();
               try {
@@ -208,13 +241,12 @@ const CardPhrase = ({
               }
             }}
           >
-            <IonIcon slot="icon-only" icon={shareSocialOutline}></IonIcon>
-          </IonButton>
-          <IonButton
-            shape="round"
-            fill="clear"
-            color="light"
-            size="large"
+            <IonIcon icon={shareSocialOutline} />
+          </button>
+          <button
+            type="button"
+            className="card-action"
+            aria-label="Copy"
             onClick={async (e) => {
               e.stopPropagation();
               try {
@@ -227,8 +259,8 @@ const CardPhrase = ({
               }
             }}
           >
-            <IonIcon slot="icon-only" icon={copyOutline}></IonIcon>
-          </IonButton>
+            <IonIcon icon={copyOutline} />
+          </button>
         </div>
       </div>
       {/* Espacio reservado para el banner nativo (spec 020); transparente. */}

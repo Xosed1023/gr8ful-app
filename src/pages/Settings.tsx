@@ -1,16 +1,23 @@
 import {
+  IonContent,
   IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
   IonPage,
-  IonToggle,
   useIonAlert,
   useIonRouter,
+  useIonViewWillEnter,
 } from "@ionic/react";
-import { alarmOutline, arrowForward, language, list } from "ionicons/icons";
+import {
+  bookOutline,
+  languageOutline,
+  moonOutline,
+  notificationsOutline,
+  timeOutline,
+} from "ionicons/icons";
+import { IoArrowForward, IoPencil } from "react-icons/io5";
 import { useEffect, useState } from "react";
+import { useUserGender } from "../hooks/useUserGender";
 import "./Settings.css";
+import "../components/home/HomeKit.css";
 import { applyStoredTheme } from "../theme/applyStoredTheme";
 import {
   disableDailyQuotes,
@@ -18,9 +25,79 @@ import {
 } from "../notifications/dailyQuote";
 import {
   AppNotificationsLanguage,
+  AppSettingsDetailLanguage,
   AppSetttingsScreenLanguage,
+  AppTopicsScreenLanguage,
   LanguageKeys,
 } from "../persistence/languages";
+
+const LANGUAGE_NAME: Record<LanguageKeys, string> = {
+  es: "Español",
+  en: "English",
+  fr: "Français",
+};
+
+const TIME_LABEL: Record<string, string> = {
+  "6": "6:00 AM",
+  "12": "12:00 PM",
+  "18": "6:00 PM",
+};
+
+interface SettingsRowProps {
+  icon: string;
+  title: string;
+  subtitle?: string;
+  /** Color de la burbuja del icono (cada ajuste tiene el suyo, como en Stitch). */
+  tint: "a" | "b" | "c" | "n";
+  /** Fila de navegación (flecha); sin `onClick` es una fila con control propio. */
+  onClick?: () => void;
+  children?: React.ReactNode;
+}
+
+/** Fila de la lista: burbuja de icono, título, subtítulo y flecha o control. */
+const SettingsRow = ({ icon, title, subtitle, tint, onClick, children }: SettingsRowProps) => {
+  const content = (
+    <>
+      <span className={`settings-icon tint-${tint}`}>
+        <IonIcon icon={icon} aria-hidden="true" />
+      </span>
+      <span className="settings-row-text">
+        <span className="settings-row-title">{title}</span>
+        {subtitle && <span className="settings-row-subtitle">{subtitle}</span>}
+      </span>
+      {onClick ? <IoArrowForward className="settings-chevron" aria-hidden="true" /> : children}
+    </>
+  );
+  return onClick ? (
+    <button type="button" className="settings-row" onClick={onClick}>
+      {content}
+    </button>
+  ) : (
+    <div className="settings-row">{content}</div>
+  );
+};
+
+/** Interruptor en píldora (52 × 28 px) con la bolita que se desliza, como en Stitch. */
+const Switch = ({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (next: boolean) => void;
+  label: string;
+}) => (
+  <button
+    type="button"
+    role="switch"
+    aria-checked={checked}
+    aria-label={label}
+    className={`settings-switch ${checked ? "on" : ""}`}
+    onClick={() => onChange(!checked)}
+  >
+    <span className="settings-switch-thumb" />
+  </button>
+);
 
 const Settings = () => {
   const navigate = useIonRouter();
@@ -40,10 +117,25 @@ const Settings = () => {
   const [userLanguage, setUserLanguage] = useState<LanguageKeys | null>(
     localStorage.getItem("language") as LanguageKeys | null
   );
+  const { isMale } = useUserGender();
+  const accent = isMale ? "man" : "woman";
+  // Fuerza releer hora y temas guardados al volver de editarlos (Settings no se desmonta).
+  const [, refresh] = useState(0);
+  useIonViewWillEnter(() => {
+    setUserLanguage(localStorage.getItem("language") as LanguageKeys | null);
+    refresh((n) => n + 1);
+  });
   const [presentAlert] = useIonAlert();
   const [notificationsOn, setNotificationsOn] = useState(
     localStorage.getItem("pushNotifications") === "true"
   );
+  const [darkOn, setDarkOn] = useState(localStorage.getItem("darkMode") === "true");
+
+  const handleDarkToggle = (next: boolean) => {
+    setDarkOn(next);
+    localStorage.setItem("darkMode", next.toString());
+    applyStoredTheme();
+  };
 
   // El interruptor controla las notificaciones diarias (spec 021): activar pide
   // el permiso y programa; desactivar cancela. Con permiso denegado vuelve a
@@ -87,93 +179,101 @@ const Settings = () => {
     setVersionText(AppSetttingsScreenLanguage.versionLabel[userLanguage]);
   }, [userLanguage]);
 
+  // Subtítulos con el valor actual de cada ajuste
+  const lang: LanguageKeys = userLanguage ?? "en";
+  const name = localStorage.getItem("name") ?? "";
+  const timeLabel = TIME_LABEL[localStorage.getItem("time") ?? "12"] ?? TIME_LABEL["12"];
+  const storedTopics: { key: string }[] = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("topics") || "[]");
+    } catch {
+      return [];
+    }
+  })();
+  const topicNames = storedTopics.map(
+    (t) =>
+      AppTopicsScreenLanguage.topics[lang].find((x) => x.key === t.key)?.value ?? t.key
+  );
+  const topicsLine =
+    topicNames.length === 0
+      ? AppSettingsDetailLanguage.allTopics[lang]
+      : topicNames.slice(0, 2).join(", ") +
+        (topicNames.length > 2 ? ` +${topicNames.length - 2}` : "");
+
   return (
-    <IonPage className="bg-[color:var(--header-bg)]">
-      <div className="bg-[color:var(--header-bg)] h-1/5 flex items-center pl-10">
-        <h1 className="text-3xl font-bold text-white">{title[0]}</h1>
-      </div>
-      <div
-        className="bg-[color:var(--surface)] rounded-t-3xl
-       text-[color:var(--text-color)] h-4/5 w-full flex flex-col items-center justify-between pt-9 px-6"
+    <IonPage>
+      <IonContent
+        className="settings-page"
+        style={{ "--padding-bottom": "var(--nav-space)" } as React.CSSProperties}
       >
-        <div className="flex flex-col items-center justify-between w-full">
-          <h1 className="text-3xl font-bold">{localStorage.getItem("name")}</h1>
-          <button
-            className="mt-2 px-2 py-1 border-solid border border-[color:var(--icon-color)] rounded-3xl text-sm"
-            onClick={() => navigate.push("/userName", "root")}
-          >
-            {changeNameBtnText[0]}
-          </button>
+        <div className={`settings-screen ${accent}`}>
+          {/* Cabecera decorativa: índigo con las esquinas de abajo redondeadas y manchas de luz */}
+          <div className="settings-header">
+            <span className="settings-grabber" aria-hidden="true" />
+          </div>
 
-          <IonList inset={true} lines="none" className="w-full">
-            <IonItem onClick={() => navigate.push("/languages")}>
-              <IonIcon
-                className="text-[color:var(--icon-color)]"
-                slot="start"
-                icon={language}
+          {/* Tarjeta flotante que se monta sobre la cabecera */}
+          <div className="settings-card">
+            <h1 className="settings-name">{name}</h1>
+            <button
+              type="button"
+              className="settings-edit-pill"
+              onClick={() => navigate.push("/userName", "root")}
+            >
+              {changeNameBtnText[0]}
+              <IoPencil aria-hidden="true" />
+            </button>
+
+            <div className="settings-list">
+              <SettingsRow
+                icon={languageOutline}
+                title={languageOptText[0]}
+                subtitle={LANGUAGE_NAME[lang]}
+                tint="a"
+                onClick={() => navigate.push("/languages")}
               />
-              <IonLabel>{languageOptText[0]}</IonLabel>
-              <IonIcon
-                className="text-[color:var(--icon-color)]"
-                slot="end"
-                icon={arrowForward}
+              <SettingsRow
+                icon={timeOutline}
+                title={hourOptText[0]}
+                subtitle={AppSettingsDetailLanguage.timeLine[lang].replace("{time}", timeLabel)}
+                tint="b"
+                onClick={() => navigate.push("/quoteTime", "forward")}
               />
-            </IonItem>
-            <IonItem onClick={() => navigate.push("/quoteTime", "forward")}>
-              <IonIcon
-                className="text-[color:var(--icon-color)]"
-                slot="start"
-                icon={alarmOutline}
+              <SettingsRow
+                icon={bookOutline}
+                title={topicsOptText[0]}
+                subtitle={topicsLine}
+                tint="c"
+                onClick={() => navigate.push("/quoteTopics", "forward")}
               />
-              <IonLabel>{hourOptText[0]}</IonLabel>
-              <IonIcon
-                className="text-[color:var(--icon-color)]"
-                slot="end"
-                icon={arrowForward}
-              />
-            </IonItem>
-            <IonItem onClick={() => navigate.push("/quoteTopics", "forward")}>
-              <IonIcon className="text-[color:var(--icon-color)]" slot="start" icon={list} />
-              <IonLabel>{topicsOptText[0]}</IonLabel>
-              <IonIcon
-                className="text-[color:var(--icon-color)]"
-                slot="end"
-                icon={arrowForward}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel>{pushNotificationsOptText[0]}</IonLabel>
-              <IonToggle
-                enableOnOffLabels={true}
-                color="tertiary"
-                slot="end"
-                checked={notificationsOn}
-                onIonChange={(e) => handleNotificationsToggle(e.detail.checked)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel>{darkmodeOptText[0]}</IonLabel>
-              <IonToggle
-                enableOnOffLabels={true}
-                color="tertiary"
-                slot="end"
-                value={
-                  localStorage.getItem("darkMode") === "true" ? "true" : "false"
-                }
-                checked={localStorage.getItem("darkMode") === "true"}
-                onIonChange={(e) => {
-                  localStorage.setItem("darkMode", e.detail.checked.toString());
-                  applyStoredTheme();
-                }}
-              />
-            </IonItem>
-          </IonList>
+              <SettingsRow
+                icon={notificationsOutline}
+                title={pushNotificationsOptText[0]}
+                subtitle={AppSettingsDetailLanguage.notificationsHint[lang]}
+                tint="n"
+              >
+                <Switch
+                  checked={notificationsOn}
+                  onChange={handleNotificationsToggle}
+                  label={pushNotificationsOptText[0]}
+                />
+              </SettingsRow>
+              <SettingsRow icon={moonOutline} title={darkmodeOptText[0]} tint="n">
+                <Switch
+                  checked={darkOn}
+                  onChange={handleDarkToggle}
+                  label={darkmodeOptText[0]}
+                />
+              </SettingsRow>
+            </div>
+
+            <p className="settings-footer">
+              {versionText[0]} {import.meta.env.VITE_VERSION_APP}
+              <span>Gr8ful Daily Moments</span>
+            </p>
+          </div>
         </div>
-
-        <p className="mb-2 text-xs">
-          {versionText[0]} {import.meta.env.VITE_VERSION_APP}
-        </p>
-      </div>
+      </IonContent>
     </IonPage>
   );
 };

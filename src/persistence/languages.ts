@@ -164,6 +164,11 @@ export const AppLoadingScreenLanguage = {
     en: ["Good things take time.", "Your quote is on its", "way!"],
     fr: ["Les bonnes choses prennent du temps.", "Votre citation est en", "chemin."]
   },
+  status: {
+    es: "Preparando tu sabiduría diaria en tres idiomas…",
+    en: "Brewing your daily wisdom in three languages…",
+    fr: "Préparation de votre sagesse du jour en trois langues…"
+  },
 }
 
 export const AppHomeScreenLanguage = {

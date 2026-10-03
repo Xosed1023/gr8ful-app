@@ -1,82 +1,188 @@
-/* Fondo con ambos degradados */
-.background-waiting {
-    background:
-        linear-gradient(to top right,
-            var(--g-woman-s) 10%,
-            var(--g-woman-z) 20%,
-            var(--g-woman-z) 100%),
-        /* Degradado púrpura de arriba hacia abajo */
-        linear-gradient(to bottom left,
-            var(--g-woman-s) 10%,
-            var(--g-woman-z) 20%,
-            var(--g-woman-z) 100%),
-        /* Color de fondo base */
-        var(--background-color);
-    height: 100vh;
-    width: 100vw;
-    font-family: 'Montserrat', sans-serif;
+/* Pantalla de carga: un cometa de luz recorre el ∞ del logo */
+.loading-screen {
+    --inf-a: #6f36eb;
+    --inf-b: #c4b5fd;
+    --chip-on-bg: rgba(111, 54, 235, 0.16);
 }
 
-.loading-man {
-    background:
-        linear-gradient(to top right,
-            var(--g-lm1-s) 10%,
-            var(--g-lm1-z) 20%,
-            var(--g-lm1-z) 100%),
-        linear-gradient(to bottom left,
-            var(--g-lm2-s) 10%,
-            var(--g-lm2-m) 20%,
-            var(--g-lm2-e) 100%),
-        var(--background-color);
-    height: 100vh;
-    width: 100vw;
-    font-family: 'Montserrat', sans-serif;
+.loading-screen.man {
+    --inf-a: #006493;
+    --inf-b: #39b8fd;
+    --chip-on-bg: rgba(0, 100, 147, 0.16);
 }
 
+.ion-palette-dark .loading-screen {
+    --inf-a: #a58bff;
+    --inf-b: #e8ddff;
+    --chip-on-bg: rgba(165, 139, 255, 0.22);
+}
 
-.text-container-loading {
-    margin-top: 1rem;
+.ion-palette-dark .loading-screen.man {
+    --inf-a: #39b8fd;
+    --inf-b: #cae6ff;
+    --chip-on-bg: rgba(143, 196, 232, 0.22);
+}
+
+.loading-title {
+    padding: 0 2rem;
     font-size: 24px;
     font-weight: 500;
+    line-height: 1.35;
     text-align: center;
-    display: flex;
-    gap: 4px;
-    line-height: 1.2;
-    padding-left: 2rem;
-    padding-right: 2rem;
 }
 
-.feather-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.loading-title .text-highlight {
+    font-family: "Playwrite DE SAS", cursive !important;
+    font-weight: 700 !important;
 }
 
-.feather {
-    width: 120px;
+/* ---- ∞ con cometa ---- */
+.loading-infinity {
+    position: relative;
+    width: min(260px, 70vw);
+    margin: 2.25rem 0 2rem;
+}
+
+.loading-infinity svg {
+    display: block;
+    width: 100%;
     height: auto;
-    animation: writing-motion 1.5s ease-in-out infinite;
+    overflow: visible !important;
 }
 
-@keyframes writing-motion {
-    0% {
-        transform: rotate(0deg) translateY(0);
-        /* Posición inicial */
+.grad-a { stop-color: var(--inf-a); }
+.grad-b { stop-color: var(--inf-b); }
+
+.inf-track,
+.inf-glow,
+.inf-comet {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.inf-track {
+    stroke: var(--step-dot);
+    stroke-width: 6;
+}
+
+.inf-comet,
+.inf-glow {
+    stroke-dasharray: 0.3 0.7;
+    animation: comet 2.4s linear infinite;
+}
+
+.inf-comet {
+    stroke-width: 7;
+}
+
+.inf-glow {
+    stroke-width: 15;
+    opacity: 0.55;
+    filter: blur(7px);
+}
+
+@keyframes comet {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -1; }
+}
+
+/* Halo que respira detrás del ∞ */
+.loading-halo {
+    position: absolute;
+    inset: -30% -10%;
+    border-radius: 9999px;
+    background: radial-gradient(closest-side, var(--inf-a), transparent);
+    opacity: 0.22;
+    filter: blur(24px);
+    animation: halo 2.4s ease-in-out infinite;
+}
+
+@keyframes halo {
+    0%, 100% { transform: scale(0.92); opacity: 0.16; }
+    50% { transform: scale(1.06); opacity: 0.3; }
+}
+
+/* ---- Idiomas que se encienden por turnos (1 s cada uno: una vuelta completa en 3 s) ---- */
+.loading-langs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.75rem;
+}
+
+.lang-chip {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    background: var(--glass-bg);
+    box-shadow: var(--glass-shadow-sm);
+    animation: chip-on 3s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 1s);
+}
+
+@keyframes chip-on {
+    0%, 28% {
+        color: var(--accent-text);
+        background: var(--chip-on-bg);
+        transform: scale(1.08);
+    }
+    36%, 100% {
+        color: var(--text-muted);
+        background: var(--glass-bg);
+        transform: scale(1);
+    }
+}
+
+/* ---- Barra de progreso: se llena durante toda la carga (la duración se fija en
+   LoadingScreen.tsx con LOADING_SCREEN_MS) ---- */
+.load-track {
+    width: min(240px, 64vw);
+    height: 4px;
+    border-radius: 9999px;
+    background: var(--step-dot);
+    overflow: hidden;
+}
+
+.load-fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--inf-a), var(--inf-b));
+    animation: fill 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fill {
+    to { width: 100%; }
+}
+
+.loading-status {
+    max-width: 18rem;
+    margin-top: 0.9rem;
+    padding: 0 1rem;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .inf-comet,
+    .inf-glow {
+        animation: none;
+        stroke-dasharray: none;
     }
 
-    25% {
-        transform: rotate(-2deg) translateY(-2px);
+    .loading-halo,
+    .lang-chip {
+        animation: none;
     }
 
-    50% {
-        transform: rotate(0deg) translateY(0);
-    }
-
-    75% {
-        transform: rotate(2deg) translateY(2px);
-    }
-
-    100% {
-        transform: rotate(0deg) translateY(0);
+    .load-fill {
+        animation: none;
+        width: 100%;
     }
 }

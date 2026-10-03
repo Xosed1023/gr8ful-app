@@ -315,13 +315,11 @@ http://ionicframework.com/docs/theming/ */
     filter: invert(1);
 }
 
-.ion-palette-dark .feather,
 .ion-palette-dark .img-themed {
     filter: invert(1) hue-rotate(180deg);
 }
 
 /* Base de pantalla propia de la paleta de hombre */
-.ion-palette-dark .loading-man,
 .ion-palette-dark .backgroundHome.home-man {
     --background-color: #0C1520;
 }

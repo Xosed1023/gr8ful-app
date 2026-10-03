@@ -9,6 +9,7 @@ import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
+import { LOADING_SCREEN_MS } from "./LoadingScreen";
 import StepBadge from "../components/common/StepBadge";
 import StepIndicator from "../components/common/StepIndicator";
 
@@ -28,10 +29,9 @@ const UserName = ({ backTo }: { backTo?: string }) => {
     markOnboardingComplete();
     await hapticTap();
     navigate.push("/loadingScreen", "forward");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     setTimeout(() => {
       navigate.push("/mainHome", "forward");
-    }, 1000);
+    }, LOADING_SCREEN_MS);
   };
 
   return (

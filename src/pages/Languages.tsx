@@ -1,11 +1,11 @@
 import { refreshDailyQuotes } from "../notifications/dailyQuote";
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./Languages.css";
-import { IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { AppSelectLanguage } from "../persistence/languages";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { hapticTap } from "../hooks/useHaptics";
+import BackButton from "../components/common/BackButton";
 
 const Languages = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
@@ -32,13 +32,13 @@ const Languages = ({ backTo }: { backTo?: string }) => {
       <IonContent fullscreen>
         <div className="safe-area">
           <div className="background flex flex-col items-center justify-center min-h-screen">
-            {/* Flecha de retroceso */}
-            {/* <div className="absolute top-4 left-4">
-              <IoArrowBack
-                className="text-[color:var(--text-color)] text-3xl cursor-pointer"
-                onClick={() => navigate.push(backTo || "/", "back")}
-              />
-            </div> */}
+            {/* Flecha de retroceso: solo al editar desde Ajustes. En el onboarding
+                inicial el paso previo es Welcome, que redirige a Home si la app
+                ya arrancó una vez, así que no hay destino válido al que volver
+                (spec 012, FR-001). */}
+            {backTo !== undefined && (
+              <BackButton onClick={() => navigate.push(backTo, "back")} />
+            )}
 
             {/* Puntos superiores */}
             {backTo === undefined && (

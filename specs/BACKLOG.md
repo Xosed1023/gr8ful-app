@@ -14,6 +14,7 @@ Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se
 - **Validar la posición de los banners por tarjeta en Android** — `specs/020-completar-banners-admob-card` se verificó solo en un iPhone 17 Pro. En Android (sobre todo con pantalla completa/borde a borde) el contenedor del plugin puede no coincidir con `window.innerHeight`; si el banner sale desplazado, ajustar `PLATFORM_OFFSET` en `src/ads/bannerMargin.ts` (quickstart.md §5). También conviene revisar tamaños de pantalla pequeños en iOS.
 - **Validar las notificaciones de frase diaria en Android** — `specs/021-completar-scheduling-frase-diaria` se verificó solo en iPhone. Revisar entrega con la app cerrada, tras reiniciar el dispositivo, y en fabricantes con optimización agresiva de batería.
 - **Icono propio para las notificaciones en Android** — hoy se usa el icono por defecto del plugin; añadir un icono monocromo de la app (`smallIcon`).
+- **Onboarding interrumpido** — `gr8fulFirstTime` se marca en el primer arranque de la app (`App.tsx`), no al terminar el onboarding. Si el usuario cierra la app a mitad del onboarding, `Welcome` lo redirige a Home sin haber elegido género, hora ni temas. Convendría marcar el flag al finalizar el último paso (`UserName`). Hallado durante la spec 012.
 
 ## Relación con deuda técnica existente
 

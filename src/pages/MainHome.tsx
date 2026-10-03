@@ -14,7 +14,7 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { bookmarkOutline, infiniteOutline, optionsOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
-import { Redirect, Route } from "react-router";
+import { Redirect, Route, useLocation } from "react-router";
 import { Phrase } from "../models/Phrase";
 import {
   addOrUpdatePhrase,
@@ -51,6 +51,23 @@ const TEST_REWARDED_AD_ID =
   Capacitor.getPlatform() === "ios"
     ? "ca-app-pub-3940256099942544/1712485313"
     : "ca-app-pub-3940256099942544/5224354917";
+
+/** Pantallas de edición que se abren desde Ajustes: ahí la barra de pestañas estorba. */
+const EDIT_ROUTES = ["/languages", "/quoteTime", "/quoteTopics", "/userName"];
+
+/**
+ * Marca <html> con `hide-tabs` mientras se edita algo desde Ajustes, para que la
+ * píldora flotante se oculte (con transición) y no tape el botón de continuar.
+ * Va dentro del IonReactRouter anidado: solo ahí `useLocation` ve estas rutas.
+ */
+const HideTabsOnEdit = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    document.documentElement.classList.toggle("hide-tabs", EDIT_ROUTES.includes(pathname));
+    return () => document.documentElement.classList.remove("hide-tabs");
+  }, [pathname]);
+  return null;
+};
 
 const MainHome = () => {
   const { isMale } = useUserGender();
@@ -210,6 +227,7 @@ const MainHome = () => {
 
   return (
     <IonReactRouter>
+      <HideTabsOnEdit />
       <IonTabs className="bg-[color:var(--tabs-bg)]">
         <IonRouterOutlet>
           <Route exact path="/tabs/home">

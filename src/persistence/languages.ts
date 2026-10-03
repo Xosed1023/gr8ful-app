@@ -274,6 +274,16 @@ export const AppSettingsDetailLanguage = {
     en: "All topics",
     fr: "Tous les sujets",
   },
+  hapticsTitle: {
+    es: "Vibración háptica",
+    en: "Haptic feedback",
+    fr: "Retour haptique",
+  },
+  hapticsHint: {
+    es: "Una vibración suave al tocar",
+    en: "A gentle vibration when you tap",
+    fr: "Une légère vibration au toucher",
+  },
   notificationsHint: {
     es: "Recordatorios de tu frase diaria",
     en: "Daily quote reminders",

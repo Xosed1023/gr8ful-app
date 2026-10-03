@@ -378,10 +378,13 @@
 }
 
 /* ---- Temas del onboarding ---- */
-.topics-page {
+/* Temas es alta: se alinea arriba en vez de centrarse (si no, queda un hueco enorme).
+   Doble clase para ganar a la regla general de zonas seguras que va más abajo. */
+.onboarding-background.topics-page {
     height: auto;
     min-height: 100vh;
-    padding: calc(env(safe-area-inset-top, 0px) + 4.5rem) 0 2rem;
+    justify-content: flex-start;
+    padding: calc(env(safe-area-inset-top, 0px) + 4.25rem) 0 calc(env(safe-area-inset-bottom, 0px) + 2rem);
 }
 
 .topics-grid {
@@ -590,4 +593,20 @@
     --step-glow: rgba(143, 196, 232, 0.35);
     --accent-text: #8FC4E8;
     --option-chosen-bg: rgba(24, 60, 92, 0.85);
+}
+
+/* ---- Zonas seguras: el fondo llega hasta los bordes y es el contenido el que las respeta ---- */
+.safe-area:has(> .onboarding-background) {
+    padding: 0;
+}
+
+.onboarding-background {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Pantallas de edición (abiertas desde Ajustes): contenido pegado arriba, bajo el botón atrás */
+.onboarding-background.edit-mode {
+    justify-content: flex-start;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 5rem);
 }

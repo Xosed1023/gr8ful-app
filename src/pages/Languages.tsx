@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { AppSelectLanguage } from "../persistence/languages";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useSelectThenAdvance } from "../hooks/useSelectThenAdvance";
+import { useUserGender } from "../hooks/useUserGender";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import StepIndicator from "../components/common/StepIndicator";
@@ -21,6 +22,10 @@ const Languages = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
   const [title, setTitle] = useState(["Select", "your", "language"]);
   const { userLanguage } = useAppLanguage();
+  // En el onboarding aún no hay género elegido (paleta por defecto); al editar desde
+  // Ajustes ya existe y la pantalla debe usar los acentos del usuario.
+  const { isMale } = useUserGender();
+  const accentClass = backTo !== undefined && isMale ? "man" : "";
   // Al editar desde Ajustes se marca el idioma actual; en el onboarding no hay ninguno elegido.
   const selectedLanguage = backTo ? localStorage.getItem("language") : null;
 
@@ -47,7 +52,11 @@ const Languages = ({ backTo }: { backTo?: string }) => {
     <IonPage>
       <IonContent fullscreen>
         <div className="safe-area">
-          <div className="onboarding-background flex flex-col items-center justify-center min-h-screen">
+          <div
+            className={`onboarding-background ${accentClass} ${
+              backTo !== undefined ? "edit-mode" : ""
+            } flex flex-col items-center justify-center min-h-screen`}
+          >
             <GlowBackground />
 
             {/* Barra superior: atrás (solo al editar desde Ajustes) o indicador de pasos

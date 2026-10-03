@@ -153,6 +153,18 @@ const CardPhrase = ({
   // la siguen con ~0,12 s de diferencia entre cada una.
   const animationDelay = Math.max(0, (60 - parseInt(initialPosition)) * 0.008);
 
+  // Háptico en el instante en que la tarjeta empieza a aparecer (al terminar su
+  // retardo escalonado), no cuando el resorte ya se asentó, que se sentía tarde.
+  useEffect(() => {
+    const timer = setTimeout(
+      () => hapticTap(),
+      reduceMotion ? 0 : animationDelay * 1000
+    );
+    return () => clearTimeout(timer);
+    // Solo en la entrada inicial de la tarjeta
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // El movimiento depende de la fase: entrada inicial, abrir o cerrar.
   const transition = reduceMotion
     ? { duration: 0 }
@@ -188,7 +200,6 @@ const CardPhrase = ({
         }
         if (!isInitialAnimationDone) {
           setIsInitialAnimationDone(true); // Marca como completada la animación inicial
-          hapticTap(); // Vibra al finalizar la animación de entrada
         }
         if (isExpanded) setIsSettledOpen(true);
       }}

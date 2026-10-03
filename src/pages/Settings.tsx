@@ -11,11 +11,13 @@ import {
   languageOutline,
   moonOutline,
   notificationsOutline,
+  phonePortraitOutline,
   timeOutline,
 } from "ionicons/icons";
 import { IoArrowForward, IoPencil } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { useUserGender } from "../hooks/useUserGender";
+import { hapticTap, isHapticsEnabled, setHapticsEnabled } from "../hooks/useHaptics";
 import "./Settings.css";
 import "../components/home/HomeKit.css";
 import { applyStoredTheme } from "../theme/applyStoredTheme";
@@ -130,6 +132,14 @@ const Settings = () => {
     localStorage.getItem("pushNotifications") === "true"
   );
   const [darkOn, setDarkOn] = useState(localStorage.getItem("darkMode") === "true");
+  const [hapticsOn, setHapticsOn] = useState(isHapticsEnabled());
+
+  const handleHapticsToggle = (next: boolean) => {
+    setHapticsOn(next);
+    setHapticsEnabled(next);
+    // Al activarlo, una muestra de cómo se siente (al apagarlo ya no vibra).
+    if (next) void hapticTap();
+  };
 
   const handleDarkToggle = (next: boolean) => {
     setDarkOn(next);
@@ -256,6 +266,18 @@ const Settings = () => {
                   checked={notificationsOn}
                   onChange={handleNotificationsToggle}
                   label={pushNotificationsOptText[0]}
+                />
+              </SettingsRow>
+              <SettingsRow
+                icon={phonePortraitOutline}
+                title={AppSettingsDetailLanguage.hapticsTitle[lang]}
+                subtitle={AppSettingsDetailLanguage.hapticsHint[lang]}
+                tint="n"
+              >
+                <Switch
+                  checked={hapticsOn}
+                  onChange={handleHapticsToggle}
+                  label={AppSettingsDetailLanguage.hapticsTitle[lang]}
                 />
               </SettingsRow>
               <SettingsRow icon={moonOutline} title={darkmodeOptText[0]} tint="n">

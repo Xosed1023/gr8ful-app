@@ -30,7 +30,8 @@ const UserName = ({ backTo }: { backTo?: string }) => {
     await hapticTap();
     navigate.push("/loadingScreen", "forward");
     setTimeout(() => {
-      navigate.push("/mainHome", "forward");
+      // «replace»: la pantalla de carga no debe quedar en el historial.
+      navigate.push("/mainHome", "root", "replace");
     }, LOADING_SCREEN_MS);
   };
 
@@ -40,7 +41,7 @@ const UserName = ({ backTo }: { backTo?: string }) => {
         <div className="safe-area">
           <div className={`onboarding-background ${
             isWoman ? "" : "man"
-          } flex flex-col items-center justify-center min-h-screen`}>
+          } ${backTo !== undefined ? "edit-mode" : ""} flex flex-col items-center justify-center min-h-screen`}>
             <GlowBackground />
 
             {/* Atrás e indicador de pasos (el indicador solo en el onboarding) */}

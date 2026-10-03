@@ -53,7 +53,7 @@ const QuoteTime = ({ backTo }: { backTo?: string }) => {
         <div className="safe-area">
           <div className={`onboarding-background ${
             isMale ? "man" : ""
-          } flex flex-col items-center justify-center min-h-screen`}>
+          } ${backTo !== undefined ? "edit-mode" : ""} flex flex-col items-center justify-center min-h-screen`}>
             <GlowBackground />
 
             {/* Atrás (a Género en el onboarding, a Ajustes al editar) e indicador de pasos */}

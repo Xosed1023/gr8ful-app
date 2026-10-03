@@ -22,7 +22,7 @@ const Welcome: React.FC = () => {
     // onboarding se considera terminado únicamente al pulsar «Finalizar»
     // (spec 022).
     if (isOnboardingComplete()) {
-      navigate.push("/mainHome", "forward");
+      navigate.push("/mainHome", "root", "replace");
     }
 
     const interval = setInterval(() => {

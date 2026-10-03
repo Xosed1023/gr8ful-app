@@ -1,6 +1,7 @@
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, useLocation } from "react-router-dom";
+import { App as CapacitorApp } from "@capacitor/app";
 import { initialData } from "./persistence/initialData";
 import "./tailwind.css";
 
@@ -47,6 +48,78 @@ import { PushNotifications } from "@capacitor/push-notifications";
 import { refreshDailyQuotes } from "./notifications/dailyQuote";
 
 setupIonicReact();
+
+/**
+ * Rutas donde NO se debe poder volver al onboarding (ni deslizando de izquierda a
+ * derecha en iOS ni con el botón atrás de Android): una vez terminado el onboarding,
+ * Home es la raíz de la app. Con «root» Ionic solo cambia la animación, no borra el
+ * historial, así que el historial anterior seguía accesible.
+ */
+const NO_BACK_ROUTES = ["/mainHome", "/tabs/home", "/loadingScreen"];
+
+/** Pantallas raíz: el botón atrás de Android cierra la app en vez de navegar. */
+const EXIT_ON_BACK_ROUTES = ["/", "/mainHome", "/tabs/home", "/tabs/favorites", "/tabs/settings"];
+
+/** Se actualiza con la ruta actual; lo consulta el gesto de volver. */
+let swipeBackBlocked = false;
+const guardedHandlers = new WeakSet<object>();
+
+/**
+ * Esta versión de Ionic no expone `swipeGesture`: el router de Ionic React asigna al
+ * outlet un `swipeHandler` con su propio `canStart`. Se envuelve una sola vez para que,
+ * además, compruebe que la ruta actual permite volver. Se aplica al primer outlet del
+ * documento (el principal; el de MainHome es posterior).
+ */
+const guardSwipeBack = () => {
+  const outlet = document.querySelector("ion-router-outlet");
+  const handler = outlet?.swipeHandler;
+  if (!outlet || !handler || guardedHandlers.has(handler)) return;
+  const guarded = {
+    ...handler,
+    canStart: () => !swipeBackBlocked && handler.canStart(),
+  };
+  guardedHandlers.add(guarded);
+  outlet.swipeHandler = guarded;
+};
+
+const AppRoutes: React.FC = () => {
+  const { pathname } = useLocation();
+
+  // Android: el botón atrás cierra la app desde las pantallas raíz y se ignora en la carga.
+  useEffect(() => {
+    const handle = CapacitorApp.addListener("backButton", () => {
+      const current = window.location.pathname;
+      if (current === "/loadingScreen") return;
+      if (EXIT_ON_BACK_ROUTES.includes(current)) CapacitorApp.exitApp();
+      else window.history.back();
+    });
+    return () => {
+      handle.then((h) => h.remove()).catch(() => undefined);
+    };
+  }, []);
+
+  // Bloquea el gesto de «volver deslizando» en las rutas sin retorno.
+  useEffect(() => {
+    swipeBackBlocked = NO_BACK_ROUTES.includes(pathname);
+    guardSwipeBack();
+  }, [pathname]);
+
+  return (
+    <IonRouterOutlet>
+      <Route exact path="/" component={Welcome} />
+      <Route exact path="/languages" component={Languages} />
+      <Route exact path="/gender" component={Gender} />
+      <Route exact path="/quoteTime" component={QuoteTime} />
+      <Route exact path="/quoteTopics" component={QuoteTopics} />
+      <Route exact path="/userName" component={UserName} />
+      <Route exact path="/loadingScreen" component={LoadingScreen} />
+      <Route exact path={["/mainHome", "/tabs/home"]} component={MainHome} />
+      <Route>
+        <Redirect to="/" />
+      </Route>
+    </IonRouterOutlet>
+  );
+};
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -117,23 +190,7 @@ const App: React.FC = () => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/" component={Welcome} />
-          <Route exact path="/languages" component={Languages} />
-          <Route exact path="/gender" component={Gender} />
-          <Route exact path="/quoteTime" component={QuoteTime} />
-          <Route exact path="/quoteTopics" component={QuoteTopics} />
-          <Route exact path="/userName" component={UserName} />
-          <Route exact path="/loadingScreen" component={LoadingScreen} />
-          <Route
-            exact
-            path={["/mainHome", "/tabs/home"]}
-            component={MainHome}
-          />
-          <Route>
-            <Redirect to="/" />
-          </Route>
-        </IonRouterOutlet>
+        <AppRoutes />
       </IonReactRouter>
     </IonApp>
   );

@@ -315,3 +315,36 @@ export const AppFavoritesLanguage = {
   },
 };
 
+export const AppShareLanguage = {
+  title: { es: "Compartir", en: "Share", fr: "Partager" },
+  asImage: { es: "Como imagen", en: "As an image", fr: "En image" },
+  asImageHint: {
+    es: "Una imagen lista para tus redes",
+    en: "A picture ready for your feeds",
+    fr: "Une image prête pour vos réseaux",
+  },
+  asText: { es: "Como texto", en: "As text", fr: "En texte" },
+  asTextHint: {
+    es: "La frase y su autor",
+    en: "The quote and its author",
+    fr: "La citation et son auteur",
+  },
+  cancel: { es: "Cancelar", en: "Cancel", fr: "Annuler" },
+  close: { es: "Cerrar", en: "Close", fr: "Fermer" },
+  previewTitle: { es: "Vista previa", en: "Preview", fr: "Aperçu" },
+  formatStory: { es: "Historia", en: "Story", fr: "Story" },
+  formatSquare: { es: "Cuadrado", en: "Square", fr: "Carré" },
+  share: { es: "Compartir", en: "Share", fr: "Partager" },
+  creating: {
+    es: "Creando tu imagen…",
+    en: "Creating your image…",
+    fr: "Création de votre image…",
+  },
+  error: {
+    es: "No pudimos crear la imagen. Inténtalo de nuevo.",
+    en: "We couldn't create the image. Please try again.",
+    fr: "Impossible de créer l'image. Réessayez.",
+  },
+  retry: { es: "Reintentar", en: "Try again", fr: "Réessayer" },
+};
+

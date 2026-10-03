@@ -17,6 +17,7 @@ import { hapticTap } from "../../hooks/useHaptics";
 import { LanguageKeys } from "../../persistence/languages";
 import "./HomeKit.css";
 import { QUOTE_MARKS } from "../common/quoteMarks";
+import ShareSheet from "../../share/ShareSheet";
 import { computeBannerMargin } from "../../ads/bannerMargin";
 import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 
@@ -113,6 +114,22 @@ const CardPhrase = ({
   const bannerSlotRef = useRef<HTMLDivElement>(null);
   const [present] = useIonToast();
   const reduceMotion = useReducedMotion();
+  const [shareOpen, setShareOpen] = useState(false);
+
+  // «Como texto»: el compartir de siempre (frase + autor, en el idioma de la tarjeta)
+  const shareAsText = async () => {
+    setShareOpen(false);
+    try {
+      await Share.share({
+        text: `${phrase.content[language]}\n\n— ${phrase.author}`,
+      });
+    } catch (error) {
+      // Cancelar el share sheet nativo también rechaza la promesa
+      // en algunas plataformas (ej. iOS) — no es necesariamente un
+      // error real, así que no se muestra toast (research.md Decisión 4).
+      console.error("Error al compartir", error);
+    }
+  };
 
   const presentToast = (message: string) => {
     present({
@@ -238,18 +255,9 @@ const CardPhrase = ({
             type="button"
             className="card-action"
             aria-label="Share"
-            onClick={async (e) => {
+            onClick={(e) => {
               e.stopPropagation();
-              try {
-                await Share.share({
-                  text: `${phrase.content[language]}\n\n— ${phrase.author}`,
-                });
-              } catch (error) {
-                // Cancelar el share sheet nativo también rechaza la promesa
-                // en algunas plataformas (ej. iOS) — no es necesariamente un
-                // error real, así que no se muestra toast (research.md Decisión 4).
-                console.error("Error al compartir", error);
-              }
+              setShareOpen(true);
             }}
           >
             <IonIcon icon={shareSocialOutline} />
@@ -274,6 +282,14 @@ const CardPhrase = ({
           </button>
         </div>
       </div>
+      <ShareSheet
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        quote={phrase.content[language]}
+        author={phrase.author}
+        language={language}
+        onShareText={shareAsText}
+      />
       {/* Espacio reservado para el banner nativo (spec 020); transparente. */}
       <div ref={bannerSlotRef} aria-hidden="true" className="mt-4 min-h-[60px]" />
     </motion.div>

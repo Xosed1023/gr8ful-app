@@ -3,7 +3,6 @@
 Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se convierte en spec completa con `/speckit-specify`. Esta lista no es exhaustiva ni compromete ningún orden — es solo un punto de partida para discutirlo en sesiones futuras.
 
 - **Racha de días de uso ("streak")** — incentivar apertura diaria mostrando cuántos días consecutivos el usuario abrió la app, reforzando el hábito de aprendizaje de idiomas.
-- **Compartir frase como imagen** — versión más elaborada de `specs/008-completar-compartir`: generar una imagen con la frase estilizada para compartir en redes, en vez de solo texto.
 - **Widget nativo (Android/iOS)** — mostrar la frase del día directamente en la pantalla de inicio del dispositivo, sin abrir la app.
 - **Más idiomas** — extender más allá de ES/EN/FR (ej. portugués, alemán) si se valida demanda; implicaría revisar el modelo `Phrase.content` (hoy hardcodeado a 3 idiomas) y todo `src/persistence/languages.ts`.
 - **Quiz/práctica de vocabulario** — a partir de las frases ya mostradas, ejercicios simples de traducción o selección múltiple para reforzar el aprendizaje de idiomas (más allá de solo "leer" frases).
@@ -14,6 +13,8 @@ Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se
 - **Validar la posición de los banners por tarjeta en Android** — `specs/020-completar-banners-admob-card` se verificó solo en un iPhone 17 Pro. En Android (sobre todo con pantalla completa/borde a borde) el contenedor del plugin puede no coincidir con `window.innerHeight`; si el banner sale desplazado, ajustar `PLATFORM_OFFSET` en `src/ads/bannerMargin.ts` (quickstart.md §5). También conviene revisar tamaños de pantalla pequeños en iOS.
 - **Validar las notificaciones de frase diaria en Android** — `specs/021-completar-scheduling-frase-diaria` se verificó solo en iPhone. Revisar entrega con la app cerrada, tras reiniciar el dispositivo, y en fabricantes con optimización agresiva de batería.
 - **Icono propio para las notificaciones en Android** — hoy se usa el icono por defecto del plugin; añadir un icono monocromo de la app (`smallIcon`).
+- **Validar «compartir como imagen» en Android** — `specs/023-compartir-como-imagen` se verificó solo en iPhone. Revisar que el archivo temporal en la caché llegue a las apps destino (permisos de FileProvider) y la tipografía en el dispositivo.
+- **Compartir las tres versiones en una sola imagen** — variante de la spec 023 que apila la frase en ES, EN y FR; encaja con el propósito de aprendizaje de idiomas.
 
 ## Relación con deuda técnica existente
 

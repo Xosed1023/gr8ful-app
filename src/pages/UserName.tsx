@@ -44,7 +44,14 @@ const UserName = ({ backTo }: { backTo?: string }) => {
             <GlowBackground />
 
             {/* Atrás e indicador de pasos (el indicador solo en el onboarding) */}
-            <BackButton variant="glass" onClick={() => navigate.goBack()} />
+            <BackButton
+              variant="glass"
+              // Desde Ajustes se llega con la dirección «root» (historial reiniciado), así
+              // que `goBack()` no tiene destino y deja la pantalla vacía: se navega a `backTo`.
+              onClick={() =>
+                backTo ? navigate.push(backTo, "back") : navigate.goBack()
+              }
+            />
             {backTo === undefined && (
               <div
                 className="onboarding-topbar"

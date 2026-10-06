@@ -29,16 +29,11 @@ import QuoteTime from "./QuoteTime";
 import QuoteTopics from "./QuoteTopics";
 import Settings from "./Settings";
 import UserName from "./UserName";
-import {
-  RewardAdOptions,
-  AdLoadInfo,
-  RewardAdPluginEvents,
-  AdMobRewardItem,
-} from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
 import "../components/home/HomeKit.css";
 import { useUserGender } from "../hooks/useUserGender";
 import { AppHomeNavLanguage } from "../persistence/languages";
+import { showRewarded } from "../ads/rewarded";
 
 // IDs de prueba oficiales de Google AdMob — https://developers.google.com/admob/ios/test-ads
 // y https://developers.google.com/admob/android/test-ads. Devuelven anuncios de test
@@ -47,10 +42,6 @@ const TEST_INTERSTITIAL_AD_ID =
   Capacitor.getPlatform() === "ios"
     ? "ca-app-pub-3940256099942544/4411468910"
     : "ca-app-pub-3940256099942544/1033173712";
-const TEST_REWARDED_AD_ID =
-  Capacitor.getPlatform() === "ios"
-    ? "ca-app-pub-3940256099942544/1712485313"
-    : "ca-app-pub-3940256099942544/5224354917";
 
 /** Pantallas de edición que se abren desde Ajustes: ahí la barra de pestañas estorba. */
 const EDIT_ROUTES = ["/languages", "/quoteTime", "/quoteTopics", "/userName"];
@@ -168,43 +159,9 @@ const MainHome = () => {
   };
 
   const loadRandomPhraseWithAd = async () => {
-    const onLoadedListener = AdMob.addListener(
-      RewardAdPluginEvents.Loaded,
-      (info: AdLoadInfo) => {
-        console.log("Rewarded: anuncio de prueba cargado", info);
-      }
-    );
-    const onFailedListener = AdMob.addListener(
-      RewardAdPluginEvents.FailedToLoad,
-      (error) => {
-        console.error("Rewarded: fallo al cargar", error);
-      }
-    );
-    const onRewardedListener = AdMob.addListener(
-      RewardAdPluginEvents.Rewarded,
-      (rewardItem: AdMobRewardItem) => {
-        console.log("Rewarded: recompensa otorgada", rewardItem);
-      }
-    );
-
-    try {
-      const options: RewardAdOptions = {
-        adId: TEST_REWARDED_AD_ID,
-        isTesting: true,
-      };
-      console.log("Rewarded: solicitando anuncio de prueba", options);
-      await AdMob.prepareRewardVideoAd(options);
-      const rewardItem = await AdMob.showRewardVideoAd();
-      if (rewardItem.amount > 0) {
-        // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
-        await loadRandomPhrase();
-      }
-    } catch (error) {
-      console.error("Error mostrando rewarded", error);
-    } finally {
-      onLoadedListener.remove();
-      onFailedListener.remove();
-      onRewardedListener.remove();
+    if (await showRewarded()) {
+      // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
+      await loadRandomPhrase();
     }
   };
 

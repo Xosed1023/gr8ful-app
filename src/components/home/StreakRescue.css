@@ -1,0 +1,101 @@
+/* Aviso para rescatar la racha (por encima de todo, incluida la barra de pestañas) */
+.streak-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(8, 10, 20, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    overflow: visible !important;
+}
+
+.streak-overlay.man {
+    --streak-accent: var(--tint-blue-fg);
+    --streak-tint: var(--tint-blue-bg);
+}
+
+.streak-overlay.woman {
+    --streak-accent: var(--tint-purple-fg);
+    --streak-tint: var(--tint-purple-bg);
+}
+
+.streak-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 22rem;
+    padding: 28px 22px 18px;
+    border-radius: 28px;
+    text-align: center;
+    color: var(--text-color);
+    background: var(--surface);
+    box-shadow: var(--sheet-shadow);
+    overflow: visible !important;
+}
+
+.streak-flame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 9999px;
+    font-size: 34px;
+    color: var(--streak-accent);
+    background: var(--streak-tint);
+}
+
+.streak-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.streak-card p {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-muted);
+}
+
+.streak-card p.streak-error {
+    color: var(--streak-accent);
+    font-weight: 600;
+}
+
+.streak-primary,
+.streak-secondary {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.streak-primary {
+    margin-top: 8px;
+    color: #fff;
+    background: var(--streak-accent);
+}
+
+.streak-secondary {
+    color: var(--text-muted);
+    background: transparent;
+}
+
+.streak-primary:active,
+.streak-secondary:active {
+    transform: scale(0.98);
+}
+
+.streak-primary:disabled,
+.streak-secondary:disabled {
+    opacity: 0.55;
+}

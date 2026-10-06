@@ -1,20 +1,26 @@
 import { isPlatform } from "@ionic/react";
 import { useUserGender } from "../../hooks/useUserGender";
+import { LanguageKeys } from "../../persistence/languages";
+import StreakPill from "./StreakPill";
 
 interface GreetingsProps {
   greeting: string;
   inspiration: string;
+  /** Días de racha; la píldora solo aparece si es mayor que 0. */
+  streak?: number;
+  language?: LanguageKeys | null;
 }
 
-const Greetings = ({ greeting, inspiration }: GreetingsProps) => {
+const Greetings = ({ greeting, inspiration, streak = 0, language }: GreetingsProps) => {
   const { isMale } = useUserGender();
 
   return (
     <div className={`flex flex-col items-center px-4 ${isPlatform('ios') ? 'mt-20' : 'mt-11'}`}>
-      <div className="flex flex-col self-start mb-4">
-        <h1 className={`${isMale ? 'text-[color:var(--greeting-man)]' : 'text-[color:var(--greeting-woman)]'} text-4xl font-bold self-start`}>
+      <div className="flex items-center justify-between w-full gap-3 mb-4">
+        <h1 className={`${isMale ? 'text-[color:var(--greeting-man)]' : 'text-[color:var(--greeting-woman)]'} text-4xl font-bold min-w-0`}>
           {greeting} {localStorage.getItem("name")}!
         </h1>
+        {streak > 0 && <StreakPill days={streak} language={language ?? "en"} />}
       </div>
 
       <div className="flex flex-row justify-between relative h-64 w-full">

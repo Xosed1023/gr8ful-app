@@ -4,6 +4,8 @@ import CardsContainer from "../components/home/CardsContainer";
 import Greetings from "../components/home/Greetings";
 import { Phrase } from "../models/Phrase";
 import { useUserGender } from "../hooks/useUserGender";
+import { useStreak } from "../streak/useStreak";
+import StreakRescue from "../components/home/StreakRescue";
 
 import "./Home.css";
 import { AppHomeScreenLanguage } from "../persistence/languages";
@@ -30,6 +32,7 @@ const Home = ({
     localStorage.getItem("language") as LanguageKeys | null
   );
   const navigate = useIonRouter();
+  const streak = useStreak();
 
   useEffect(() => {
     setUserLanguage(localStorage.getItem("language") as LanguageKeys | null);
@@ -52,11 +55,19 @@ const Home = ({
           <Greetings
             greeting={greetingsText[0]}
             inspiration={inspirationText[0]}
+            streak={streak.current}
+            language={userLanguage}
           />
           {phrase && (
             <CardsContainer phrase={phrase} onRefresh={onRefresh} />
           )}
         </div>
+        <StreakRescue
+          streak={streak.rescue?.streak ?? null}
+          language={userLanguage ?? "en"}
+          onAccept={streak.accept}
+          onDecline={streak.decline}
+        />
       </IonContent>
     </IonPage>
   );

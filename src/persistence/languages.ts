@@ -348,3 +348,29 @@ export const AppShareLanguage = {
   retry: { es: "Reintentar", en: "Try again", fr: "Réessayer" },
 };
 
+
+export const AppStreakLanguage = {
+  label: { es: "Racha", en: "Streak", fr: "Série" },
+  rescueTitle: {
+    es: "¡Casi pierdes tu racha!",
+    en: "You almost lost your streak!",
+    fr: "Vous avez failli perdre votre série !",
+  },
+  // `{n}` se sustituye por los días de la racha
+  rescueBody: {
+    es: "Te saltaste un día. Mira un anuncio y tu racha de {n} días sigue viva.",
+    en: "You missed a day. Watch an ad and your {n}-day streak lives on.",
+    fr: "Vous avez manqué un jour. Regardez une pub et votre série de {n} jours continue.",
+  },
+  rescueWatch: {
+    es: "Ver anuncio y conservarla",
+    en: "Watch ad to keep it",
+    fr: "Voir la pub et la garder",
+  },
+  rescueRestart: { es: "Empezar de nuevo", en: "Start over", fr: "Recommencer" },
+  rescueError: {
+    es: "No pudimos cargar el anuncio. Inténtalo de nuevo.",
+    en: "We couldn't load the ad. Please try again.",
+    fr: "Impossible de charger la pub. Réessayez.",
+  },
+};

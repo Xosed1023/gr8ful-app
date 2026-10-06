@@ -113,7 +113,8 @@ interface ResolveInput {
 /**
  * Decide si el plan guardado sigue valiendo o hay que rehacerlo. Vale si es de los mismos
  * temas, incluye hoy, quedan al menos `MIN_DAYS_LEFT` días y todas sus frases existen.
- * Al rehacerlo se conserva la frase de hoy (si los temas no cambiaron).
+ * Al rehacerlo se conserva siempre la frase de hoy (también si cambiaron los temas): la frase
+ * diaria solo cambia al cambiar el día o con un anuncio recompensado.
  */
 export function resolvePlan({ stored, phrases, topics, now }: ResolveInput): {
   plan: DailyPlan;
@@ -133,7 +134,7 @@ export function resolvePlan({ stored, phrases, topics, now }: ResolveInput): {
 
   if (usable && stored) return { plan: stored, changed: false };
 
-  const todayEntry = sameTopics ? remaining.find((d) => d.date === today) : undefined;
+  const todayEntry = remaining.find((d) => d.date === today);
   return {
     plan: buildPlan({
       phrases,
@@ -142,6 +143,39 @@ export function resolvePlan({ stored, phrases, topics, now }: ResolveInput): {
       keepToday: todayEntry && ids.has(todayEntry.phraseId) ? todayEntry.phraseId : undefined,
     }),
     changed: true,
+  };
+}
+
+interface ReplaceInput {
+  plan: DailyPlan;
+  phrases: Phrase[];
+  topics: Topic[];
+  today: string;
+}
+
+/**
+ * Cambia la frase de hoy por otra (función pura). Prefiere una que no esté ya en los días
+ * que quedan del plan; si no hay, cualquiera distinta de la actual. `null` si solo existe una.
+ */
+export function replaceToday({ plan, phrases, topics, today }: ReplaceInput): {
+  plan: DailyPlan;
+  phraseId: number | null;
+} {
+  const current = plan.days.find((d) => d.date === today)?.phraseId;
+  const upcoming = new Set(plan.days.filter((d) => d.date >= today).map((d) => d.phraseId));
+  const pool = orderPool(
+    phrases.filter((p) => p.id != null),
+    topics
+  );
+  const next =
+    pool.find((p) => !upcoming.has(p.id!)) ?? pool.find((p) => p.id !== current);
+  if (!next || current == null) return { plan, phraseId: null };
+  return {
+    plan: {
+      ...plan,
+      days: plan.days.map((d) => (d.date === today ? { ...d, phraseId: next.id! } : d)),
+    },
+    phraseId: next.id!,
   };
 }
 
@@ -188,4 +222,38 @@ export async function loadDailyPlan(now: Date = new Date()): Promise<LoadedPlan 
   const byId = new Map<number, Phrase>();
   phrases.forEach((p) => p.id != null && byId.set(p.id, p));
   return { plan, byId };
+}
+
+const savePlan = (plan: DailyPlan) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+  } catch {
+    // sin almacenamiento el cambio no persiste
+  }
+};
+
+/** La frase del día: la que toca hoy en el plan. Es la misma del widget y las notificaciones. */
+export async function getTodayPhrase(now: Date = new Date()): Promise<Phrase | null> {
+  const loaded = await loadDailyPlan(now);
+  if (!loaded) return null;
+  const entry = loaded.plan.days.find((d) => d.date === dateKey(now));
+  return (entry && loaded.byId.get(entry.phraseId)) || null;
+}
+
+/**
+ * Sustituye la frase de hoy (tras un anuncio recompensado) y la guarda en el plan, de modo
+ * que el widget y las notificaciones pasen a mostrar la misma. Devuelve la nueva frase.
+ */
+export async function replaceTodayPhrase(now: Date = new Date()): Promise<Phrase | null> {
+  const loaded = await loadDailyPlan(now);
+  if (!loaded) return null;
+  const result = replaceToday({
+    plan: loaded.plan,
+    phrases: [...loaded.byId.values()],
+    topics: readTopics(),
+    today: dateKey(now),
+  });
+  if (result.phraseId == null) return null;
+  savePlan(result.plan);
+  return loaded.byId.get(result.phraseId) ?? null;
 }

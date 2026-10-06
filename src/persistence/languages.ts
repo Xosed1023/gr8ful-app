@@ -374,3 +374,12 @@ export const AppStreakLanguage = {
     fr: "Impossible de charger la pub. Réessayez.",
   },
 };
+
+/** Aviso al cambiar los temas desde Ajustes: la frase de hoy no cambia hasta mañana. */
+export const AppTopicsNoticeLanguage = {
+  changed: {
+    es: "Listo. Tus nuevos temas llegan mañana; hoy conservas tu frase, o renuévala ya viendo un anuncio.",
+    en: "Done. Your new topics start tomorrow; you keep today's quote, or renew it now by watching an ad.",
+    fr: "C'est fait. Vos nouveaux thèmes arrivent demain ; vous gardez la citation du jour, ou renouvelez-la maintenant avec une pub.",
+  },
+};

@@ -1,7 +1,8 @@
-import { IonContent, IonPage, useIonRouter } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter, useIonToast } from "@ionic/react";
 import "./QuoteTopics.css";
 import { useEffect, useState } from "react";
-import { AppTopicsScreenLanguage } from "../persistence/languages";
+import { AppTopicsNoticeLanguage, AppTopicsScreenLanguage } from "../persistence/languages";
+import { topicsKeyOf } from "../daily/dailyPlan";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
@@ -15,6 +16,7 @@ import { Topic } from "../models/Topic";
 
 const QuoteTopics = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
+  const [present] = useIonToast();
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
   const [title, setTitle] = useState([
     "Choose the",
@@ -60,8 +62,17 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
   }, [userLanguage]);
 
   const handleTopicsChange = async () => {
+    const previous: Topic[] = JSON.parse(localStorage.getItem("topics") || "[]");
     localStorage.setItem("topics", JSON.stringify(selectedTopics));
     await refreshDailyContent();
+    // Al editar desde Ajustes la frase de hoy se conserva: se avisa de que los temas rigen desde mañana
+    if (backTo && topicsKeyOf(previous) !== topicsKeyOf(selectedTopics)) {
+      present({
+        message: AppTopicsNoticeLanguage.changed[userLanguage],
+        duration: 6000,
+        position: "bottom",
+      });
+    }
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/userName", "forward");
     await hapticTap();

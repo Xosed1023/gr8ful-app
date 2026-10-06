@@ -5,6 +5,7 @@ import {
   dateKey,
   MIN_DAYS_LEFT,
   PLAN_DAYS,
+  replaceToday,
   resolvePlan,
   topicsKeyOf,
 } from "./dailyPlan";
@@ -113,5 +114,72 @@ describe("topicsKeyOf", () => {
     expect(
       topicsKeyOf([{ key: "Love", value: "" }, { key: "humor", value: "" }])
     ).toBe(topicsKeyOf([{ key: "HUMOR", value: "" }, { key: "love", value: "" }]));
+  });
+});
+
+describe("replaceToday", () => {
+  const today = "2026-10-03";
+
+  it("cambia solo la frase de hoy y deja los demás días igual", () => {
+    const phrases = makePhrases(40);
+    const plan = buildPlan({ phrases, topics: [], start: NOW });
+    const { plan: next, phraseId } = replaceToday({ plan, phrases, topics: [], today });
+    expect(phraseId).not.toBeNull();
+    expect(phraseId).not.toBe(plan.days[0].phraseId);
+    expect(next.days[0].phraseId).toBe(phraseId);
+    expect(next.days.slice(1)).toEqual(plan.days.slice(1));
+  });
+
+  it("prefiere una frase que no esté ya en los días que vienen", () => {
+    const phrases = makePhrases(40);
+    const plan = buildPlan({ phrases, topics: [], start: NOW });
+    const { phraseId } = replaceToday({ plan, phrases, topics: [], today });
+    const upcoming = plan.days.map((d) => d.phraseId);
+    expect(upcoming).not.toContain(phraseId);
+  });
+
+  it("con pocas frases elige cualquiera distinta de la actual", () => {
+    const phrases = makePhrases(3);
+    const plan = buildPlan({ phrases, topics: [], start: NOW });
+    const { phraseId } = replaceToday({ plan, phrases, topics: [], today });
+    expect(phraseId).not.toBeNull();
+    expect(phraseId).not.toBe(plan.days[0].phraseId);
+  });
+
+  it("si solo hay una frase no cambia nada", () => {
+    const phrases = makePhrases(1);
+    const plan = buildPlan({ phrases, topics: [], start: NOW });
+    const result = replaceToday({ plan, phrases, topics: [], today });
+    expect(result.phraseId).toBeNull();
+    expect(result.plan).toBe(plan);
+  });
+
+  it("si hoy no está en el plan no cambia nada", () => {
+    const phrases = makePhrases(40);
+    const plan = buildPlan({ phrases, topics: [], start: NOW });
+    expect(replaceToday({ plan, phrases, topics: [], today: "2030-01-01" }).phraseId).toBeNull();
+  });
+
+  it("el plan resultante sigue siendo válido al día siguiente (conserva la frase cambiada)", () => {
+    const phrases = makePhrases(40);
+    const plan = buildPlan({ phrases, topics: [], start: NOW });
+    const { plan: next, phraseId } = replaceToday({ plan, phrases, topics: [], today });
+    const resolved = resolvePlan({ stored: next, phrases, topics: [], now: NOW });
+    expect(resolved.changed).toBe(false);
+    expect(resolved.plan.days[0].phraseId).toBe(phraseId);
+  });
+});
+
+describe("resolvePlan al cambiar los temas", () => {
+  it("conserva la frase de hoy aunque no encaje con los temas nuevos", () => {
+    const phrases = [...makePhrases(20, "Motivation", 1), ...makePhrases(20, "Love", 100)];
+    const old = buildPlan({ phrases, topics: [{ key: "motivation", value: "Motivation" }], start: NOW });
+    const love = [{ key: "love", value: "Love" }];
+    const resolved = resolvePlan({ stored: old, phrases, topics: love, now: NOW });
+    expect(resolved.changed).toBe(true);
+    expect(resolved.plan.topicsKey).toBe(topicsKeyOf(love));
+    expect(resolved.plan.days[0].phraseId).toBe(old.days[0].phraseId);
+    // desde mañana rigen los temas nuevos
+    expect(resolved.plan.days[1].phraseId).toBeGreaterThanOrEqual(100);
   });
 });

@@ -18,8 +18,6 @@ import { Redirect, Route, useLocation } from "react-router";
 import { Phrase } from "../models/Phrase";
 import {
   addOrUpdatePhrase,
-  getPhraseById,
-  getRandomPhrase,
   initDB,
 } from "../persistence/IndexedDBService";
 import Favorites from "./Favorites";
@@ -29,11 +27,14 @@ import QuoteTime from "./QuoteTime";
 import QuoteTopics from "./QuoteTopics";
 import Settings from "./Settings";
 import UserName from "./UserName";
+import { App } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
 import "../components/home/HomeKit.css";
 import { useUserGender } from "../hooks/useUserGender";
 import { AppHomeNavLanguage } from "../persistence/languages";
 import { showRewarded } from "../ads/rewarded";
+import { getTodayPhrase, replaceTodayPhrase } from "../daily/dailyPlan";
+import { refreshDailyContent } from "../daily/refreshDailyContent";
 
 // IDs de prueba oficiales de Google AdMob — https://developers.google.com/admob/ios/test-ads
 // y https://developers.google.com/admob/android/test-ads. Devuelven anuncios de test
@@ -82,10 +83,21 @@ const MainHome = () => {
 
     initDB().then(() => {
       if (phrase === null) {
-        loadRandomPhrase();
+        loadTodayPhrase();
       }
     });
   }, []);
+
+  // Si la app estuvo en segundo plano y cambió el día, pasa a la frase de hoy
+  useEffect(() => {
+    const listener = App.addListener("appStateChange", ({ isActive }) => {
+      if (isActive && phrase !== null) void loadTodayPhrase();
+    });
+    return () => {
+      void listener.then((handle) => handle.remove());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phrase === null]);
 
   useEffect(() => {
     const onDismissListener = AdMob.addListener(
@@ -158,28 +170,32 @@ const MainHome = () => {
     }
   };
 
+  // Rewarded: cambia la frase del día. Se guarda en el plan para que el widget y las
+  // notificaciones muestren la misma.
   const loadRandomPhraseWithAd = async () => {
     if (await showRewarded()) {
       // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
-      await loadRandomPhrase();
+      const next = await replaceTodayPhrase();
+      if (next) {
+        await markShown(next);
+        setPhrase(next);
+        void refreshDailyContent();
+      }
     }
   };
 
-  const loadRandomPhrase = async () => {
-    let topics = JSON.parse(localStorage.getItem("topics") || "[]");
-    const randomPhrase = await getRandomPhrase(topics);
-    if (randomPhrase) {
-      await updateHistoryDate(randomPhrase.id!);
-      setPhrase(randomPhrase);
+  // La frase del día es la del plan: no cambia al reabrir la app, solo al cambiar el día
+  const loadTodayPhrase = async () => {
+    const today = await getTodayPhrase();
+    if (today) {
+      await markShown(today);
+      setPhrase((prev) => (prev?.id === today.id ? prev : today));
     }
   };
 
-  const updateHistoryDate = async (id: number) => {
-    const phrase = await getPhraseById(id);
-    if (phrase) {
-      phrase.hasShown = true;
-      await addOrUpdatePhrase(phrase);
-    }
+  const markShown = async (phrase: Phrase) => {
+    if (phrase.id == null || phrase.hasShown) return;
+    await addOrUpdatePhrase({ ...phrase, hasShown: true });
   };
 
   return (

@@ -5,7 +5,7 @@ import { AppTopicsScreenLanguage } from "../persistence/languages";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
-import { refreshDailyQuotes } from "../notifications/dailyQuote";
+import { refreshDailyContent } from "../daily/refreshDailyContent";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import StepBadge from "../components/common/StepBadge";
@@ -61,7 +61,7 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
 
   const handleTopicsChange = async () => {
     localStorage.setItem("topics", JSON.stringify(selectedTopics));
-    await refreshDailyQuotes();
+    await refreshDailyContent();
     if (backTo) navigate.push(backTo, "back");
     else navigate.push("/userName", "forward");
     await hapticTap();

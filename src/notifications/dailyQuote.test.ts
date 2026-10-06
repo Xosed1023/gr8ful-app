@@ -104,6 +104,37 @@ describe("buildSchedule", () => {
   });
 });
 
+describe("buildSchedule con plan (preordered)", () => {
+  const ordered = makePhrases(40);
+  const input = (over = {}) => ({
+    phrases: ordered,
+    topics: [],
+    language: "es" as const,
+    hour: 12,
+    now: new Date(2026, 9, 2, 9, 0),
+    preordered: true,
+    ...over,
+  });
+
+  it("respeta el orden del plan: el día 0 es la primera frase", () => {
+    const q = buildSchedule(input());
+    expect(q[0].phraseId).toBe(1);
+    expect(q[1].phraseId).toBe(2);
+    expect(q[0].at).toEqual(new Date(2026, 9, 2, 12, 0));
+  });
+
+  it("si la hora de hoy ya pasó, salta la frase de hoy y empieza mañana con la siguiente", () => {
+    const q = buildSchedule(input({ now: new Date(2026, 9, 2, 13, 0) }));
+    expect(q[0].at).toEqual(new Date(2026, 9, 3, 12, 0));
+    expect(q[0].phraseId).toBe(2);
+  });
+
+  it("no filtra por temas ni reordena", () => {
+    const q = buildSchedule(input({ topics: [{ key: "Love", value: "Amor" }] }));
+    expect(q.slice(0, 3).map((n) => n.phraseId)).toEqual([1, 2, 3]);
+  });
+});
+
 describe("enable / disable / refresh", () => {
   beforeEach(() => {
     vi.clearAllMocks();

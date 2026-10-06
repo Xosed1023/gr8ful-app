@@ -3,7 +3,7 @@
 Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se convierte en spec completa con `/speckit-specify`. Esta lista no es exhaustiva ni compromete ningún orden — es solo un punto de partida para discutirlo en sesiones futuras.
 
 - **Racha de días de uso ("streak")** — incentivar apertura diaria mostrando cuántos días consecutivos el usuario abrió la app, reforzando el hábito de aprendizaje de idiomas.
-- **Widget nativo (Android/iOS)** — mostrar la frase del día directamente en la pantalla de inicio del dispositivo, sin abrir la app.
+- **Widget de la frase del día en Android** — fase 2 de `specs/024-widget-frase-del-dia` (iOS ya implementado): AppWidget con el mismo payload (`src/widget/widgetData.ts`) y la misma paleta; también tamaños mediano/grande en ambas plataformas.
 - **Más idiomas** — extender más allá de ES/EN/FR (ej. portugués, alemán) si se valida demanda; implicaría revisar el modelo `Phrase.content` (hoy hardcodeado a 3 idiomas) y todo `src/persistence/languages.ts`.
 - **Quiz/práctica de vocabulario** — a partir de las frases ya mostradas, ejercicios simples de traducción o selección múltiple para reforzar el aprendizaje de idiomas (más allá de solo "leer" frases).
 - **Historial de frases vistas** — pantalla que liste todas las frases ya mostradas (`hasShown: true`), no solo las favoritas.

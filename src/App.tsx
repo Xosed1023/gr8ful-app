@@ -45,7 +45,7 @@ import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
 import { PushNotifications } from "@capacitor/push-notifications";
-import { refreshDailyQuotes } from "./notifications/dailyQuote";
+import { refreshDailyContent } from "./daily/refreshDailyContent";
 
 setupIonicReact();
 
@@ -140,7 +140,7 @@ const App: React.FC = () => {
     addListeners();
     registerNotifications();
     getDeliveredNotifications();
-    refreshDailyQuotes();
+    refreshDailyContent();
   };
 
   const addListeners = async () => {

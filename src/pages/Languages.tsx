@@ -1,4 +1,4 @@
-import { refreshDailyQuotes } from "../notifications/dailyQuote";
+import { refreshDailyContent } from "../daily/refreshDailyContent";
 import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import "./Languages.css";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ const Languages = ({ backTo }: { backTo?: string }) => {
       language,
       async () => {
         localStorage.setItem("language", language);
-        await refreshDailyQuotes();
+        await refreshDailyContent();
       },
       () => {
         if (backTo) navigate.push(backTo, "back");

@@ -2,7 +2,7 @@ import { Capacitor } from "@capacitor/core";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Phrase } from "../models/Phrase";
 import { Topic } from "../models/Topic";
-import { getAllPhrases } from "../persistence/IndexedDBService";
+import { dateKey, loadDailyPlan, orderPool } from "../daily/dailyPlan";
 import {
   AppNotificationsLanguage,
   LanguageKeys,
@@ -31,23 +31,11 @@ interface BuildScheduleInput {
   hour: number;
   now: Date;
   days?: number;
-}
-
-function shuffle<T>(items: T[]): T[] {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-/** Orden de uso: no vistas primero, luego vistas, barajadas dentro de cada grupo. */
-function orderByPreference(phrases: Phrase[]): Phrase[] {
-  return [
-    ...shuffle(phrases.filter((p) => !p.hasShown)),
-    ...shuffle(phrases.filter((p) => p.hasShown)),
-  ];
+  /**
+   * `true`: `phrases` ya viene ordenada por día desde hoy (el plan diario) y se respeta
+   * tal cual, sin filtrar por temas ni reordenar.
+   */
+  preordered?: boolean;
 }
 
 /**
@@ -62,16 +50,13 @@ export function buildSchedule({
   hour,
   now,
   days = NOTIFICATION_DAYS,
+  preordered = false,
 }: BuildScheduleInput): ScheduledQuote[] {
   if (phrases.length === 0) return [];
 
-  const topicKeys = topics.map((t) => t.key.toLowerCase());
-  const inTopics = (p: Phrase) =>
-    topicKeys.length === 0 || topicKeys.includes(p.type.toLowerCase());
-  const pool = [
-    ...orderByPreference(phrases.filter(inTopics)),
-    ...orderByPreference(phrases.filter((p) => !inTopics(p))),
-  ];
+  const pool = preordered
+    ? phrases
+    : orderPool(phrases, topics);
 
   const first = new Date(now);
   first.setHours(hour, 0, 0, 0);
@@ -79,7 +64,8 @@ export function buildSchedule({
 
   const title = "Gr8ful";
   return Array.from({ length: days }, (_, i) => {
-    const phrase = pool[i % pool.length];
+    // Con el plan, el día 0 es hoy: si la hora de hoy ya pasó se salta esa frase
+    const phrase = pool[(preordered ? startOffset + i : i) % pool.length];
     const at = new Date(now);
     at.setDate(at.getDate() + startOffset + i);
     at.setHours(hour, 0, 0, 0);
@@ -103,14 +89,6 @@ const readLanguage = (): LanguageKeys => {
   return stored === "es" || stored === "fr" ? stored : "en";
 };
 
-const readTopics = (): Topic[] => {
-  try {
-    return JSON.parse(localStorage.getItem("topics") || "[]");
-  } catch {
-    return [];
-  }
-};
-
 const readHour = (): number => {
   const hour = parseInt(localStorage.getItem("time") ?? "", 10);
   return [6, 12, 18].includes(hour) ? hour : DEFAULT_HOUR;
@@ -129,13 +107,22 @@ async function ensureAndroidChannel(language: LanguageKeys) {
 /** Cancela las pendientes y programa la ventana actual (sin comprobar permiso). */
 async function scheduleWindow() {
   const language = readLanguage();
-  const phrases = await getAllPhrases();
+  // La frase de cada día sale del plan único (la misma que ve el widget)
+  const loaded = await loadDailyPlan();
+  const today = dateKey(new Date());
+  const ordered = loaded
+    ? loaded.plan.days
+        .filter((d) => d.date >= today)
+        .map((d) => loaded.byId.get(d.phraseId))
+        .filter((p): p is Phrase => !!p)
+    : [];
   const queue = buildSchedule({
-    phrases,
-    topics: readTopics(),
+    phrases: ordered,
+    topics: [],
     language,
     hour: readHour(),
     now: new Date(),
+    preordered: true,
   });
 
   await LocalNotifications.cancel({ notifications: allIds() });

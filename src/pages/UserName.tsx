@@ -10,6 +10,7 @@ import { hapticTap } from "../hooks/useHaptics";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import { LOADING_SCREEN_MS } from "./LoadingScreen";
+import { refreshWidget } from "../daily/refreshDailyContent";
 import StepBadge from "../components/common/StepBadge";
 import StepIndicator from "../components/common/StepIndicator";
 
@@ -27,6 +28,8 @@ const UserName = ({ backTo }: { backTo?: string }) => {
     localStorage.setItem("name", name);
     // Último paso del onboarding: a partir de aquí la app abre directo en Home.
     markOnboardingComplete();
+    // Ya hay idioma, género, temas y nombre: el widget puede mostrar la frase del día
+    void refreshWidget();
     await hapticTap();
     navigate.push("/loadingScreen", "forward");
     setTimeout(() => {

@@ -4,10 +4,8 @@ import { AppTimeScreenLanguage } from "../persistence/languages";
 import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useSelectThenAdvance } from "../hooks/useSelectThenAdvance";
 import { useUserGender } from "../hooks/useUserGender";
-import {
-  enableDailyQuotes,
-  refreshDailyQuotes,
-} from "../notifications/dailyQuote";
+import { enableDailyQuotes } from "../notifications/dailyQuote";
+import { refreshDailyContent } from "../daily/refreshDailyContent";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import StepBadge from "../components/common/StepBadge";
@@ -36,7 +34,7 @@ const QuoteTime = ({ backTo }: { backTo?: string }) => {
         localStorage.setItem("time", time);
         // Onboarding: las notificaciones quedan activadas y el permiso se pide aquí
         // (spec 021, FR-005). Desde Ajustes solo se reprograman si ya están activas.
-        if (backTo) await refreshDailyQuotes();
+        if (backTo) await refreshDailyContent();
         else await enableDailyQuotes();
       },
       () => {

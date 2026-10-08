@@ -5,4 +5,9 @@
     <string name="package_name">com.zen.gr8ful</string>
     <string name="custom_url_scheme">com.zen.gr8ful</string>
     <string name="admob_app_id">ca-app-pub-6255300430204769~6863949950</string>
+    <string name="widget_name">Daily quote</string>
+    <string name="widget_description">A new quote every day, in your language.</string>
+    <string name="widget_empty">Open Gr8ful and your daily quote will appear here</string>
+    <string name="widget_preview_quote">“The future belongs to those who believe in the beauty of their dreams.”</string>
+    <string name="widget_preview_author">— Eleanor Roosevelt</string>
 </resources>

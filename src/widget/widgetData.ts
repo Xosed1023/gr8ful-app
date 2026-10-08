@@ -36,18 +36,19 @@ export function buildWidgetPayload({ plan, byId, language, gender, now }: BuildP
   return { v: 1, language, gender, updatedAt: now.getTime(), days };
 }
 
-/** Plugin nativo local (ios/App/App/WidgetBridgePlugin.swift). */
+/** Plugin nativo local (ios/App/App/WidgetBridgePlugin.swift y android/.../WidgetBridgePlugin.java). */
 interface WidgetBridgePlugin {
   setData(options: { json: string }): Promise<void>;
 }
 const WidgetBridge = registerPlugin<WidgetBridgePlugin>("WidgetBridge");
 
 /**
- * Entrega el contenido al widget: el plugin lo guarda en el contenedor compartido del App
- * Group y pide al sistema recargar el widget. Solo existe en iOS; en el resto no hace nada.
+ * Entrega el contenido al widget: el plugin lo guarda donde el widget puede leerlo (App Group
+ * en iOS, SharedPreferences en Android) y pide al sistema redibujarlo. En la web no hace nada.
  */
 export async function writeWidgetData(payload: WidgetPayload): Promise<void> {
-  if (Capacitor.getPlatform() !== "ios") return;
+  const platform = Capacitor.getPlatform();
+  if (platform !== "ios" && platform !== "android") return;
   try {
     await WidgetBridge.setData({ json: JSON.stringify(payload) });
   } catch (error) {

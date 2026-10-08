@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget de la frase del día (2×2). El fondo, los colores y los textos los pone
+     QuoteWidgetProvider; los valores de aquí sirven de vista previa en el selector. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widget_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/widget_preview_bg"
+        android:importantForAccessibility="no" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+        <ImageView
+            android:id="@+id/widget_infinity"
+            android:layout_width="22dp"
+            android:layout_height="11dp"
+            android:src="@drawable/ic_widget_infinity"
+            android:tint="#5602D3"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/widget_quote"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="4dp"
+            android:ellipsize="end"
+            android:maxLines="7"
+            android:text="@string/widget_preview_quote"
+            android:textColor="#1B1C1C"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/widget_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/widget_preview_author"
+            android:textColor="#6B6578"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+</FrameLayout>

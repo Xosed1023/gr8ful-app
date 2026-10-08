@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-03
 
-**Status**: Completed (iOS; Android en fase 2)
+**Status**: Completed (iOS; Android en `specs/026-widget-android`)
 
 **Input**: Candidata del `specs/BACKLOG.md` («Widget nativo»): mostrar la frase del día directamente en la pantalla de inicio del dispositivo, sin abrir la app.
 

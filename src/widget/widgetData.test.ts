@@ -65,9 +65,14 @@ describe("writeWidgetData", () => {
     expect(JSON.parse(bridge.setData.mock.calls[0][0].json)).toEqual(payload);
   });
 
-  it("fuera de iOS no hace nada", async () => {
+  it("en Android también entrega el JSON al plugin", async () => {
     platform.name = "android";
     await writeWidgetData(payload);
+    expect(bridge.setData).toHaveBeenCalledTimes(1);
+    expect(JSON.parse(bridge.setData.mock.calls[0][0].json)).toEqual(payload);
+  });
+
+  it("en la web no hace nada", async () => {
     platform.name = "web";
     await writeWidgetData(payload);
     expect(bridge.setData).not.toHaveBeenCalled();

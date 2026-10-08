@@ -8,8 +8,6 @@ import { enableDailyQuotes } from "../notifications/dailyQuote";
 import { refreshDailyContent } from "../daily/refreshDailyContent";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
-import StepBadge from "../components/common/StepBadge";
-import StepIndicator from "../components/common/StepIndicator";
 
 const TIME_OPTIONS = [
   { key: "6", label: "6:00 AM" },
@@ -59,19 +57,8 @@ const QuoteTime = ({ backTo }: { backTo?: string }) => {
               variant="glass"
               onClick={() => navigate.push(backTo || "/gender", "back")}
             />
-            {backTo === undefined && (
-              <div
-                className="onboarding-topbar"
-                style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
-              >
-                <StepIndicator step={3} total={5} />
-              </div>
-            )}
 
             <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
-              {backTo === undefined && (
-                <StepBadge label={text.stepBadge[userLanguage]} />
-              )}
 
               {/* Texto principal */}
               <div className="text-container flex flex-col items-center mt-4 px-4">

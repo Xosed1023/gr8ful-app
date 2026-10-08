@@ -8,8 +8,6 @@ import { useSelectThenAdvance } from "../hooks/useSelectThenAdvance";
 import { useUserGender } from "../hooks/useUserGender";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
-import StepIndicator from "../components/common/StepIndicator";
-import StepBadge from "../components/common/StepBadge";
 import { IoCheckmark } from "react-icons/io5";
 
 const LANGUAGE_OPTIONS = [
@@ -68,20 +66,9 @@ const Languages = ({ backTo }: { backTo?: string }) => {
                 onClick={() => navigate.push(backTo, "back")}
               />
             )}
-            {backTo === undefined && (
-              <div
-                className="onboarding-topbar"
-                style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
-              >
-                <StepIndicator step={1} total={5} />
-              </div>
-            )}
 
             <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
               {/* Etiqueta de paso (solo en el onboarding) */}
-              {backTo === undefined && (
-                <StepBadge label={AppSelectLanguage.stepBadge[userLanguage]} />
-              )}
 
               {/* Título */}
               <div className="text-container flex items-center justify-center mt-4">

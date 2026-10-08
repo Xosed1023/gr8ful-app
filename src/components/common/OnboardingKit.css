@@ -11,7 +11,7 @@
 
 /* Contenido por encima de las manchas. Se excluyen los elementos que ya van
    en posición absoluta (barra superior y botón atrás). */
-.onboarding-background > *:not(.glow-layer):not(.onboarding-topbar):not(.back-glass) {
+.onboarding-background > *:not(.glow-layer):not(.back-glass) {
     position: relative;
     z-index: 1;
 }
@@ -93,35 +93,37 @@
 }
 
 .step-dot {
+    position: relative;
     width: 8px;
     height: 8px;
     border-radius: 9999px;
     background: var(--step-dot);
+    transition: width 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
+        height 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
+        background-color 0.3s ease;
 }
 
-.step-active {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.step-dot.active {
     width: 12px;
     height: 12px;
-}
-
-.step-core {
-    width: 12px;
-    height: 12px;
-    border-radius: 9999px;
     background: var(--step-active);
     animation: glow-pulse 2s ease-in-out infinite;
 }
 
-.step-ring {
+/* Brillo alrededor del punto activo: aparece y se apaga al cambiar de paso */
+.step-dot::before {
+    content: "";
     position: absolute;
     inset: -4px;
     border-radius: 9999px;
     background: var(--step-glow);
     filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.step-dot.active::before {
+    opacity: 1;
 }
 
 /* ---- Etiqueta de paso sobre el título ---- */
@@ -170,10 +172,11 @@
 /* variables.css fuerza `overflow: hidden` en todos los elementos; aquí debe
    verse el brillo, el anillo y las sombras que sobresalen de su caja. */
 .step-indicator,
-.step-active,
+.step-dot,
 .step-badge,
 .step-badge-dot,
-.onboarding-topbar {
+.onboarding-progress,
+.onboarding-progress-badge {
     overflow: visible !important;
 }
 
@@ -203,14 +206,23 @@
     transform: scale(0.95);
 }
 
-/* Barra superior del onboarding (indicador centrado) */
-.onboarding-topbar {
-    position: absolute;
+/* Indicador y etiqueta de paso: un único componente fijo sobre las pantallas del onboarding
+   (OnboardingProgress), siempre en la misma posición. */
+.onboarding-progress {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 1rem);
     left: 0;
     right: 0;
-    z-index: 5;
+    z-index: 20;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    pointer-events: none;
+}
+
+.onboarding-progress-badge {
+    min-height: 26px;
 }
 
 /* Bloque central de las pantallas de opciones del onboarding */
@@ -422,7 +434,7 @@
     height: auto;
     min-height: 100vh;
     justify-content: flex-start;
-    padding: calc(env(safe-area-inset-top, 0px) + 4.25rem) 0 calc(env(safe-area-inset-bottom, 0px) + 2rem);
+    padding: calc(env(safe-area-inset-top, 0px) + 6.75rem) 0 calc(env(safe-area-inset-bottom, 0px) + 2rem);
 }
 
 .topics-grid {
@@ -619,14 +631,16 @@
 }
 
 /* ---- Acentos de la paleta de hombre (azules): sobrescriben los tokens violetas ---- */
-.onboarding-background.man {
+.onboarding-background.man,
+.onboarding-progress.man {
     --step-active: #006493;
     --step-glow: rgba(137, 206, 255, 0.5);
     --accent-text: #0D4461;
     --option-chosen-bg: rgba(214, 236, 255, 0.95);
 }
 
-.ion-palette-dark .onboarding-background.man {
+.ion-palette-dark .onboarding-background.man,
+.ion-palette-dark .onboarding-progress.man {
     --step-active: #8FC4E8;
     --step-glow: rgba(143, 196, 232, 0.35);
     --accent-text: #8FC4E8;

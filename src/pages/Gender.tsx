@@ -6,8 +6,6 @@ import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useSelectThenAdvance } from "../hooks/useSelectThenAdvance";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
-import StepBadge from "../components/common/StepBadge";
-import StepIndicator from "../components/common/StepIndicator";
 
 const Gender: React.FC = () => {
   const { userLanguage } = useAppLanguage();
@@ -54,15 +52,8 @@ const Gender: React.FC = () => {
               variant="glass"
               onClick={() => navigate.push("/languages", "back")}
             />
-            <div
-              className="onboarding-topbar"
-              style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
-            >
-              <StepIndicator step={2} total={5} />
-            </div>
 
             <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
-              <StepBadge label={AppGenderScreenLanguage.stepBadge[userLanguage]} />
 
               {/* Texto "I Identify as" */}
               <div className="text-container flex items-center justify-center mt-4">

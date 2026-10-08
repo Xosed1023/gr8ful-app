@@ -41,6 +41,7 @@ import MainHome from "./pages/MainHome";
 import QuoteTime from "./pages/QuoteTime";
 import QuoteTopics from "./pages/QuoteTopics";
 import UserName from "./pages/UserName";
+import OnboardingProgress from "./components/common/OnboardingProgress";
 import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
@@ -105,6 +106,8 @@ const AppRoutes: React.FC = () => {
   }, [pathname]);
 
   return (
+    <>
+    <OnboardingProgress />
     <IonRouterOutlet>
       <Route exact path="/" component={Welcome} />
       <Route exact path="/languages" component={Languages} />
@@ -118,6 +121,7 @@ const AppRoutes: React.FC = () => {
         <Redirect to="/" />
       </Route>
     </IonRouterOutlet>
+    </>
   );
 };
 

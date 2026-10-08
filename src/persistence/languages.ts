@@ -3,7 +3,6 @@ import { Topic } from "../models/Topic";
 export type LanguageKeys = "es" | "en" | "fr";
 
 type AppTopicsScreenLanguageType = {
-  stepBadge: Record<LanguageKeys, string>;
   subtitle: Record<LanguageKeys, string>;
   title: Record<LanguageKeys, string[]>;
   note: Record<LanguageKeys, string[]>;
@@ -16,11 +15,6 @@ export const AppGenderScreenLanguage = {
     es: ["Me", "identifico", "como"],
     en: ["I", "identify", "as"],
     fr: ["Je", "m'identifie", "comme"]
-  },
-  stepBadge: {
-    es: "Paso 2 de 5",
-    en: "Step 2 of 5",
-    fr: "Étape 2 sur 5"
   },
   subtitle: {
     es: "Elige la atmósfera visual, el tono y los colores que prefieres.",
@@ -46,20 +40,10 @@ export const AppSelectLanguage = {
     es: ["Selecciona", "tu", "idioma"],
     en: ["Select", "your", "language"],
     fr: ["Choisissez", "votre", "langue"]
-  },
-  stepBadge: {
-    es: "Paso 1 de 5",
-    en: "Step 1 of 5",
-    fr: "Étape 1 sur 5"
   }
 }
 
 export const AppTimeScreenLanguage = {
-  stepBadge: {
-    es: "Paso 3 de 5",
-    en: "Step 3 of 5",
-    fr: "Étape 3 sur 5"
-  },
   title: {
     es: ["¿Cuándo deberíamos enviarte tu frase", "diaria?"],
     en: ["When should we send your daily", "quote?"],
@@ -73,11 +57,6 @@ export const AppTimeScreenLanguage = {
 }
 
 export const AppTopicsScreenLanguage: AppTopicsScreenLanguageType = {
-  stepBadge: {
-    es: "Paso 4 de 5",
-    en: "Step 4 of 5",
-    fr: "Étape 4 sur 5"
-  },
   subtitle: {
     es: "Toca las áreas de tu vida que hoy piden luz.",
     en: "Tap the areas of your life calling for light today.",
@@ -106,11 +85,6 @@ export const AppTopicsScreenLanguage: AppTopicsScreenLanguageType = {
 }
 
 export const AppNameScreenLanguage = {
-  stepBadge: {
-    es: "Paso 5 de 5",
-    en: "Step 5 of 5",
-    fr: "Étape 5 sur 5"
-  },
   subtitle: {
     es: "Tu nombre aparecerá con tus citas diarias para una experiencia cálida y personal.",
     en: "Your name will appear with your daily quotes for a warm, personal experience.",
@@ -381,5 +355,14 @@ export const AppTopicsNoticeLanguage = {
     es: "Listo. Tus nuevos temas llegan mañana; hoy conservas tu frase, o renuévala ya viendo un anuncio.",
     en: "Done. Your new topics start tomorrow; you keep today's quote, or renew it now by watching an ad.",
     fr: "C'est fait. Vos nouveaux thèmes arrivent demain ; vous gardez la citation du jour, ou renouvelez-la maintenant avec une pub.",
+  },
+};
+
+/** Etiqueta del paso del onboarding; `{n}` y `{total}` se sustituyen. */
+export const AppStepLanguage = {
+  badge: {
+    es: "Paso {n} de {total}",
+    en: "Step {n} of {total}",
+    fr: "Étape {n} sur {total}",
   },
 };

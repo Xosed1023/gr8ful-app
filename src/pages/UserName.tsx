@@ -11,8 +11,6 @@ import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import { LOADING_SCREEN_MS } from "./LoadingScreen";
 import { refreshWidget } from "../daily/refreshDailyContent";
-import StepBadge from "../components/common/StepBadge";
-import StepIndicator from "../components/common/StepIndicator";
 
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
@@ -56,19 +54,8 @@ const UserName = ({ backTo }: { backTo?: string }) => {
                 backTo ? navigate.push(backTo, "back") : navigate.goBack()
               }
             />
-            {backTo === undefined && (
-              <div
-                className="onboarding-topbar"
-                style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
-              >
-                <StepIndicator step={5} total={5} />
-              </div>
-            )}
 
             <div className="onboarding-content">
-              {backTo === undefined && (
-                <StepBadge label={text.stepBadge[userLanguage]} />
-              )}
 
               {/* Texto principal */}
               <div className="text-container flex flex-row items-center justify-center mt-4">

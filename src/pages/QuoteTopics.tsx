@@ -9,8 +9,6 @@ import { hapticTap } from "../hooks/useHaptics";
 import { refreshDailyContent } from "../daily/refreshDailyContent";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
-import StepBadge from "../components/common/StepBadge";
-import StepIndicator from "../components/common/StepIndicator";
 import { IoArrowForward, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { Topic } from "../models/Topic";
 
@@ -94,19 +92,8 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
               variant="glass"
               onClick={() => navigate.push(backTo || "/quoteTime", "back")}
             />
-            {backTo === undefined && (
-              <div
-                className="onboarding-topbar"
-                style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
-              >
-                <StepIndicator step={4} total={5} />
-              </div>
-            )}
 
             <div className="onboarding-content">
-              {backTo === undefined && (
-                <StepBadge label={AppTopicsScreenLanguage.stepBadge[userLanguage]} />
-              )}
 
               {/* Texto principal */}
               <div className="text-container mt-4">

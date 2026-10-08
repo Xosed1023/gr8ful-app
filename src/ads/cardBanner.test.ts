@@ -16,7 +16,7 @@ vi.mock("@capacitor-community/admob", () => ({
   BannerAdSize: { ADAPTIVE_BANNER: "ADAPTIVE_BANNER" },
 }));
 vi.mock("@capacitor/core", () => ({
-  Capacitor: { isNativePlatform: () => native.value },
+  Capacitor: { isNativePlatform: () => native.value, getPlatform: () => "android" },
 }));
 
 import {
@@ -34,7 +34,21 @@ describe("cardBanner", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     native.value = true;
+    vi.stubEnv("VITE_IS_TESTING", "false");
     reset();
+  });
+
+  it("en modo pruebas usa el banner de prueba de Google en lugar del adId de la tarjeta", async () => {
+    vi.stubEnv("VITE_IS_TESTING", "true");
+    showCardBanner(en);
+    await flush();
+    expect(admob.showBanner).toHaveBeenCalledWith(
+      expect.objectContaining({
+        adId: "ca-app-pub-3940256099942544/6300978111",
+        isTesting: true,
+        margin: 300,
+      })
+    );
   });
 
   it("al abrir una tarjeta crea el banner con su margen y adId", async () => {

@@ -28,7 +28,23 @@ let isShown = false;
 let queue: Promise<void> = Promise.resolve();
 let failedListenerAdded = false;
 
-const keyOf = (r: CardBannerRequest) => `${r.adId}|${r.margin}`;
+// Banners de prueba oficiales de Google (https://developers.google.com/admob/android/test-ads).
+const TEST_BANNER_AD_ID =
+  Capacitor.getPlatform() === "ios"
+    ? "ca-app-pub-3940256099942544/2934735716"
+    : "ca-app-pub-3940256099942544/6300978111";
+
+// import.meta.env es una cadena: "false" sería verdadero si se evaluara tal cual.
+const isTesting = () => import.meta.env.VITE_IS_TESTING === "true";
+
+/**
+ * En pruebas se usa siempre el banner de prueba de Google. `isTesting` del plugin no basta:
+ * en un emulador (que cuenta como dispositivo de prueba) el plugin usa el ID real, y con la
+ * cuenta de AdMob sin verificar el banner no carga.
+ */
+const unitIdOf = (r: CardBannerRequest) => (isTesting() ? TEST_BANNER_AD_ID : r.adId);
+
+const keyOf = (r: CardBannerRequest) => `${unitIdOf(r)}|${r.margin}`;
 
 function ensureFailedListener() {
   if (failedListenerAdded) return;
@@ -63,12 +79,11 @@ async function apply() {
   }
   ensureFailedListener();
   const options: BannerAdOptions = {
-    adId: active.adId,
+    adId: unitIdOf(active),
     adSize: BannerAdSize.ADAPTIVE_BANNER,
     position: BannerAdPosition.BOTTOM_CENTER,
     margin: active.margin,
-    // import.meta.env es una cadena: "false" sería verdadero si se pasara tal cual.
-    isTesting: import.meta.env.VITE_IS_TESTING === "true",
+    isTesting: isTesting(),
   };
   await AdMob.showBanner(options);
   nativeKey = key;

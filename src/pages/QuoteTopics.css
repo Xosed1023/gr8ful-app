@@ -7,14 +7,6 @@
     z-index: 1;
 }
 
-/* Contenedor principal */
-.text-container {
-    text-align: center;
-    padding: 16px;
-    font-size: 18px;
-    padding-top: 40px;
-}
-
 /* Contenedor de scroll */
 .content-wrapper {
     padding: 16px var(--ion-safe-area-left, 16px) var(--ion-safe-area-bottom, 16px);

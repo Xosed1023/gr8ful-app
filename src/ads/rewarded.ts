@@ -4,6 +4,7 @@ import {
   RewardAdPluginEvents,
 } from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
+import { loadAdState, markRewarded, saveAdState } from "./interstitialPolicy";
 
 // ID de prueba oficial de Google AdMob — https://developers.google.com/admob/ios/test-ads
 // y https://developers.google.com/admob/android/test-ads. Devuelve anuncios de test
@@ -28,7 +29,10 @@ export async function showRewarded(): Promise<boolean> {
     const options: RewardAdOptions = { adId: TEST_REWARDED_AD_ID, isTesting: true };
     await AdMob.prepareRewardVideoAd(options);
     const reward = await AdMob.showRewardVideoAd();
-    return reward.amount > 0;
+    const rewarded = reward.amount > 0;
+    // Quien eligió ver un anuncio recibe un respiro sin intersticiales
+    if (rewarded) saveAdState(markRewarded(loadAdState(), Date.now()));
+    return rewarded;
   } catch (error) {
     console.error("Error mostrando rewarded", error);
     return false;

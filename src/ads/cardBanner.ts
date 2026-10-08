@@ -118,6 +118,11 @@ export function setHomeVisible(visible: boolean) {
   schedule();
 }
 
+/** ¿Hay alguna tarjeta abierta? Los intersticiales no deben interrumpir la lectura. */
+export function hasOpenCardBanner() {
+  return open.length > 0;
+}
+
 /** Solo para tests: devuelve el estado interno a su valor inicial. */
 export function __resetCardBannerForTests() {
   open = [];

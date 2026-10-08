@@ -4,6 +4,7 @@ import { closeOutline, imageOutline, textOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { IoShareOutline } from "react-icons/io5";
+import { registerAdMoment } from "../ads/adMoments";
 import { setHomeVisible } from "../ads/cardBanner";
 import "../components/common/OnboardingKit.css";
 import { useUserGender } from "../hooks/useUserGender";
@@ -96,6 +97,7 @@ const ShareSheet = ({ open, onClose, quote, author, language, onShareText }: Sha
     setSharing(true);
     try {
       await shareImage(imageUrl, t("title"));
+      registerAdMoment("share");
     } catch (error) {
       console.error("Error al compartir la imagen", error);
       setStatus("error");

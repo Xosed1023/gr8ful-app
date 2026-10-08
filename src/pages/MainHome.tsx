@@ -1,8 +1,4 @@
-import {
-  AdMob,
-  AdOptions,
-  InterstitialAdPluginEvents,
-} from "@capacitor-community/admob";
+import { AdMob } from "@capacitor-community/admob";
 import {
   IonIcon,
   IonLabel,
@@ -28,21 +24,13 @@ import QuoteTopics from "./QuoteTopics";
 import Settings from "./Settings";
 import UserName from "./UserName";
 import { App } from "@capacitor/app";
-import { Capacitor } from "@capacitor/core";
 import "../components/home/HomeKit.css";
 import { useUserGender } from "../hooks/useUserGender";
 import { AppHomeNavLanguage } from "../persistence/languages";
+import { initInterstitial } from "../ads/interstitial";
 import { showRewarded } from "../ads/rewarded";
 import { getTodayPhrase, replaceTodayPhrase } from "../daily/dailyPlan";
 import { refreshDailyContent } from "../daily/refreshDailyContent";
-
-// IDs de prueba oficiales de Google AdMob — https://developers.google.com/admob/ios/test-ads
-// y https://developers.google.com/admob/android/test-ads. Devuelven anuncios de test
-// para toda solicitud, sin depender de configuración de cuenta/consentimiento.
-const TEST_INTERSTITIAL_AD_ID =
-  Capacitor.getPlatform() === "ios"
-    ? "ca-app-pub-3940256099942544/4411468910"
-    : "ca-app-pub-3940256099942544/1033173712";
 
 /** Pantallas de edición que se abren desde Ajustes: ahí la barra de pestañas estorba. */
 const EDIT_ROUTES = ["/languages", "/quoteTime", "/quoteTopics", "/userName"];
@@ -71,7 +59,6 @@ const MainHome = () => {
     ];
   const [phrase, setPhrase] = useState<Phrase | null>(null);
   /* const [present] = useIonToast(); */
-  const [isAdVisible, setIsAdVisible] = useState(false);
   // Rastreado a mano (no vía useLocation) porque MainHome monta su propio
   // <IonReactRouter> anidado dentro del router principal de App.tsx; leer la
   // ubicación desde ahí quedaba desincronizada con los taps reales del usuario.
@@ -99,72 +86,14 @@ const MainHome = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phrase === null]);
 
-  useEffect(() => {
-    const onDismissListener = AdMob.addListener(
-      InterstitialAdPluginEvents.Dismissed,
-      () => {
-        setIsAdVisible(false);
-      }
-    );
-    const onFailedListener = AdMob.addListener(
-      InterstitialAdPluginEvents.FailedToLoad,
-      (error) => {
-        console.error("Intersticial: fallo al cargar", error);
-        setIsAdVisible(false);
-      }
-    );
-
-    const onLoadListener = AdMob.addListener(
-      InterstitialAdPluginEvents.Showed,
-      () => {
-        setIsAdVisible(true);
-      }
-    );
-
-    return () => {
-      onDismissListener.remove();
-      onFailedListener.remove();
-      onLoadListener.remove();
-    };
-  }, []);
-
-  useEffect(() => {
-    /* present({
-      message: `isAdVisible: ${isAdVisible}`,
-      duration: 5000,
-      position: "bottom",
-    }); */
-    if (!isAdVisible) {
-      setTimeout(() => {
-        showAdMobInterstitial();
-      }, 45000);
-    } else {
-    }
-  }, [isAdVisible]);
-
-  const showAdMobInterstitial = async (): Promise<void> => {
-    try {
-      const options: AdOptions = {
-        adId: TEST_INTERSTITIAL_AD_ID,
-        isTesting: true,
-      };
-      console.log("Intersticial: solicitando anuncio de prueba", options);
-      await AdMob.prepareInterstitial(options);
-      AdMob.showInterstitial().then(() => {
-        setIsAdVisible(true);
-      });
-    } catch (error) {
-      console.error("Error mostrando intersticial", error);
-      setIsAdVisible(false);
-    }
-  };
-
   const initializeAdMob = async () => {
     try {
       await AdMob.initialize({
         testingDevices: [],
         initializeForTesting: true,
       });
+      // Intersticial listo para cuando la política lo pida (spec 027)
+      await initInterstitial();
     } catch (error) {
       console.error("Error al inicializar AdMob", error);
     }

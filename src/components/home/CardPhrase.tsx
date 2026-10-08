@@ -20,6 +20,7 @@ import { QUOTE_MARKS } from "../common/quoteMarks";
 import ShareSheet from "../../share/ShareSheet";
 import { computeBannerMargin } from "../../ads/bannerMargin";
 import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
+import { registerAdMoment } from "../../ads/adMoments";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type" | "author">;
@@ -123,6 +124,7 @@ const CardPhrase = ({
       await Share.share({
         text: `${phrase.content[language]}\n\n— ${phrase.author}`,
       });
+      registerAdMoment("share");
     } catch (error) {
       // Cancelar el share sheet nativo también rechaza la promesa
       // en algunas plataformas (ej. iOS) — no es necesariamente un
@@ -140,7 +142,10 @@ const CardPhrase = ({
   };
 
   const toggleCard = async () => {
-    if (isExpanded) setIsSettledOpen(false);
+    if (isExpanded) {
+      setIsSettledOpen(false);
+      registerAdMoment("card_close");
+    }
     setIsExpanded((prev) => !prev);
     await hapticTap();
   };
@@ -273,6 +278,7 @@ const CardPhrase = ({
                   string: phrase.content[language],
                 });
                 presentToast("Frase copiada al portapapeles");
+                registerAdMoment("copy");
               } catch (err) {
                 presentToast("Error al copiar al portapapeles");
               }

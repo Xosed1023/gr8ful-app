@@ -14,6 +14,7 @@ Candidatas a futuro sin spec formal todavía. Cuando se decida priorizar una, se
 - **Icono propio para las notificaciones en Android** — hoy se usa el icono por defecto del plugin; añadir un icono monocromo de la app (`smallIcon`).
 - **Validar «compartir como imagen» en Android** — `specs/023-compartir-como-imagen` se verificó solo en iPhone. Revisar que el archivo temporal en la caché llegue a las apps destino (permisos de FileProvider) y la tipografía en el dispositivo.
 - **Ampliar la racha** — mostrar la mejor racha (ya se guarda), celebrar hitos (7, 30, 100 días) y/o mostrarla en Ajustes y en el widget (`specs/025-racha-de-dias`).
+- **Más ingresos sin más intrusión** (continuación de `specs/027-estrategia-de-anuncios`) — banner discreto fijo o anuncio nativo cada N frases en Favoritos; premios del rewarded (p. ej. temas extra para la imagen al compartir, o «un día sin intersticiales»); formato App Open para quien solo lee desde el widget (comprobar soporte del plugin); recalibrar `AD_POLICY` con datos reales de retención e ingresos.
 - **Compartir las tres versiones en una sola imagen** — variante de la spec 023 que apila la frase en ES, EN y FR; encaja con el propósito de aprendizaje de idiomas.
 
 ## Relación con deuda técnica existente

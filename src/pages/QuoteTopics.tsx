@@ -11,9 +11,11 @@ import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import { IoArrowForward, IoCheckmarkCircleOutline } from "react-icons/io5";
 import { Topic } from "../models/Topic";
+import { useCalmEnter } from "../theme/useCalmEnter";
 
 const QuoteTopics = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
+  const calmRef = useCalmEnter<HTMLDivElement>();
   const [present] = useIonToast();
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
   const [title, setTitle] = useState([
@@ -93,7 +95,7 @@ const QuoteTopics = ({ backTo }: { backTo?: string }) => {
               onClick={() => navigate.push(backTo || "/quoteTime", "back")}
             />
 
-            <div className="onboarding-content">
+            <div ref={calmRef} className="onboarding-content calm-stagger">
 
               {/* Texto principal */}
               <div className="text-container mt-4">

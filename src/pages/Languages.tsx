@@ -9,6 +9,7 @@ import { useUserGender } from "../hooks/useUserGender";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import { IoCheckmark } from "react-icons/io5";
+import { useCalmEnter } from "../theme/useCalmEnter";
 
 const LANGUAGE_OPTIONS = [
   { key: "es", label: "Español" },
@@ -18,6 +19,7 @@ const LANGUAGE_OPTIONS = [
 
 const Languages = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
+  const calmRef = useCalmEnter<HTMLDivElement>();
   const [title, setTitle] = useState(["Select", "your", "language"]);
   const { userLanguage } = useAppLanguage();
   // En el onboarding aún no hay género elegido (paleta por defecto); al editar desde
@@ -67,7 +69,10 @@ const Languages = ({ backTo }: { backTo?: string }) => {
               />
             )}
 
-            <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
+            <div
+              ref={calmRef}
+              className={`onboarding-content calm-stagger ${leaving ? "leaving" : ""}`}
+            >
               {/* Etiqueta de paso (solo en el onboarding) */}
 
               {/* Título */}

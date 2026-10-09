@@ -61,7 +61,7 @@
     margin: -9rem 0 0 -9rem;
     transform: translateY(-4rem);
     background: var(--glow-center-a);
-    animation: glow-pulse 7s ease-in-out infinite;
+    animation: glow-pulse var(--motion-ambient) var(--motion-ease-inout) infinite;
 }
 
 .glow-center-b {
@@ -98,16 +98,16 @@
     height: 8px;
     border-radius: 9999px;
     background: var(--step-dot);
-    transition: width 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
-        height 0.4s cubic-bezier(0.34, 1.4, 0.64, 1),
-        background-color 0.3s ease;
+    transition: width var(--motion-slow) var(--motion-ease),
+        height var(--motion-slow) var(--motion-ease),
+        background-color var(--motion-base) var(--motion-ease-inout);
 }
 
 .step-dot.active {
     width: 12px;
     height: 12px;
     background: var(--step-active);
-    animation: glow-pulse 2s ease-in-out infinite;
+    animation: glow-pulse 4s var(--motion-ease-inout) infinite;
 }
 
 /* Brillo alrededor del punto activo: aparece y se apaga al cambiar de paso */
@@ -119,7 +119,7 @@
     background: var(--step-glow);
     filter: blur(2px);
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity var(--motion-slow) var(--motion-ease-inout);
 }
 
 .step-dot.active::before {
@@ -159,12 +159,12 @@
     inset: 0;
     border-radius: inherit;
     background: inherit;
-    animation: badge-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    animation: badge-ping 3.2s var(--motion-ease-inout) infinite;
 }
 
 @keyframes badge-ping {
     75%, 100% {
-        transform: scale(2.4);
+        transform: scale(2);
         opacity: 0;
     }
 }
@@ -199,11 +199,11 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--glass-shadow);
-    transition: transform 0.15s ease;
+    transition: transform var(--motion-quick) var(--motion-ease);
 }
 
 .back-glass:active {
-    transform: scale(0.95);
+    transform: scale(0.97);
 }
 
 /* Indicador y etiqueta de paso: un único componente fijo sobre las pantallas del onboarding
@@ -269,11 +269,11 @@
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     box-shadow: var(--glass-shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--motion-quick) var(--motion-ease), box-shadow var(--motion-quick) var(--motion-ease);
 }
 
 .option-card:active {
-    transform: scale(0.95);
+    transform: scale(0.985);
 }
 
 /* Círculo de selección a la derecha */
@@ -287,7 +287,7 @@
     font-size: 16px;
     color: transparent;
     background: var(--glass-check-off);
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color var(--motion-quick) var(--motion-ease-inout), color var(--motion-quick) var(--motion-ease-inout);
 }
 
 .option-check.selected {
@@ -400,11 +400,11 @@
         rgba(255, 255, 255, 0.2)
     );
     box-shadow: 0 20px 25px -5px var(--welcome-btn-shadow);
-    transition: transform 0.2s ease;
+    transition: transform var(--motion-quick) var(--motion-ease), opacity var(--motion-quick) var(--motion-ease);
 }
 
 .cta-button:active {
-    transform: scale(0.96);
+    transform: scale(0.98);
 }
 
 .cta-button.cta-woman {
@@ -464,7 +464,7 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--glass-shadow-sm);
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform var(--motion-quick) var(--motion-ease), background-color var(--motion-quick) var(--motion-ease-inout);
 }
 
 .topic-card:active {
@@ -576,50 +576,82 @@
 
 /* ---- Respuesta a la elección (idioma, género, hora) ---- */
 .option-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease,
-        background-color 0.3s ease;
+    transition: transform var(--motion-base) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease),
+        opacity var(--motion-base) var(--motion-ease-inout), background-color var(--motion-base) var(--motion-ease-inout);
 }
 
 /* La tarjeta elegida se tiñe y se enmarca */
 .option-card.chosen {
     background: var(--option-chosen-bg);
     box-shadow: 0 0 0 2px var(--step-active), var(--glass-shadow);
-    transform: scale(1.02);
+    transform: scale(1.01);
 }
 
 /* Las demás se atenúan mientras tanto */
 .option-list.has-chosen .option-card:not(.chosen) {
-    opacity: 0.4;
-    transform: scale(0.98);
+    opacity: 0.45;
+    transform: scale(0.99);
     pointer-events: none;
 }
 
-/* El check aparece con un pequeño rebote */
+/* El check aparece con un fundido suave, sin rebote */
 .option-check svg {
-    transform: scale(0);
+    transform: scale(0.6);
+    opacity: 0;
 }
 
 .option-check.selected svg {
     transform: scale(1);
-    animation: check-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 1;
+    animation: check-pop var(--motion-base) var(--motion-ease);
 }
 
 @keyframes check-pop {
-    0% { transform: scale(0); }
-    100% { transform: scale(1); }
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-/* Al avanzar, el contenido sale deslizándose hacia la izquierda */
+/* Al avanzar, el contenido se funde y se aparta apenas hacia la izquierda */
 .onboarding-content {
-    transition: opacity 0.22s ease, transform 0.22s ease;
+    transition: opacity var(--motion-quick) var(--motion-ease-inout), transform var(--motion-quick) var(--motion-ease-inout);
 }
 
 .onboarding-content.leaving {
     opacity: 0;
-    transform: translateX(-28px);
+    transform: translateX(calc(var(--motion-shift) * -1));
 }
 
+/* Entrada escalonada de las opciones (spec 031): la lista no se anima como bloque, cada
+   tarjeta entra una tras otra después del título. `backwards` libera el `transform` al
+   terminar, para no pisar los estados `.chosen` y `:active`. */
+.onboarding-content.calm-run > .option-list,
+.onboarding-content.calm-run > .topics-grid {
+    animation: none;
+}
+
+.onboarding-content.calm-run .option-list > *,
+.onboarding-content.calm-run .topics-grid > * {
+    animation: calm-fade-up var(--motion-base) var(--motion-ease) backwards;
+    animation-delay: calc(var(--motion-stagger) * 2 + var(--card-i, 0) * 50ms);
+}
+
+.option-list > :nth-child(1), .topics-grid > :nth-child(1) { --card-i: 0; }
+.option-list > :nth-child(2), .topics-grid > :nth-child(2) { --card-i: 1; }
+.option-list > :nth-child(3), .topics-grid > :nth-child(3) { --card-i: 2; }
+.topics-grid > :nth-child(4) { --card-i: 3; }
+.topics-grid > :nth-child(5) { --card-i: 4; }
+.topics-grid > :nth-child(6) { --card-i: 5; }
+.topics-grid > :nth-child(7) { --card-i: 6; }
+.topics-grid > :nth-child(8) { --card-i: 7; }
+.topics-grid > :nth-child(9) { --card-i: 8; }
+.topics-grid > :nth-child(10) { --card-i: 9; }
+
 @media (prefers-reduced-motion: reduce) {
+    .onboarding-content.calm-run .option-list > *,
+    .onboarding-content.calm-run .topics-grid > * {
+        animation: none;
+    }
+
     .option-card,
     .onboarding-content {
         transition: none;

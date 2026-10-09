@@ -1,0 +1,76 @@
+/* Utilidades de movimiento calmo (spec 031). Los valores salen de los tokens `--motion-*`
+   de variables.css; el movimiento reducido apaga todas las animaciones. */
+
+@keyframes calm-fade-up {
+    from { opacity: 0; transform: translateY(var(--motion-rise)); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes calm-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Entrada suave de un elemento: fundido con ascenso leve. `--calm-i` desplaza su inicio. */
+.calm-in {
+    animation: calm-fade-up var(--motion-base) var(--motion-ease) backwards;
+    animation-delay: calc(var(--calm-i, 0) * var(--motion-stagger));
+}
+
+/* Solo fundido, sin desplazamiento (fondos, textos largos). */
+.calm-fade {
+    animation: calm-fade var(--motion-slow) var(--motion-ease-inout) backwards;
+    animation-delay: calc(var(--calm-i, 0) * var(--motion-stagger));
+}
+
+/* Entrada escalonada de los hijos directos. Arranca al añadir `.calm-run` (lo hace
+   `useCalmEnter` cada vez que la pantalla va a mostrarse); sin esa clase no oculta nada. */
+.calm-stagger.calm-run > * {
+    animation: calm-fade-up var(--motion-base) var(--motion-ease) backwards;
+    animation-delay: calc(var(--calm-i, 0) * var(--motion-stagger));
+}
+
+.calm-stagger > :nth-child(1) { --calm-i: 0; }
+.calm-stagger > :nth-child(2) { --calm-i: 1; }
+.calm-stagger > :nth-child(3) { --calm-i: 2; }
+.calm-stagger > :nth-child(4) { --calm-i: 3; }
+.calm-stagger > :nth-child(5) { --calm-i: 4; }
+.calm-stagger > :nth-child(6) { --calm-i: 5; }
+.calm-stagger > :nth-child(7) { --calm-i: 6; }
+.calm-stagger > :nth-child(8) { --calm-i: 7; }
+
+/* Respuesta táctil sutil: el elemento se «hunde» apenas al pulsarlo. */
+.calm-press {
+    transition: transform var(--motion-quick) var(--motion-ease), opacity var(--motion-quick) var(--motion-ease);
+}
+
+.calm-press:active {
+    transform: scale(var(--motion-press));
+}
+
+/* Respiración lenta e infinita (destellos, halos). */
+@keyframes calm-breathe {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+}
+
+.calm-breathe {
+    animation: calm-breathe var(--motion-ambient) var(--motion-ease-inout) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .calm-in,
+    .calm-fade,
+    .calm-stagger.calm-run > *,
+    .calm-breathe {
+        animation: none;
+    }
+
+    .calm-press {
+        transition: none;
+    }
+
+    .calm-press:active {
+        transform: none;
+    }
+}

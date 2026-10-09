@@ -1,8 +1,18 @@
-import { IonContent, IonIcon, IonPage, useIonViewWillEnter } from "@ionic/react";
+import {
+  IonContent,
+  IonIcon,
+  IonPage,
+  isPlatform,
+  useIonViewDidEnter,
+  useIonViewWillEnter,
+  useIonViewWillLeave,
+} from "@ionic/react";
 import { bookmark, sparklesOutline } from "ionicons/icons";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { IoBookmarkOutline } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { computeBannerMargin } from "../ads/bannerMargin";
+import { favoritesBannerAdId, hideFavoritesBanner, showFavoritesBanner } from "../ads/favoritesBanner";
 import { Phrase } from "../models/Phrase";
 import { getFavoritePhrases, toggleFavorite } from "../persistence/IndexedDBService";
 import { AppFavoritesLanguage, LanguageKeys } from "../persistence/languages";
@@ -36,6 +46,21 @@ const Favorites: React.FC = () => {
     refresh((n) => n + 1);
   });
 
+  // Banner fijo al pie (spec 029): el hueco `.favorites-ad-slot` marca dónde va, justo encima
+  // de la barra de pestañas flotante. Se pide al terminar la transición (para medir el hueco
+  // ya en su sitio) y se quita al salir o desmontar; el coordinador lo comparte con Home.
+  const adSlotRef = useRef<HTMLDivElement>(null);
+  useIonViewDidEnter(() => {
+    if (!adSlotRef.current) return;
+    const platform = isPlatform("ios") ? "ios" : "android";
+    showFavoritesBanner(
+      favoritesBannerAdId(import.meta.env, platform),
+      computeBannerMargin(adSlotRef.current.getBoundingClientRect())
+    );
+  });
+  useIonViewWillLeave(hideFavoritesBanner);
+  useEffect(() => hideFavoritesBanner, []);
+
   const handleUnfavorite = async (favorite: Phrase) => {
     if (favorite.id == null) return;
     await toggleFavorite(favorite.id, false);
@@ -48,7 +73,7 @@ const Favorites: React.FC = () => {
   ].replace("{n}", String(favorites.length));
 
   return (
-    <IonPage className="bg-[color:var(--header-bg)]">
+    <IonPage className="favorites-page bg-[color:var(--header-bg)]">
       <div className={`favorites-header glow-header ${accent}`}>
         <h1 className="favorites-title">{AppFavoritesLanguage.title[lang]}</h1>
         {favorites.length > 0 && <span className="favorites-count">{countText}</span>}
@@ -56,7 +81,8 @@ const Favorites: React.FC = () => {
 
       <IonContent
         className="favorites-sheet"
-        style={{ "--padding-bottom": "var(--nav-space)" } as React.CSSProperties}
+        // La lista deja sitio a la barra flotante y al banner que va encima
+        style={{ "--padding-bottom": "var(--favorites-bottom-space)" } as React.CSSProperties}
       >
         {favorites.length === 0 ? (
           <motion.div
@@ -119,6 +145,9 @@ const Favorites: React.FC = () => {
           </div>
         )}
       </IonContent>
+
+      {/* Hueco (transparente) del banner nativo: solo sirve para medir su posición */}
+      <div ref={adSlotRef} className="favorites-ad-slot" aria-hidden="true" />
     </IonPage>
   );
 };

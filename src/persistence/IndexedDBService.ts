@@ -1,6 +1,7 @@
 import { Phrase } from "../models/Phrase";
 import { Topic } from "../models/Topic";
 import { openDB, IDBPDatabase } from 'idb';
+import { applyPhrasePatch, flipPhraseFavorite, PhrasePatch } from './phrasePatch';
 
 const DB_NAME = 'motivationalPhrasesDB';
 const STORE_NAME = 'phrases';
@@ -42,13 +43,35 @@ export async function getFavoritePhrases(): Promise<Phrase[]> {
   return phrases.filter((phrase) => phrase.isFavorite === true);
 }
 
-export async function toggleFavorite(id: number, isFavorite: boolean) {
+/**
+ * Cambia campos sueltos de una frase en UNA transacción sobre el registro vigente (ver
+ * phrasePatch.ts). Es la forma de escribir `isFavorite`/`hasShown`: reescribir la frase entera
+ * desde un objeto cargado antes pisaría cambios hechos mientras tanto.
+ */
+export async function patchPhrase(id: number, patch: PhrasePatch): Promise<boolean> {
   if (!db) throw new Error('Database not initialized');
-  const phrase = await db.get(STORE_NAME, id);
-  if (phrase) {
-    phrase.isFavorite = isFavorite;
-    await addOrUpdatePhrase(phrase); // Actualizamos la frase
-  }
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const found = await applyPhrasePatch(tx.store, id, patch);
+  await tx.done;
+  return found;
+}
+
+export async function toggleFavorite(id: number, isFavorite: boolean) {
+  await patchPhrase(id, { isFavorite });
+}
+
+/** Invierte el favorito de la frase tal como está guardado y devuelve el valor nuevo. */
+export async function flipFavorite(id: number): Promise<boolean | null> {
+  if (!db) throw new Error('Database not initialized');
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const next = await flipPhraseFavorite(tx.store, id);
+  await tx.done;
+  return next;
+}
+
+/** Marca la frase como mostrada sin tocar el resto de sus campos. */
+export async function markPhraseShown(id: number) {
+  await patchPhrase(id, { hasShown: true });
 }
 
 export async function getAllPhrases(): Promise<Phrase[]> {

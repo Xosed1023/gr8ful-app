@@ -13,8 +13,8 @@ import { useEffect, useState } from "react";
 import { Redirect, Route, useLocation } from "react-router";
 import { Phrase } from "../models/Phrase";
 import {
-  addOrUpdatePhrase,
   initDB,
+  markPhraseShown,
 } from "../persistence/IndexedDBService";
 import Favorites from "./Favorites";
 import Home from "./Home";
@@ -124,7 +124,8 @@ const MainHome = () => {
 
   const markShown = async (phrase: Phrase) => {
     if (phrase.id == null || phrase.hasShown) return;
-    await addOrUpdatePhrase({ ...phrase, hasShown: true });
+    // Solo el campo hasShown, sobre el registro vigente: no pisa un favorito cambiado mientras tanto
+    await markPhraseShown(phrase.id);
   };
 
   return (

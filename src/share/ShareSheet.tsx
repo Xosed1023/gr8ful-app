@@ -23,6 +23,11 @@ interface ShareSheetProps {
   language: LanguageKeys;
   /** Compartir solo texto (la opción de siempre). */
   onShareText: () => void;
+  /**
+   * Oculta el banner de las tarjetas de Home mientras el menú está abierto (por defecto sí).
+   * Favoritos lo desactiva: gestiona su propio banner.
+   */
+  pauseHomeBanner?: boolean;
 }
 
 type Mode = "menu" | "preview";
@@ -33,7 +38,15 @@ type Status = "loading" | "ready" | "error";
  * o «Como texto». Va en un portal sobre toda la app; mientras está abierto se oculta
  * el banner nativo, que de otro modo flotaría por encima.
  */
-const ShareSheet = ({ open, onClose, quote, author, language, onShareText }: ShareSheetProps) => {
+const ShareSheet = ({
+  open,
+  onClose,
+  quote,
+  author,
+  language,
+  onShareText,
+  pauseHomeBanner = true,
+}: ShareSheetProps) => {
   const { isMale } = useUserGender();
   const reduceMotion = useReducedMotion();
   // El texto del menú sigue al idioma de la app, no al de la tarjeta
@@ -50,10 +63,10 @@ const ShareSheet = ({ open, onClose, quote, author, language, onShareText }: Sha
 
   // El banner nativo flota sobre la web: se esconde mientras el menú está abierto
   useEffect(() => {
-    if (!open) return;
+    if (!open || !pauseHomeBanner) return;
     setHomeVisible(false);
     return () => setHomeVisible(true);
-  }, [open]);
+  }, [open, pauseHomeBanner]);
 
   // Cada vez que se abre, vuelve al menú
   useEffect(() => {

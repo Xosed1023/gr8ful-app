@@ -135,6 +135,48 @@
   color: var(--text-muted);
 }
 
+/* ---- Acciones de la tarjeta (spec 034) ---- */
+.fav-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fav-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.fav-card.man {
+  --fav-accent: #1E88C7;
+}
+
+.fav-card.woman {
+  --fav-accent: var(--step-active);
+}
+
+.fav-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--fav-accent);
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow-sm);
+  transition: transform var(--motion-quick) var(--motion-ease);
+}
+
+.fav-action:active {
+  transform: scale(0.95);
+}
+
 /* ---- Estado vacío ---- */
 .favorites-empty {
   display: flex;
@@ -180,7 +222,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fav-remove {
+  .fav-remove,
+  .fav-action {
     transition: none;
   }
 }

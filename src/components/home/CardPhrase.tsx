@@ -1,5 +1,3 @@
-import { Clipboard } from "@capacitor/clipboard";
-import { Share } from "@capacitor/share";
 import { IonIcon, useIonToast } from "@ionic/react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -21,6 +19,7 @@ import ShareSheet from "../../share/ShareSheet";
 import { computeBannerMargin } from "../../ads/bannerMargin";
 import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 import { registerAdMoment } from "../../ads/adMoments";
+import { copyQuote, shareQuoteText } from "../../share/quoteActions";
 import { isTutorialActive } from "../../tutorial/tutorialState";
 import { CALM_SPRING } from "../../theme/motion";
 
@@ -127,17 +126,7 @@ const CardPhrase = ({
   // «Como texto»: el compartir de siempre (frase + autor, en el idioma de la tarjeta)
   const shareAsText = async () => {
     setShareOpen(false);
-    try {
-      await Share.share({
-        text: `${phrase.content[language]}\n\n— ${phrase.author}`,
-      });
-      adMoment("share");
-    } catch (error) {
-      // Cancelar el share sheet nativo también rechaza la promesa
-      // en algunas plataformas (ej. iOS) — no es necesariamente un
-      // error real, así que no se muestra toast (research.md Decisión 4).
-      console.error("Error al compartir", error);
-    }
+    if (await shareQuoteText(phrase.content[language], phrase.author)) adMoment("share");
   };
 
   const presentToast = (message: string) => {
@@ -285,13 +274,10 @@ const CardPhrase = ({
             aria-label="Copy"
             onClick={async (e) => {
               e.stopPropagation();
-              try {
-                await Clipboard.write({
-                  string: phrase.content[language],
-                });
+              if (await copyQuote(phrase.content[language])) {
                 presentToast("Frase copiada al portapapeles");
                 adMoment("copy");
-              } catch (err) {
+              } else {
                 presentToast("Error al copiar al portapapeles");
               }
             }}

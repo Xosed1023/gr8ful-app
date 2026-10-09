@@ -3,11 +3,12 @@ import {
   IonIcon,
   IonPage,
   isPlatform,
+  useIonToast,
   useIonViewDidEnter,
   useIonViewWillEnter,
   useIonViewWillLeave,
 } from "@ionic/react";
-import { bookmark, sparklesOutline } from "ionicons/icons";
+import { bookmark, copyOutline, shareSocialOutline, sparklesOutline } from "ionicons/icons";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   CALM_DURATION,
@@ -18,6 +19,7 @@ import {
 } from "../theme/motion";
 import { IoBookmarkOutline } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
+import { registerAdMoment } from "../ads/adMoments";
 import { computeBannerMargin } from "../ads/bannerMargin";
 import { favoritesBannerAdId, hideFavoritesBanner, showFavoritesBanner } from "../ads/favoritesBanner";
 import { Phrase } from "../models/Phrase";
@@ -26,6 +28,9 @@ import { AppFavoritesLanguage, LanguageKeys } from "../persistence/languages";
 import { useUserGender } from "../hooks/useUserGender";
 import { hapticTap } from "../hooks/useHaptics";
 import { QUOTE_MARKS } from "../components/common/quoteMarks";
+import { copyQuote, shareQuoteText } from "../share/quoteActions";
+import ShareSheet from "../share/ShareSheet";
+import { FavoritesActionsText } from "./favoritesCopy";
 import "../components/home/HomeKit.css";
 import "./Favorites.css";
 
@@ -39,6 +44,9 @@ const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<Phrase[]>([]);
   // Cambia en cada visita a la pestaña: la lista se vuelve a montar y entra con calma
   const [enterKey, refresh] = useState(0);
+  const [present] = useIonToast();
+  // Frase cuyo menú de compartir está abierto (un solo menú para toda la lista)
+  const [shareTarget, setShareTarget] = useState<Phrase | null>(null);
 
   const loadFavorites = async () => {
     setFavorites(await getFavoritePhrases());
@@ -58,22 +66,58 @@ const Favorites: React.FC = () => {
   // de la barra de pestañas flotante. Se pide al terminar la transición (para medir el hueco
   // ya en su sitio) y se quita al salir o desmontar; el coordinador lo comparte con Home.
   const adSlotRef = useRef<HTMLDivElement>(null);
-  useIonViewDidEnter(() => {
+  const viewActive = useRef(false);
+  const requestBanner = () => {
     if (!adSlotRef.current) return;
     const platform = isPlatform("ios") ? "ios" : "android";
     showFavoritesBanner(
       favoritesBannerAdId(import.meta.env, platform),
       computeBannerMargin(adSlotRef.current.getBoundingClientRect())
     );
+  };
+  useIonViewDidEnter(() => {
+    viewActive.current = true;
+    if (!shareTarget) requestBanner();
   });
-  useIonViewWillLeave(hideFavoritesBanner);
+  useIonViewWillLeave(() => {
+    viewActive.current = false;
+    hideFavoritesBanner();
+  });
   useEffect(() => hideFavoritesBanner, []);
+
+  // El banner nativo flota sobre la web: se oculta mientras el menú de compartir está abierto
+  // y vuelve al cerrarlo.
+  useEffect(() => {
+    if (shareTarget) hideFavoritesBanner();
+    else if (viewActive.current) requestBanner();
+    // `requestBanner` solo depende de refs; interesa reaccionar al abrir/cerrar el menú
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shareTarget]);
 
   const handleUnfavorite = async (favorite: Phrase) => {
     if (favorite.id == null) return;
     await toggleFavorite(favorite.id, false);
     setFavorites((prev) => prev.filter((p) => p.id !== favorite.id));
     await hapticTap();
+  };
+
+  const copyText = async (text: string) => {
+    const ok = await copyQuote(text);
+    // Arriba: abajo quedaría tapado por el banner y la barra de pestañas
+    present({
+      message: FavoritesActionsText[ok ? "copied" : "copyError"][lang],
+      duration: 2200,
+      position: "top",
+    });
+    if (ok) registerAdMoment("copy");
+  };
+
+  const shareAsText = async () => {
+    const target = shareTarget;
+    setShareTarget(null);
+    if (target && (await shareQuoteText(target.content[lang], target.author))) {
+      registerAdMoment("share");
+    }
   };
 
   const countText = AppFavoritesLanguage.count[lang][
@@ -151,12 +195,44 @@ const Favorites: React.FC = () => {
                     {QUOTE_MARKS[lang][1]}
                   </p>
                   <p className="fav-author">— {favorite.author}</p>
+
+                  <div className="fav-actions">
+                    <div className="fav-actions-right">
+                      <button
+                        type="button"
+                        className="fav-action"
+                        aria-label={FavoritesActionsText.copy[lang]}
+                        onClick={() => copyText(favorite.content[lang])}
+                      >
+                        <IonIcon icon={copyOutline} />
+                      </button>
+                      <button
+                        type="button"
+                        className="fav-action"
+                        aria-label={FavoritesActionsText.share[lang]}
+                        onClick={() => setShareTarget(favorite)}
+                      >
+                        <IonIcon icon={shareSocialOutline} />
+                      </button>
+                    </div>
+                  </div>
                 </motion.article>
               ))}
             </AnimatePresence>
           </div>
         )}
       </IonContent>
+
+      {/* Menú de compartir (como imagen o como texto), el mismo de Home */}
+      <ShareSheet
+        open={shareTarget !== null}
+        onClose={() => setShareTarget(null)}
+        quote={shareTarget?.content[lang] ?? ""}
+        author={shareTarget?.author ?? ""}
+        language={lang}
+        onShareText={shareAsText}
+        pauseHomeBanner={false}
+      />
 
       {/* Hueco (transparente) del banner nativo: solo sirve para medir su posición */}
       <div ref={adSlotRef} className="favorites-ad-slot" aria-hidden="true" />

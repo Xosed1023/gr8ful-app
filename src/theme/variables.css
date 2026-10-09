@@ -24,6 +24,20 @@ http://ionicframework.com/docs/theming/ */
 }
 
 :root {
+    /* ---- Movimiento calmo (spec 031): una sola fuente de verdad para toda la app ----
+       La app es de motivación: el movimiento debe transmitir calma. Curvas suaves de salida,
+       sin rebotes ni overshoot, duraciones de 300 a 700 ms y entradas escalonadas. */
+    --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);        /* entradas: arranca ágil y se posa despacio */
+    --motion-ease-inout: cubic-bezier(0.45, 0, 0.2, 1);   /* cambios de estado y fundidos cruzados */
+    --motion-quick: 300ms;    /* respuesta al toque, salidas */
+    --motion-base: 500ms;     /* entradas y transiciones de elementos */
+    --motion-slow: 700ms;     /* transiciones de pantalla y elementos grandes */
+    --motion-ambient: 9s;     /* respiración del fondo y destellos infinitos */
+    --motion-rise: 14px;      /* ascenso leve de las entradas */
+    --motion-shift: 10px;     /* desplazamiento al salir */
+    --motion-stagger: 80ms;   /* retardo entre elementos hermanos */
+    --motion-press: 0.985;    /* escala al pulsar: apenas perceptible */
+
     /* Colores predeterminados (neutros o genéricos) */
     --background-color: #F8F6F6;
     --text-color: #000000;

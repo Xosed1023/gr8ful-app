@@ -45,10 +45,13 @@ import OnboardingProgress from "./components/common/OnboardingProgress";
 import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
+import "./theme/motion.css";
+import { calmPageTransition } from "./theme/pageTransition";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { refreshDailyContent } from "./daily/refreshDailyContent";
 
-setupIonicReact();
+// Transición calmada entre pantallas (spec 031); las pestañas y el gesto de volver conservan la de Ionic
+setupIonicReact({ navAnimation: calmPageTransition });
 
 /**
  * Rutas donde NO se debe poder volver al onboarding (ni deslizando de izquierda a

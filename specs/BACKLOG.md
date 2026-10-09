@@ -25,5 +25,6 @@ Antes de invertir en features nuevas de esta lista, priorizar cerrar `specs/007`
 ## Bloqueante antes de publicar en las stores
 
 - **Volver a Ad Unit IDs de producción de AdMob** — durante `specs/015-actualizar-dependencias-calidad` (T016) se reemplazaron temporalmente los Ad Unit ID de producción (intersticial y rewarded, iOS y Android) por los IDs de test oficiales de Google, para poder verificar que los anuncios seguían funcionando tras la actualización de dependencias sin arriesgar la cuenta real. Hoy la app queda fija en modo test — **no genera ingresos por ads** hasta revertir este cambio en `src/pages/MainHome.tsx`.
+- **Poner `VITE_IS_TESTING=false` al publicar** — con `true` la app usa anuncios de prueba y muestra la sección «Herramientas de prueba» en Ajustes (`specs/032-herramientas-de-prueba`).
 - **Implementar el flujo de consentimiento GDPR/UMP** — `AdMob.requestConsentInfo`/`showConsentForm` no están implementados hoy; es requisito legal antes de servir ads personalizados a usuarios en la UE/EEE.
 - **Nota de contexto**: las cuentas de AdMob y AdSense están actualmente en proceso de verificación por parte de Google — hasta que ese proceso no se resuelva, no tiene sentido revertir a IDs de producción ni publicar con monetización real activa. Revisar el estado de la verificación antes de abordar estos dos puntos.

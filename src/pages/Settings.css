@@ -262,3 +262,10 @@ button.settings-row:active {
     transition: none;
   }
 }
+
+/* Herramientas de prueba (spec 032): solo visibles con VITE_IS_TESTING=true */
+.settings-dev-title {
+  margin: 1.25rem 0 0.25rem;
+  text-align: left;
+  font-weight: 700;
+}

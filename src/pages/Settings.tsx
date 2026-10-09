@@ -24,6 +24,7 @@ import "./Settings.css";
 import "../components/home/HomeKit.css";
 import { applyStoredTheme } from "../theme/applyStoredTheme";
 import { useCalmEnter } from "../theme/useCalmEnter";
+import DevToolsSection from "../debug/DevToolsSection";
 import WidgetGuide, { canShowWidgetGuide } from "../tutorial/WidgetGuide";
 import { TutorialText } from "../tutorial/tutorialLanguage";
 import { requestTutorialReplay } from "../tutorial/tutorialState";
@@ -316,6 +317,8 @@ const Settings = () => {
                   navigate.push("/tabs/home", "root");
                 }}
               />
+              {/* Solo con VITE_IS_TESTING=true (spec 032) */}
+              <DevToolsSection />
             </div>
 
             <p className="settings-footer">

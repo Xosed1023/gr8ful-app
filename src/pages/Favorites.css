@@ -26,6 +26,28 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* ---- Banner fijo al pie ---- */
+/* Alto reservado al banner adaptativo (~50-60 dp) y holgura entre él y la barra flotante. */
+.favorites-page {
+  --favorites-ad-height: 60px;
+  --favorites-ad-gap: 8px;
+  --favorites-bottom-space: calc(
+    var(--nav-space) + var(--favorites-ad-height) + var(--favorites-ad-gap)
+  );
+}
+
+/* Hueco transparente justo encima de la barra de pestañas (--nav-space ya deja 12 px de
+   aire sobre ella); el banner nativo se coloca aquí. */
+.favorites-ad-slot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--nav-space);
+  height: var(--favorites-ad-height);
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* ---- Hoja ---- */
 .favorites-sheet {
   --background: var(--surface);
@@ -88,7 +110,7 @@
   font-size: 22px;
   color: var(--step-active);
   background: transparent;
-  transition: transform 0.15s ease, background-color 0.2s ease;
+  transition: transform var(--motion-quick) var(--motion-ease), background-color var(--motion-quick) var(--motion-ease-inout);
 }
 
 .fav-card.man .fav-remove {
@@ -96,7 +118,7 @@
 }
 
 .fav-remove:active {
-  transform: scale(0.88);
+  transform: scale(0.94);
   background: var(--glass-bg);
 }
 
@@ -155,4 +177,10 @@
   font-size: 14px;
   line-height: 1.55;
   color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fav-remove {
+    transition: none;
+  }
 }

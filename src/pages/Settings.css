@@ -119,11 +119,11 @@
   color: var(--text-color);
   background: var(--pill-bg);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s ease;
+  transition: transform var(--motion-quick) var(--motion-ease);
 }
 
 .settings-edit-pill:active {
-  transform: scale(0.95);
+  transform: scale(var(--motion-press));
 }
 
 .settings-edit-pill svg {
@@ -156,11 +156,11 @@
 
 button.settings-row {
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: transform var(--motion-quick) var(--motion-ease), background-color var(--motion-quick) var(--motion-ease-inout);
 }
 
 button.settings-row:active {
-  transform: scale(0.98);
+  transform: scale(var(--motion-press));
 }
 
 .settings-icon {
@@ -218,7 +218,7 @@ button.settings-row:active {
   border-radius: 9999px;
   cursor: pointer;
   background: var(--switch-off);
-  transition: background-color 0.2s ease;
+  transition: background-color var(--motion-base) var(--motion-ease-inout);
 }
 
 .settings-screen .settings-switch.on {
@@ -231,7 +231,7 @@ button.settings-row:active {
   border-radius: 9999px;
   background: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.5, 1);
+  transition: transform var(--motion-base) var(--motion-ease);
 }
 
 .settings-switch.on .settings-switch-thumb {

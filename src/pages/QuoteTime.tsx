@@ -8,6 +8,7 @@ import { enableDailyQuotes } from "../notifications/dailyQuote";
 import { refreshDailyContent } from "../daily/refreshDailyContent";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
+import { useCalmEnter } from "../theme/useCalmEnter";
 
 const TIME_OPTIONS = [
   { key: "6", label: "6:00 AM" },
@@ -17,6 +18,7 @@ const TIME_OPTIONS = [
 
 const QuoteTime = ({ backTo }: { backTo?: string }) => {
   const navigate = useIonRouter();
+  const calmRef = useCalmEnter<HTMLDivElement>();
   const { userLanguage } = useAppLanguage();
   const { isMale } = useUserGender();
   const text = AppTimeScreenLanguage;
@@ -58,7 +60,10 @@ const QuoteTime = ({ backTo }: { backTo?: string }) => {
               onClick={() => navigate.push(backTo || "/gender", "back")}
             />
 
-            <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
+            <div
+              ref={calmRef}
+              className={`onboarding-content calm-stagger ${leaving ? "leaving" : ""}`}
+            >
 
               {/* Texto principal */}
               <div className="text-container flex flex-col items-center mt-4 px-4">

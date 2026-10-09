@@ -6,11 +6,13 @@ import { useAppLanguage } from "../hooks/useAppLanguage";
 import { useSelectThenAdvance } from "../hooks/useSelectThenAdvance";
 import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
+import { useCalmEnter } from "../theme/useCalmEnter";
 
 const Gender: React.FC = () => {
   const { userLanguage } = useAppLanguage();
   const title = AppGenderScreenLanguage.title[userLanguage];
   const navigate = useIonRouter();
+  const calmRef = useCalmEnter<HTMLDivElement>();
   // Si se retoma el onboarding, la opción elegida antes aparece marcada.
   const selectedGender = localStorage.getItem("gender");
 
@@ -53,7 +55,10 @@ const Gender: React.FC = () => {
               onClick={() => navigate.push("/languages", "back")}
             />
 
-            <div className={`onboarding-content ${leaving ? "leaving" : ""}`}>
+            <div
+              ref={calmRef}
+              className={`onboarding-content calm-stagger ${leaving ? "leaving" : ""}`}
+            >
 
               {/* Texto "I Identify as" */}
               <div className="text-container flex items-center justify-center mt-4">

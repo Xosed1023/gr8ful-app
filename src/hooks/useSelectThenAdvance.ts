@@ -5,7 +5,7 @@ import { hapticTap } from "./useHaptics";
 /** La elección se ve (tarjeta tintada y check) antes de que la pantalla salga. */
 const SELECT_MS = 320;
 /** Duración de la salida del contenido antes de navegar. */
-const LEAVE_MS = 220;
+const LEAVE_MS = 300;
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&

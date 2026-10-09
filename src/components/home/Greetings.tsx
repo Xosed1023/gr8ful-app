@@ -1,6 +1,7 @@
 import { isPlatform } from "@ionic/react";
 import { useUserGender } from "../../hooks/useUserGender";
 import { LanguageKeys } from "../../persistence/languages";
+import { useCalmEnter } from "../../theme/useCalmEnter";
 import StreakPill from "./StreakPill";
 
 interface GreetingsProps {
@@ -13,9 +14,11 @@ interface GreetingsProps {
 
 const Greetings = ({ greeting, inspiration, streak = 0, language }: GreetingsProps) => {
   const { isMale } = useUserGender();
+  // Saludo e inspiración entran uno tras otro cada vez que se muestra Home
+  const calmRef = useCalmEnter<HTMLDivElement>();
 
   return (
-    <div className={`flex flex-col items-center px-4 ${isPlatform('ios') ? 'mt-20' : 'mt-11'}`}>
+    <div ref={calmRef} className={`calm-stagger flex flex-col items-center px-4 ${isPlatform('ios') ? 'mt-20' : 'mt-11'}`}>
       <div className="flex items-center justify-between w-full gap-3 mb-4">
         <h1 className={`${isMale ? 'text-[color:var(--greeting-man)]' : 'text-[color:var(--greeting-woman)]'} text-4xl font-bold min-w-0`}>
           {greeting} {localStorage.getItem("name")}!

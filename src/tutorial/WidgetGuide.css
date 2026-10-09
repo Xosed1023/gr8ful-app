@@ -1,0 +1,185 @@
+/* Guía para añadir el widget (modal de Ajustes y último paso del tutorial) */
+.wg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(8, 10, 20, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    overflow: visible !important;
+}
+
+/* Acentos por género: el contenedor que lo use (modal o tutorial) define el color */
+.wg-overlay.man,
+.tutorial-panel.man {
+    --wg-accent: var(--tint-blue-fg);
+    --wg-tint: var(--tint-blue-bg);
+}
+
+.wg-overlay.woman,
+.tutorial-panel.woman {
+    --wg-accent: var(--tint-purple-fg);
+    --wg-tint: var(--tint-purple-bg);
+}
+
+.wg-card {
+    width: 100%;
+    max-width: 23rem;
+    max-height: 100%;
+    padding: 24px 22px 14px;
+    border-radius: 28px;
+    color: var(--text-color);
+    background: var(--surface);
+    box-shadow: var(--sheet-shadow);
+    overflow-y: auto !important;
+}
+
+.wg-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    overflow: visible !important;
+}
+
+.wg-lead {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wg-accent);
+}
+
+.wg-title {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.wg-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+.wg-status {
+    padding: 8px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wg-accent);
+    background: var(--wg-tint);
+}
+
+/* Ilustración: pantalla de inicio con el widget y la insignia «+» */
+.wg-illustration {
+    width: 9.5rem;
+    height: auto;
+    margin: 2px 0;
+    overflow: visible !important;
+}
+
+.wg-ill-screen {
+    fill: var(--row-bg);
+    stroke: var(--step-dot);
+    stroke-width: 2;
+}
+
+.wg-ill-widget rect:first-child {
+    fill: var(--wg-tint);
+}
+
+.wg-ill-infinity {
+    fill: none;
+    stroke: var(--wg-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.wg-ill-line {
+    fill: var(--wg-accent);
+    opacity: 0.35;
+}
+
+.wg-ill-app {
+    fill: var(--step-dot);
+    opacity: 0.7;
+}
+
+.wg-ill-plus {
+    fill: var(--wg-accent);
+}
+
+.wg-ill-plus-sign {
+    stroke: var(--btn-text);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.wg-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin: 2px 0 4px;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+}
+
+.wg-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.wg-step-n {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--wg-accent);
+    background: var(--wg-tint);
+}
+
+.wg-primary,
+.wg-secondary {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--motion-quick) var(--motion-ease), opacity var(--motion-quick) var(--motion-ease);
+}
+
+.wg-primary {
+    margin-top: 4px;
+    color: var(--btn-text);
+    background: var(--wg-accent);
+}
+
+.wg-secondary {
+    color: var(--text-muted);
+    background: transparent;
+}
+
+.wg-primary:active,
+.wg-secondary:active {
+    transform: scale(0.98);
+}
+
+.wg-primary:disabled {
+    opacity: 0.55;
+}

@@ -7,11 +7,13 @@ import {
   useIonViewWillEnter,
 } from "@ionic/react";
 import {
+  appsOutline,
   bookOutline,
   languageOutline,
   moonOutline,
   notificationsOutline,
   phonePortraitOutline,
+  schoolOutline,
   timeOutline,
 } from "ionicons/icons";
 import { IoArrowForward, IoPencil } from "react-icons/io5";
@@ -21,6 +23,10 @@ import { hapticTap, isHapticsEnabled, setHapticsEnabled } from "../hooks/useHapt
 import "./Settings.css";
 import "../components/home/HomeKit.css";
 import { applyStoredTheme } from "../theme/applyStoredTheme";
+import { useCalmEnter } from "../theme/useCalmEnter";
+import WidgetGuide, { canShowWidgetGuide } from "../tutorial/WidgetGuide";
+import { TutorialText } from "../tutorial/tutorialLanguage";
+import { requestTutorialReplay } from "../tutorial/tutorialState";
 import {
   disableDailyQuotes,
   enableDailyQuotes,
@@ -103,6 +109,8 @@ const Switch = ({
 
 const Settings = () => {
   const navigate = useIonRouter();
+  // La tarjeta entra por partes (nombre, lista, pie) cada vez que se muestra Ajustes
+  const calmRef = useCalmEnter<HTMLDivElement>();
   const [title, setTitle] = useState(["Settings"]);
   const [changeNameBtnText, setChangeNameBtnText] = useState(["Edit name"]);
   const [languageOptText, setLanguageOptText] = useState(["Language"]);
@@ -133,6 +141,7 @@ const Settings = () => {
   );
   const [darkOn, setDarkOn] = useState(localStorage.getItem("darkMode") === "true");
   const [hapticsOn, setHapticsOn] = useState(isHapticsEnabled());
+  const [widgetGuideOpen, setWidgetGuideOpen] = useState(false);
 
   const handleHapticsToggle = (next: boolean) => {
     setHapticsOn(next);
@@ -223,7 +232,7 @@ const Settings = () => {
           </div>
 
           {/* Tarjeta flotante que se monta sobre la cabecera */}
-          <div className="settings-card">
+          <div ref={calmRef} className="settings-card calm-stagger">
             <h1 className="settings-name">{name}</h1>
             <button
               type="button"
@@ -287,6 +296,26 @@ const Settings = () => {
                   label={darkmodeOptText[0]}
                 />
               </SettingsRow>
+              {/* Ayuda: guía del widget (solo móvil) y repetir el tutorial (spec 030) */}
+              {canShowWidgetGuide() && (
+                <SettingsRow
+                  icon={appsOutline}
+                  title={TutorialText.settings.widgetTitle[lang]}
+                  subtitle={TutorialText.settings.widgetHint[lang]}
+                  tint="b"
+                  onClick={() => setWidgetGuideOpen(true)}
+                />
+              )}
+              <SettingsRow
+                icon={schoolOutline}
+                title={TutorialText.settings.replayTitle[lang]}
+                subtitle={TutorialText.settings.replayHint[lang]}
+                tint="c"
+                onClick={() => {
+                  requestTutorialReplay();
+                  navigate.push("/tabs/home", "root");
+                }}
+              />
             </div>
 
             <p className="settings-footer">
@@ -295,6 +324,11 @@ const Settings = () => {
             </p>
           </div>
         </div>
+        <WidgetGuide
+          open={widgetGuideOpen}
+          onClose={() => setWidgetGuideOpen(false)}
+          language={lang}
+        />
       </IonContent>
     </IonPage>
   );

@@ -95,7 +95,7 @@
     background: radial-gradient(closest-side, var(--inf-a), transparent);
     opacity: 0.22;
     filter: blur(24px);
-    animation: halo 2.4s ease-in-out infinite;
+    animation: halo 3s var(--motion-ease-inout) infinite;
 }
 
 @keyframes halo {
@@ -119,7 +119,7 @@
     color: var(--text-muted);
     background: var(--glass-bg);
     box-shadow: var(--glass-shadow-sm);
-    animation: chip-on 3s ease-in-out infinite;
+    animation: chip-on 3s var(--motion-ease-inout) infinite;
     animation-delay: calc(var(--i) * 1s);
 }
 
@@ -127,7 +127,7 @@
     0%, 28% {
         color: var(--accent-text);
         background: var(--chip-on-bg);
-        transform: scale(1.08);
+        transform: scale(1.04);
     }
     36%, 100% {
         color: var(--text-muted);
@@ -152,7 +152,7 @@
     height: 100%;
     border-radius: 9999px;
     background: linear-gradient(90deg, var(--inf-a), var(--inf-b));
-    animation: fill 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fill 3s var(--motion-ease-inout) forwards;
 }
 
 @keyframes fill {

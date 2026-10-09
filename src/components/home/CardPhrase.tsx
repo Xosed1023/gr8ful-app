@@ -21,6 +21,8 @@ import ShareSheet from "../../share/ShareSheet";
 import { computeBannerMargin } from "../../ads/bannerMargin";
 import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 import { registerAdMoment } from "../../ads/adMoments";
+import { isTutorialActive } from "../../tutorial/tutorialState";
+import { CALM_SPRING } from "../../theme/motion";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type" | "author">;
@@ -32,15 +34,15 @@ interface CardPhraseProps {
 }
 
 /**
- * Movimiento de las tarjetas: resortes en vez de duraciones fijas, para que el
- * movimiento acelere y frene de forma natural.
- * - Entrada: suave y lenta, con un leve asentamiento.
- * - Abrir: algo más vivo, con un rebote casi imperceptible (~3 %).
- * - Cerrar: más amortiguado, vuelve a su sitio sin rebotar.
+ * Movimiento de las tarjetas (spec 031): resortes sobreamortiguados —nunca pasan de su
+ * destino ni rebotan—, para que las tarjetas se posen con calma.
+ * - Entrada: lenta y suave (CALM_SPRING), escalonada de abajo arriba.
+ * - Abrir: igual de suave, sin prisa.
+ * - Cerrar: algo más firme para que la tarjeta vuelva a su sitio sin arrastrarse.
  */
-const ENTER_SPRING = { type: "spring", stiffness: 130, damping: 19, mass: 1 } as const;
-const OPEN_SPRING = { type: "spring", stiffness: 220, damping: 22, mass: 1 } as const;
-const CLOSE_SPRING = { type: "spring", stiffness: 290, damping: 31, mass: 1 } as const;
+const ENTER_SPRING = CALM_SPRING;
+const OPEN_SPRING = CALM_SPRING;
+const CLOSE_SPRING = { ...CALM_SPRING, stiffness: 110, damping: 26, mass: 1.1 } as const;
 
 const LANGUAGE_LABEL: Record<LanguageKeys, string> = {
   en: "English · 01",
@@ -99,6 +101,11 @@ const colorConfig = {
   },
 };
 
+/** Durante el tutorial guiado no cuentan los momentos de valor de los anuncios (spec 030). */
+const adMoment = (moment: Parameters<typeof registerAdMoment>[0]) => {
+  if (!isTutorialActive()) registerAdMoment(moment);
+};
+
 const CardPhrase = ({
   phrase,
   color,
@@ -124,7 +131,7 @@ const CardPhrase = ({
       await Share.share({
         text: `${phrase.content[language]}\n\n— ${phrase.author}`,
       });
-      registerAdMoment("share");
+      adMoment("share");
     } catch (error) {
       // Cancelar el share sheet nativo también rechaza la promesa
       // en algunas plataformas (ej. iOS) — no es necesariamente un
@@ -144,7 +151,7 @@ const CardPhrase = ({
   const toggleCard = async () => {
     if (isExpanded) {
       setIsSettledOpen(false);
-      registerAdMoment("card_close");
+      adMoment("card_close");
     }
     setIsExpanded((prev) => !prev);
     await hapticTap();
@@ -162,7 +169,8 @@ const CardPhrase = ({
   // Banner de la tarjeta (spec 020): se pide al terminar de abrirse y se
   // oculta al cerrar, al desmontar o al salir de Home (ver cardBanner.ts).
   useEffect(() => {
-    if (!isSettledOpen || !bannerSlotRef.current) return;
+    // Sin banners mientras dura el tutorial guiado
+    if (!isSettledOpen || !bannerSlotRef.current || isTutorialActive()) return;
     showCardBanner({
       ownerId: language,
       adId: adBannerId,
@@ -173,7 +181,7 @@ const CardPhrase = ({
 
   // Entrada escalonada: la tarjeta de más abajo sube primero y las de arriba
   // la siguen con ~0,12 s de diferencia entre cada una.
-  const animationDelay = Math.max(0, (60 - parseInt(initialPosition)) * 0.008);
+  const animationDelay = Math.max(0, (60 - parseInt(initialPosition)) * 0.012);
 
   // Háptico en el instante en que la tarjeta empieza a aparecer (al terminar su
   // retardo escalonado), no cuando el resorte ya se asentó, que se sentía tarde.
@@ -200,6 +208,10 @@ const CardPhrase = ({
     <motion.div
       className={`phrase-card ${background} ${text} absolute w-full`}
       onClick={toggleCard}
+      // El tutorial guiado localiza la tarjeta y sabe si está abierta y asentada (spec 030)
+      data-tutorial={`card-${language}`}
+      data-tutorial-open={isExpanded}
+      data-tutorial-settled={isSettledOpen}
       animate={{
         top: isExpanded ? expandedPosition : initialPosition,
         height: isExpanded ? expandedHeight : initialHeight,
@@ -209,8 +221,8 @@ const CardPhrase = ({
         height: initialHeight,
       }}
       transition={transition}
-      // Leve «hundimiento» al tocar: confirma el toque sin competir con el resorte.
-      whileTap={{ scale: 0.988 }}
+      // Leve «hundimiento» al tocar (--motion-press): confirma el toque sin competir con el resorte.
+      whileTap={{ scale: 0.985 }}
       onAnimationComplete={(definition) => {
         // Solo cuenta la animación de posición/alto, no el efecto del toque.
         if (
@@ -244,7 +256,7 @@ const CardPhrase = ({
           <IonIcon icon={sparklesOutline} aria-hidden="true" />
           {phrase.type}
         </span>
-        <div className="flex gap-2">
+        <div className="flex gap-2" data-tutorial="actions">
           <button
             type="button"
             className="card-action"
@@ -278,7 +290,7 @@ const CardPhrase = ({
                   string: phrase.content[language],
                 });
                 presentToast("Frase copiada al portapapeles");
-                registerAdMoment("copy");
+                adMoment("copy");
               } catch (err) {
                 presentToast("Error al copiar al portapapeles");
               }

@@ -11,10 +11,12 @@ import BackButton from "../components/common/BackButton";
 import GlowBackground from "../components/common/GlowBackground";
 import { LOADING_SCREEN_MS } from "./LoadingScreen";
 import { refreshWidget } from "../daily/refreshDailyContent";
+import { useCalmEnter } from "../theme/useCalmEnter";
 
 const UserName = ({ backTo }: { backTo?: string }) => {
   const [name, setName] = useState<string>(localStorage.getItem("name") || "");
   const navigate = useIonRouter();
+  const calmRef = useCalmEnter<HTMLDivElement>();
   const { userLanguage } = useAppLanguage();
   const { isWoman } = useUserGender();
   const text = AppNameScreenLanguage;
@@ -55,7 +57,7 @@ const UserName = ({ backTo }: { backTo?: string }) => {
               }
             />
 
-            <div className="onboarding-content">
+            <div ref={calmRef} className="onboarding-content calm-stagger">
 
               {/* Texto principal */}
               <div className="text-container flex flex-row items-center justify-center mt-4">

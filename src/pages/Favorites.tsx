@@ -1,8 +1,25 @@
-import { IonContent, IonIcon, IonPage, useIonViewWillEnter } from "@ionic/react";
+import {
+  IonContent,
+  IonIcon,
+  IonPage,
+  isPlatform,
+  useIonViewDidEnter,
+  useIonViewWillEnter,
+  useIonViewWillLeave,
+} from "@ionic/react";
 import { bookmark, sparklesOutline } from "ionicons/icons";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  CALM_DURATION,
+  CALM_RISE,
+  CALM_SHIFT,
+  CALM_STAGGER,
+  calmTransition,
+} from "../theme/motion";
 import { IoBookmarkOutline } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { computeBannerMargin } from "../ads/bannerMargin";
+import { favoritesBannerAdId, hideFavoritesBanner, showFavoritesBanner } from "../ads/favoritesBanner";
 import { Phrase } from "../models/Phrase";
 import { getFavoritePhrases, toggleFavorite } from "../persistence/IndexedDBService";
 import { AppFavoritesLanguage, LanguageKeys } from "../persistence/languages";
@@ -20,7 +37,8 @@ const Favorites: React.FC = () => {
   const accent = isMale ? "man" : "woman";
   const reduceMotion = useReducedMotion();
   const [favorites, setFavorites] = useState<Phrase[]>([]);
-  const [, refresh] = useState(0);
+  // Cambia en cada visita a la pestaña: la lista se vuelve a montar y entra con calma
+  const [enterKey, refresh] = useState(0);
 
   const loadFavorites = async () => {
     setFavorites(await getFavoritePhrases());
@@ -36,6 +54,21 @@ const Favorites: React.FC = () => {
     refresh((n) => n + 1);
   });
 
+  // Banner fijo al pie (spec 029): el hueco `.favorites-ad-slot` marca dónde va, justo encima
+  // de la barra de pestañas flotante. Se pide al terminar la transición (para medir el hueco
+  // ya en su sitio) y se quita al salir o desmontar; el coordinador lo comparte con Home.
+  const adSlotRef = useRef<HTMLDivElement>(null);
+  useIonViewDidEnter(() => {
+    if (!adSlotRef.current) return;
+    const platform = isPlatform("ios") ? "ios" : "android";
+    showFavoritesBanner(
+      favoritesBannerAdId(import.meta.env, platform),
+      computeBannerMargin(adSlotRef.current.getBoundingClientRect())
+    );
+  });
+  useIonViewWillLeave(hideFavoritesBanner);
+  useEffect(() => hideFavoritesBanner, []);
+
   const handleUnfavorite = async (favorite: Phrase) => {
     if (favorite.id == null) return;
     await toggleFavorite(favorite.id, false);
@@ -48,7 +81,7 @@ const Favorites: React.FC = () => {
   ].replace("{n}", String(favorites.length));
 
   return (
-    <IonPage className="bg-[color:var(--header-bg)]">
+    <IonPage className="favorites-page bg-[color:var(--header-bg)]">
       <div className={`favorites-header glow-header ${accent}`}>
         <h1 className="favorites-title">{AppFavoritesLanguage.title[lang]}</h1>
         {favorites.length > 0 && <span className="favorites-count">{countText}</span>}
@@ -56,14 +89,16 @@ const Favorites: React.FC = () => {
 
       <IonContent
         className="favorites-sheet"
-        style={{ "--padding-bottom": "var(--nav-space)" } as React.CSSProperties}
+        // La lista deja sitio a la barra flotante y al banner que va encima
+        style={{ "--padding-bottom": "var(--favorites-bottom-space)" } as React.CSSProperties}
       >
         {favorites.length === 0 ? (
           <motion.div
+            key={enterKey}
             className="favorites-empty"
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            initial={reduceMotion ? false : { opacity: 0, y: CALM_RISE }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 140, damping: 20 }}
+            transition={calmTransition(reduceMotion, CALM_DURATION.slow)}
           >
             <span className={`favorites-empty-icon ${accent}`}>
               <IoBookmarkOutline aria-hidden="true" />
@@ -72,25 +107,28 @@ const Favorites: React.FC = () => {
             <p>{AppFavoritesLanguage.emptyHint[lang]}</p>
           </motion.div>
         ) : (
-          <div className="favorites-list">
-            <AnimatePresence initial={false}>
+          <div className="favorites-list" key={enterKey}>
+            <AnimatePresence>
               {favorites.map((favorite, index) => (
                 <motion.article
                   key={favorite.id}
                   layout={!reduceMotion}
                   className={`fav-card ${accent}`}
-                  initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: CALM_RISE }}
                   animate={{ opacity: 1, y: 0 }}
+                  // Al quitar un favorito se desvanece y el resto sube con calma
                   exit={
                     reduceMotion
                       ? { opacity: 0 }
-                      : { opacity: 0, x: -48, scale: 0.96 }
+                      : { opacity: 0, y: -CALM_SHIFT / 2, transition: calmTransition(false, CALM_DURATION.quick) }
                   }
                   transition={{
-                    type: "spring",
-                    stiffness: 220,
-                    damping: 26,
-                    delay: reduceMotion ? 0 : Math.min(index, 6) * 0.04,
+                    default: calmTransition(
+                      reduceMotion,
+                      CALM_DURATION.base,
+                      reduceMotion ? 0 : Math.min(index, 6) * CALM_STAGGER
+                    ),
+                    layout: calmTransition(reduceMotion, CALM_DURATION.base),
                   }}
                 >
                   <div className="fav-card-top">
@@ -119,6 +157,9 @@ const Favorites: React.FC = () => {
           </div>
         )}
       </IonContent>
+
+      {/* Hueco (transparente) del banner nativo: solo sirve para medir su posición */}
+      <div ref={adSlotRef} className="favorites-ad-slot" aria-hidden="true" />
     </IonPage>
   );
 };

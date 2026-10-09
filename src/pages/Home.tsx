@@ -6,6 +6,8 @@ import { Phrase } from "../models/Phrase";
 import { useUserGender } from "../hooks/useUserGender";
 import { useStreak } from "../streak/useStreak";
 import StreakRescue from "../components/home/StreakRescue";
+import Tutorial from "../tutorial/Tutorial";
+import { useTutorialTrigger } from "../tutorial/useTutorialTrigger";
 
 import "./Home.css";
 import { AppHomeScreenLanguage } from "../persistence/languages";
@@ -33,6 +35,8 @@ const Home = ({
   );
   const navigate = useIonRouter();
   const streak = useStreak();
+  // El tutorial espera a que se resuelva un posible rescate de racha (spec 030)
+  const tutorial = useTutorialTrigger(streak.rescue !== null);
 
   useEffect(() => {
     setUserLanguage(localStorage.getItem("language") as LanguageKeys | null);
@@ -67,6 +71,11 @@ const Home = ({
           language={userLanguage ?? "en"}
           onAccept={streak.accept}
           onDecline={streak.decline}
+        />
+        <Tutorial
+          running={tutorial.running}
+          language={userLanguage ?? "en"}
+          onFinish={tutorial.finish}
         />
       </IonContent>
     </IonPage>

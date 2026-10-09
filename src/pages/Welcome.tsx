@@ -5,6 +5,7 @@ import { IoArrowForward } from "react-icons/io5";
 import { hapticTap } from "../hooks/useHaptics";
 import GlowBackground from "../components/common/GlowBackground";
 import { isOnboardingComplete } from "../persistence/onboardingState";
+import { useCalmEnter } from "../theme/useCalmEnter";
 
 // Fuera del componente: la lista es constante y no debe recrearse en cada render.
 const welcomeTexts = [
@@ -16,6 +17,7 @@ const welcomeTexts = [
 const Welcome: React.FC = () => {
   const [textIndex, setTextIndex] = useState(0); // Índice del texto actual
   const navigate = useIonRouter();
+  const calmRef = useCalmEnter<HTMLDivElement>();
 
   useEffect(() => {
     // gr8fulFirstTime solo indica que las frases iniciales ya se cargaron; el
@@ -38,6 +40,9 @@ const Welcome: React.FC = () => {
           <div className="onboarding-background flex flex-col items-center justify-center min-h-screen">
             <GlowBackground />
 
+            {/* Contenido en un solo bloque: el logo, el texto, los puntos y el botón
+                entran uno tras otro (spec 031) */}
+            <div ref={calmRef} className="welcome-content calm-stagger">
             {/* Logo */}
             <img src="./logo.svg" alt="Gr8ful Logo" className="logo" />
 
@@ -78,6 +83,7 @@ const Welcome: React.FC = () => {
               <span>Continue</span>
               <IoArrowForward className="text-xl" aria-hidden="true" />
             </button>
+            </div>
           </div>
         </div>
       </IonContent>

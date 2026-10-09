@@ -13,20 +13,20 @@
 
 /* Entrada suave de un elemento: fundido con ascenso leve. `--calm-i` desplaza su inicio. */
 .calm-in {
-    animation: calm-fade-up var(--motion-base) var(--motion-ease) both;
+    animation: calm-fade-up var(--motion-base) var(--motion-ease) backwards;
     animation-delay: calc(var(--calm-i, 0) * var(--motion-stagger));
 }
 
 /* Solo fundido, sin desplazamiento (fondos, textos largos). */
 .calm-fade {
-    animation: calm-fade var(--motion-slow) var(--motion-ease-inout) both;
+    animation: calm-fade var(--motion-slow) var(--motion-ease-inout) backwards;
     animation-delay: calc(var(--calm-i, 0) * var(--motion-stagger));
 }
 
 /* Entrada escalonada de los hijos directos. Arranca al añadir `.calm-run` (lo hace
    `useCalmEnter` cada vez que la pantalla va a mostrarse); sin esa clase no oculta nada. */
 .calm-stagger.calm-run > * {
-    animation: calm-fade-up var(--motion-base) var(--motion-ease) both;
+    animation: calm-fade-up var(--motion-base) var(--motion-ease) backwards;
     animation-delay: calc(var(--calm-i, 0) * var(--motion-stagger));
 }
 

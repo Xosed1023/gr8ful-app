@@ -1,3 +1,12 @@
+/* Bloque central de la bienvenida: sus hijos entran escalonados (calm-stagger). Sin recorte,
+   porque variables.css fuerza `overflow: hidden` y la sombra del botón sobresale. */
+.welcome-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: visible !important;
+}
+
 .logo {
     padding: 3rem;
 }
@@ -22,7 +31,7 @@
     -webkit-font-smoothing: antialiased;
     opacity: 0;
     /* El que sale se apaga primero (sin retardo)... */
-    transition: opacity 0.4s ease;
+    transition: opacity var(--motion-base) var(--motion-ease-inout);
     color: var(--text-color);
     max-width: 320px;
     padding: 0 1rem;
@@ -36,7 +45,7 @@
 /* ...y el que entra espera a que termine, para que nunca se vean dos superpuestos. */
 .description.active {
     opacity: 1;
-    transition-delay: 0.4s;
+    transition-delay: var(--motion-base);
 }
 
 /* Indicador del texto rotativo */
@@ -53,7 +62,7 @@
     height: 6px;
     border-radius: 9999px;
     background-color: var(--dot-inactive);
-    transition: width 0.3s ease, background-color 0.3s ease;
+    transition: width var(--motion-base) var(--motion-ease), background-color var(--motion-base) var(--motion-ease-inout);
 }
 
 .welcome-dot.active {

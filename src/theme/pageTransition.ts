@@ -4,9 +4,9 @@ import type { AnimationBuilder } from "@ionic/react";
 /** Duración del fundido de pantallas, en ms (`--motion-slow`). */
 const PAGE_MS = 650;
 /** La pantalla que sale se apaga antes de que la nueva termine de entrar. */
-const LEAVE_MS = 380;
+const LEAVE_MS = 320;
 /** La pantalla que entra espera un poco para que casi no se superpongan los contenidos. */
-const ENTER_DELAY_MS = 140;
+const ENTER_DELAY_MS = 200;
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 const EASE_INOUT = "cubic-bezier(0.45, 0, 0.2, 1)";
 /** Ascenso mínimo de la pantalla que entra hacia delante, en px. */

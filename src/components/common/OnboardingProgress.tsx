@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLocation } from "react-router";
 import { AppStepLanguage, LanguageKeys } from "../../persistence/languages";
+import { CALM_DURATION, CALM_SHIFT, calmTransition } from "../../theme/motion";
 import StepBadge from "./StepBadge";
 import StepIndicator from "./StepIndicator";
 import "./OnboardingKit.css";
@@ -45,17 +46,17 @@ const OnboardingProgress = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.25 }}
+          transition={calmTransition(reduceMotion, CALM_DURATION.base)}
         >
           <StepIndicator step={step} total={TOTAL_STEPS} />
           <div className="onboarding-progress-badge">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={label}
-                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                initial={reduceMotion ? false : { opacity: 0, y: CALM_SHIFT / 2 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
-                transition={{ duration: reduceMotion ? 0 : 0.18 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -CALM_SHIFT / 2 }}
+                transition={calmTransition(reduceMotion, CALM_DURATION.quick)}
               >
                 <StepBadge label={label} />
               </motion.div>

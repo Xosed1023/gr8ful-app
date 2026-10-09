@@ -10,5 +10,5 @@ description: "Task list: estrategia de anuncios"
 - [X] T004 `rewarded.ts` abre el respiro; `MainHome.tsx` sin temporizador e inicia la precarga
 - [X] T005 Disparadores en `CardPhrase.tsx` y `ShareSheet.tsx`
 - [X] T006 `tsc`, `lint`, `vitest`, `build`, `cap sync`; probar en el emulador Android
-- [ ] T007 **Requiere a la usuaria** — probar en el teléfono según `quickstart.md`
-- [ ] T008 Cerrar: `Status`, `BACKLOG.md` (ideas de la fase siguiente)
+- [X] T007 probar en el teléfono según `quickstart.md`
+- [X] T008 Cerrar: `Status`, `BACKLOG.md` (ideas de la fase siguiente)

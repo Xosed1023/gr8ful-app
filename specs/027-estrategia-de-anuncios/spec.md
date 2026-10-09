@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08
 
-**Status**: In Progress
+**Status**: Completed
 
 **Input**: Hoy el intersticial sale cada 45 s por temporizador. Se busca maximizar los ingresos sin dañar la retención: la app se usa en sesiones muy cortas (leer la frase, quizá compartirla, salir; o entrar desde el widget).
 

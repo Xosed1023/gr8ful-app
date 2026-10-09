@@ -1,0 +1,104 @@
+/* Loader global del anuncio recompensado (spec 033): por encima de todo, incluido el aviso de racha */
+.rewarded-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(8, 10, 20, 0);
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+    transition: background-color var(--motion-base) var(--motion-ease-inout),
+        backdrop-filter var(--motion-base) var(--motion-ease-inout),
+        -webkit-backdrop-filter var(--motion-base) var(--motion-ease-inout);
+    overflow: visible !important;
+}
+
+.rewarded-loader.visible {
+    background: rgba(8, 10, 20, 0.42);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.rewarded-loader.woman {
+    --loader-accent: var(--tint-purple-fg);
+    --loader-glow: var(--tint-purple-bg);
+}
+
+.rewarded-loader.man {
+    --loader-accent: var(--tint-blue-fg);
+    --loader-glow: var(--tint-blue-bg);
+}
+
+.rewarded-loader-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 22px 30px 20px;
+    border-radius: 28px;
+    color: var(--text-color);
+    background: var(--surface);
+    box-shadow: var(--sheet-shadow);
+    opacity: 0;
+    transform: translateY(var(--motion-rise));
+    transition: opacity var(--motion-base) var(--motion-ease),
+        transform var(--motion-base) var(--motion-ease);
+    overflow: visible !important;
+}
+
+.rewarded-loader.visible .rewarded-loader-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.rewarded-loader-card p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.rewarded-loader-infinity {
+    width: 96px;
+    height: 58px;
+    overflow: visible !important;
+}
+
+.rewarded-loader-infinity path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    overflow: visible !important;
+}
+
+.rewarded-loader-track {
+    stroke: var(--loader-glow);
+    stroke-width: 6;
+}
+
+/* Un trazo corto que recorre el ∞ sin parar, despacio */
+.rewarded-loader-trace {
+    stroke: var(--loader-accent);
+    stroke-width: 6;
+    stroke-dasharray: 22 78;
+    animation: rewarded-loader-run 2.6s linear infinite;
+}
+
+@keyframes rewarded-loader-run {
+    to {
+        stroke-dashoffset: -100;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rewarded-loader,
+    .rewarded-loader-card {
+        transition: none;
+    }
+
+    .rewarded-loader-trace {
+        animation: none;
+        stroke-dasharray: none;
+    }
+}

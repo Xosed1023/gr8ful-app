@@ -102,7 +102,7 @@ const MainHome = () => {
   // Rewarded: cambia la frase del día. Se guarda en el plan para que el widget y las
   // notificaciones muestren la misma.
   const loadRandomPhraseWithAd = async () => {
-    if (await showRewarded()) {
+    if (await showRewarded({ notifyFailure: true })) {
       // TODO: Hacer una animación para ocultar las tarjetas y mostrarlas de nuevo
       const next = await replaceTodayPhrase();
       if (next) {

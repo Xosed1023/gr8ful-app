@@ -42,6 +42,7 @@ import QuoteTime from "./pages/QuoteTime";
 import QuoteTopics from "./pages/QuoteTopics";
 import UserName from "./pages/UserName";
 import OnboardingProgress from "./components/common/OnboardingProgress";
+import RewardedLoader from "./ads/RewardedLoader";
 import Welcome from "./pages/Welcome";
 import { addPhrasesBatch, initDB } from "./persistence/IndexedDBService";
 import "./theme/variables.css";
@@ -196,6 +197,7 @@ const App: React.FC = () => {
 
   return (
     <IonApp>
+      <RewardedLoader />
       <IonReactRouter>
         <AppRoutes />
       </IonReactRouter>

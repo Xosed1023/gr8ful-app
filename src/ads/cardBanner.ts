@@ -7,9 +7,14 @@ import {
 } from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
 
+/** Pantalla a la que pertenece un banner: las tarjetas de Home o la pestaña Favoritos. */
+export type BannerScreen = "home" | "favorites";
+
 export interface CardBannerRequest {
-  /** Tarjeta que lo pide: "en" | "es" | "fr". */
+  /** Quién lo pide: una tarjeta ("en" | "es" | "fr") o "favorites". */
   ownerId: string;
+  /** Pantalla del banner; por omisión, Home. Favoritos se muestra aunque Home no se vea. */
+  screen?: BannerScreen;
   adId: string;
   /** Distancia (px CSS) del borde inferior al borde inferior del banner. */
   margin: number;
@@ -17,9 +22,10 @@ export interface CardBannerRequest {
 
 /**
  * El plugin de AdMob mantiene un único banner nativo, así que las tres tarjetas
- * de Home lo comparten: este coordinador lleva la pila de tarjetas abiertas (la
- * última es la activa), si Home está visible, y serializa las llamadas al
- * plugin para que abrir/cerrar rápido no deje banners fantasma.
+ * de Home y la pestaña Favoritos lo comparten: este coordinador lleva la pila de
+ * peticiones (la última visible es la activa), si Home está visible, y serializa
+ * las llamadas al plugin para que abrir/cerrar rápido no deje banners fantasma.
+ * Las de Favoritos no dependen de que Home esté visible (spec 029).
  */
 let open: CardBannerRequest[] = [];
 let homeVisible = true;
@@ -55,10 +61,13 @@ function ensureFailedListener() {
   });
 }
 
-async function apply() {
-  const active = open[open.length - 1];
+/** ¿Debe verse esta petición ahora? Las de Home, solo si Home está visible. */
+const isVisible = (r: CardBannerRequest) => r.screen === "favorites" || homeVisible;
 
-  if (!active || !homeVisible) {
+async function apply() {
+  const active = [...open].reverse().find(isVisible);
+
+  if (!active) {
     if (isShown) {
       await AdMob.hideBanner();
       isShown = false;
@@ -120,7 +129,8 @@ export function setHomeVisible(visible: boolean) {
 
 /** ¿Hay alguna tarjeta abierta? Los intersticiales no deben interrumpir la lectura. */
 export function hasOpenCardBanner() {
-  return open.length > 0;
+  // El banner de Favoritos no es una tarjeta abierta
+  return open.some((r) => r.screen !== "favorites");
 }
 
 /** Solo para tests: devuelve el estado interno a su valor inicial. */

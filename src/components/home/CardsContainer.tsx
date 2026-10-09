@@ -4,7 +4,7 @@ import {
   useIonViewWillEnter,
   useIonViewWillLeave,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
 import CardPhrase from "./CardPhrase";
@@ -26,6 +26,12 @@ const CardsContainer = ({ phrase, onRefresh }: CardsContainerProps) => {
   const { isMale } = useUserGender();
   const { userLanguage } = useAppLanguage();
   const [isFavorite, setIsFavorite] = useState(phrase.isFavorite);
+
+  // Al cambiar la frase (p. ej. tras el anuncio de «Renovar inspiración») el estado de favorito
+  // debe ser el de la frase nueva, no el de la anterior.
+  useEffect(() => {
+    setIsFavorite(phrase.isFavorite);
+  }, [phrase.id, phrase.isFavorite]);
 
   // Re-lee el estado real al revisitar el tab Home (p. ej. tras desmarcar
   // esta misma frase desde el tab Favoritos) — ver research.md Decisión 3.

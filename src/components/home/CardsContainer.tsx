@@ -9,7 +9,7 @@ import { CardColors } from "../../models/CardColors";
 import { Phrase } from "../../models/Phrase";
 import CardPhrase from "./CardPhrase";
 import { useUserGender } from "../../hooks/useUserGender";
-import { getPhraseById, toggleFavorite } from "../../persistence/IndexedDBService";
+import { flipFavorite, getPhraseById } from "../../persistence/IndexedDBService";
 import { setHomeVisible } from "../../ads/cardBanner";
 import { useAppLanguage } from "../../hooks/useAppLanguage";
 import { AppHomeNavLanguage } from "../../persistence/languages";
@@ -35,12 +35,16 @@ const CardsContainer = ({ phrase, onRefresh }: CardsContainerProps) => {
 
   // Re-lee el estado real al revisitar el tab Home (p. ej. tras desmarcar
   // esta misma frase desde el tab Favoritos) — ver research.md Decisión 3.
+  // Ojo: Ionic registra la función de la PRIMERA renderización salvo que se le pasen
+  // dependencias; sin `[phrase.id]` releería siempre la frase con la que se montó la pantalla
+  // (no la actual tras «Renovar inspiración» o un cambio de día) y el corazón se
+  // desincronizaría de la base (spec 036).
   useIonViewWillEnter(() => {
     if (phrase.id == null) return;
     getPhraseById(phrase.id).then((p) => {
       if (p) setIsFavorite(p.isFavorite);
     });
-  });
+  }, [phrase.id]);
 
   // El banner nativo flota sobre toda la app: se oculta al salir de Home y
   // reaparece al volver si hay una tarjeta abierta (spec 020, FR-007).
@@ -49,9 +53,10 @@ const CardsContainer = ({ phrase, onRefresh }: CardsContainerProps) => {
 
   const handleToggleFavorite = async () => {
     if (phrase.id == null) return;
-    const next = !isFavorite;
-    setIsFavorite(next);
-    await toggleFavorite(phrase.id, next);
+    // Se invierte lo que hay guardado en la base (en una sola transacción), no el icono: así una
+    // pulsación nunca parte de un estado obsoleto ni se pisa con otra.
+    const next = await flipFavorite(phrase.id);
+    if (next !== null) setIsFavorite(next);
   };
 
   return (

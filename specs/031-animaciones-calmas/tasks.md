@@ -17,9 +17,9 @@ description: "Task list: animaciones calmas"
 - [ ] T010 **Requiere a la usuaria** — probar en iPhone y Android (sobre todo el gesto de volver en iOS)
 
 ## Fase 2 — Resto de la app (tras integrar las ramas 028–030)
-- [ ] T011 Home y `CardsContainer`: entrada escalonada de saludo, tarjetas y pie; suavizar `ENTER/OPEN/CLOSE_SPRING` de `CardPhrase` a `CALM_SPRING`
-- [ ] T012 Favoritos: entrada de la lista y quitar un favorito con fundido
-- [ ] T013 Ajustes: entrada escalonada de tarjetas; el interruptor (`Settings.css:234`) usa una curva con overshoot → sin rebote
-- [ ] T014 Racha: `StreakPill` y `StreakRescue`/mensaje de racha restaurada con `calmFadeUp`/`CALM_SPRING`
-- [ ] T015 `ShareSheet` y tutorial guiado con `calmFade`/`calmFadeUp`
-- [ ] T016 Cerrar: `Status` de `spec.md`
+- [X] T011 Home y `CardsContainer`: entrada escalonada de saludo, tarjetas y pie; suavizar `ENTER/OPEN/CLOSE_SPRING` de `CardPhrase` a `CALM_SPRING`
+- [X] T012 Favoritos: entrada de la lista y quitar un favorito con fundido
+- [X] T013 Ajustes: entrada escalonada de tarjetas; el interruptor (`Settings.css:234`) usa una curva con overshoot → sin rebote
+- [X] T014 Racha: `StreakPill` y `StreakRescue`/mensaje de racha restaurada con `calmFadeUp`/`CALM_SPRING`
+- [X] T015 `ShareSheet` y tutorial guiado con `calmFade`/`calmFadeUp`
+- [X] T016 Cerrar: `Status` de `spec.md`

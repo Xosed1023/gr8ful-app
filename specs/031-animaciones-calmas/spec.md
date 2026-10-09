@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: In Progress (fase 1 hecha; fase 2 pendiente)
+**Status**: Completed (falta la prueba en teléfono, T010)
 
 **Input**: Petición de la usuaria: «animaciones suaves en toda la app; es una app de motivación, quiero dar la sensación de calma, tranquilidad, paz».
 

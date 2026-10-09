@@ -77,11 +77,11 @@
     background: var(--card-glass);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: transform 0.15s ease;
+    transition: transform var(--motion-quick) var(--motion-ease);
 }
 
 .card-action:active {
-    transform: scale(0.92);
+    transform: scale(0.95);
 }
 
 /* ---- Pie: autor + renovar, sobre el espacio de la barra flotante ---- */
@@ -172,7 +172,7 @@ ion-tab-bar.floating-tabs {
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     box-shadow: var(--glass-shadow);
-    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease;
+    transition: transform var(--motion-base) var(--motion-ease), opacity var(--motion-quick) var(--motion-ease-inout);
 }
 
 /* Mientras se edita algo desde Ajustes la píldora se esconde hacia abajo */
@@ -211,8 +211,8 @@ ion-tab-bar.floating-tabs::before {
     border-radius: 9999px;
     pointer-events: none;
     transform: translateX(0);
-    /* Curva con un leve rebote, como un resorte */
-    transition: transform 0.5s cubic-bezier(0.34, 1.35, 0.5, 1);
+    /* Se desliza y se posa despacio, sin rebote (spec 031) */
+    transition: transform var(--motion-slow) var(--motion-ease);
 }
 
 ion-tab-bar.floating-tabs:has(ion-tab-button[tab="favorites"].tab-selected)::before {
@@ -238,16 +238,18 @@ ion-tab-bar.floating-tabs ion-tab-button {
 
 /* El icono activo gana un leve realce */
 ion-tab-bar.floating-tabs ion-tab-button ion-icon {
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--motion-base) var(--motion-ease);
 }
 
 ion-tab-bar.floating-tabs ion-tab-button.tab-selected ion-icon {
-    transform: translateY(-1px) scale(1.1);
+    transform: translateY(-1px) scale(1.06);
 }
 
 @media (prefers-reduced-motion: reduce) {
+    ion-tab-bar.floating-tabs,
     ion-tab-bar.floating-tabs::before,
-    ion-tab-bar.floating-tabs ion-tab-button ion-icon {
+    ion-tab-bar.floating-tabs ion-tab-button ion-icon,
+    .card-action {
         transition: none;
     }
 }

@@ -85,7 +85,7 @@ const CardsContainer = ({ phrase, onRefresh }: CardsContainerProps) => {
       </div>
 
       {/* Pie: autor y renovar, sobre el espacio de la barra flotante */}
-      <div className="home-footer">
+      <div className="home-footer calm-fade" style={{ "--calm-i": 5 } as React.CSSProperties}>
         <div className={`author-slab ${isMale ? "man" : "woman"}`}>
           <div className="author-line">
             <span className="rule" />

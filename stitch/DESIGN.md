@@ -184,6 +184,20 @@ Esquinas muy redondeadas: píldoras (`9999px`) para botones, chips, indicadores 
 - **Pantalla de carga:** un cometa de luz recorre el ∞ del logo; ES · EN · FR se encienden por turnos; barra de progreso de 3 s.
 - **Toast:** cápsula con fondo `--toast-bg`, mensaje en cursiva.
 
+## Movimiento
+
+La app es de motivación: el movimiento transmite **calma, tranquilidad y paz**. Suave, lento y sin sobresaltos. Todo sale de los tokens `--motion-*` de `variables.css` (espejados en `src/theme/motion.ts`).
+
+- **Curvas:** `--motion-ease` (`cubic-bezier(0.22, 1, 0.36, 1)`, arranca ágil y se posa despacio) para entradas; `--motion-ease-inout` (`cubic-bezier(0.45, 0, 0.2, 1)`) para fundidos cruzados y cambios de estado. **Nunca** curvas con overshoot (`cubic-bezier` con valores > 1) ni resortes que reboten.
+- **Duraciones:** `--motion-quick` 300 ms (toque, salidas), `--motion-base` 500 ms (entradas), `--motion-slow` 700 ms (pantallas y elementos grandes), `--motion-ambient` 9 s (respiración del fondo; destellos infinitos de 3 a 4 s).
+- **Desplazamiento:** ascenso de entrada `--motion-rise` 14 px; al salir `--motion-shift` 10 px. Las pantallas entran con fundido y 10 px de ascenso; al volver, solo fundido.
+- **Escalonado:** hermanos con `--motion-stagger` 80 ms de diferencia (las tarjetas de opción, 50 ms), después del título.
+- **Pulsar:** escala `--motion-press` 0.985, apenas perceptible; elegir una opción la enmarca con escala 1.01.
+- **Resorte:** solo `CALM_SPRING` (sobreamortiguado, cociente de amortiguamiento > 1) para movimientos con inercia, como hojas y tarjetas.
+- **Clases:** `.calm-in` (entrada con ascenso), `.calm-fade` (solo fundido), `.calm-stagger` + `useCalmEnter` (entrada escalonada de los hijos cada vez que se muestra la pantalla), `.calm-press` (pulsación sutil), `.calm-breathe` (respiración lenta). Con `fill-mode: backwards`, para no retener `transform`.
+- **framer-motion:** `calmFadeUp`, `calmFade`, `calmStagger`, `calmTransition` y `CALM_SPRING`, todos sensibles a `useReducedMotion`.
+- **Reducir movimiento:** `prefers-reduced-motion` apaga las animaciones y las transiciones; las pantallas pasan a un fundido instantáneo.
+
 ## Do's and Don'ts
 
 - **Sí:** usar tokens (`var(--…)`) para todo color; mantener la paleta de un solo género por pantalla; contraste ≥ 4.5:1 sobre cada tarjeta; una sola palabra manuscrita por título; respetar «reducir movimiento».

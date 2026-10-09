@@ -135,11 +135,11 @@
   color: var(--text-muted);
 }
 
-/* ---- Acciones de la tarjeta (spec 034) ---- */
+/* ---- Acciones de la tarjeta (specs 034 y 035) ---- */
 .fav-actions {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 8px;
   margin-top: 10px;
 }
@@ -155,6 +155,28 @@
 
 .fav-card.woman {
   --fav-accent: var(--step-active);
+}
+
+.fav-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fav-accent);
+  background: transparent;
+}
+
+.fav-more ion-icon {
+  font-size: 16px;
+  transition: transform var(--motion-base) var(--motion-ease);
+}
+
+.fav-more ion-icon.open {
+  transform: rotate(180deg);
 }
 
 .fav-action {
@@ -175,6 +197,43 @@
 
 .fav-action:active {
   transform: scale(0.95);
+}
+
+.fav-action.small {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+}
+
+/* Otras versiones de la frase (se despliegan con altura animada) */
+.fav-others {
+  overflow: hidden;
+}
+
+.fav-other {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--card-edge, rgba(0, 0, 0, 0.08));
+}
+
+.fav-other-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.fav-other-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.fav-other-quote {
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 /* ---- Estado vacío ---- */
@@ -223,7 +282,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fav-remove,
-  .fav-action {
+  .fav-action,
+  .fav-more ion-icon {
     transition: none;
   }
 }

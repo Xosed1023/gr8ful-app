@@ -8,7 +8,7 @@ import {
   useIonViewWillEnter,
   useIonViewWillLeave,
 } from "@ionic/react";
-import { bookmark, copyOutline, shareSocialOutline, sparklesOutline } from "ionicons/icons";
+import { bookmark, chevronDown, copyOutline, shareSocialOutline, sparklesOutline } from "ionicons/icons";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   CALM_DURATION,
@@ -31,6 +31,7 @@ import { QUOTE_MARKS } from "../components/common/quoteMarks";
 import { copyQuote, shareQuoteText } from "../share/quoteActions";
 import ShareSheet from "../share/ShareSheet";
 import { FavoritesActionsText } from "./favoritesCopy";
+import { LANGUAGE_NAME, otherLanguages } from "./favoriteLanguages";
 import "../components/home/HomeKit.css";
 import "./Favorites.css";
 
@@ -47,6 +48,8 @@ const Favorites: React.FC = () => {
   const [present] = useIonToast();
   // Frase cuyo menú de compartir está abierto (un solo menú para toda la lista)
   const [shareTarget, setShareTarget] = useState<Phrase | null>(null);
+  // Tarjetas con las otras versiones desplegadas (spec 035)
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   const loadFavorites = async () => {
     setFavorites(await getFavoritePhrases());
@@ -100,6 +103,13 @@ const Favorites: React.FC = () => {
     setFavorites((prev) => prev.filter((p) => p.id !== favorite.id));
     await hapticTap();
   };
+
+  const toggleExpanded = (id: number) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (!next.delete(id)) next.add(id);
+      return next;
+    });
 
   const copyText = async (text: string) => {
     const ok = await copyQuote(text);
@@ -197,6 +207,21 @@ const Favorites: React.FC = () => {
                   <p className="fav-author">— {favorite.author}</p>
 
                   <div className="fav-actions">
+                    <button
+                      type="button"
+                      className="fav-more"
+                      aria-expanded={favorite.id != null && expanded.has(favorite.id)}
+                      onClick={() => favorite.id != null && toggleExpanded(favorite.id)}
+                    >
+                      {FavoritesActionsText[
+                        favorite.id != null && expanded.has(favorite.id) ? "hideOthers" : "showOthers"
+                      ][lang]}
+                      <IonIcon
+                        icon={chevronDown}
+                        aria-hidden="true"
+                        className={favorite.id != null && expanded.has(favorite.id) ? "open" : ""}
+                      />
+                    </button>
                     <div className="fav-actions-right">
                       <button
                         type="button"
@@ -216,6 +241,43 @@ const Favorites: React.FC = () => {
                       </button>
                     </div>
                   </div>
+
+                  <AnimatePresence initial={false}>
+                    {favorite.id != null && expanded.has(favorite.id) && (
+                      <motion.div
+                        key="others"
+                        className="fav-others"
+                        initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                        transition={calmTransition(reduceMotion, CALM_DURATION.base)}
+                      >
+                        {otherLanguages(lang).map((other) => (
+                          <div className="fav-other" key={other}>
+                            <div className="fav-other-head">
+                              <span className="fav-other-label">{LANGUAGE_NAME[other]}</span>
+                              <button
+                                type="button"
+                                className="fav-action small"
+                                aria-label={FavoritesActionsText.copyVersion[lang].replace(
+                                  "{language}",
+                                  LANGUAGE_NAME[other]
+                                )}
+                                onClick={() => copyText(favorite.content[other])}
+                              >
+                                <IonIcon icon={copyOutline} />
+                              </button>
+                            </div>
+                            <p className="fav-other-quote">
+                              {QUOTE_MARKS[other][0]}
+                              {favorite.content[other]}
+                              {QUOTE_MARKS[other][1]}
+                            </p>
+                          </div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.article>
               ))}
             </AnimatePresence>

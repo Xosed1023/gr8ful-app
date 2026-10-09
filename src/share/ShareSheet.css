@@ -62,11 +62,11 @@
     cursor: pointer;
     color: var(--text-color);
     background: var(--row-bg);
-    transition: transform 0.15s ease;
+    transition: transform var(--motion-quick) var(--motion-ease);
 }
 
 .share-row:active {
-    transform: scale(0.98);
+    transform: scale(var(--motion-press));
 }
 
 .share-icon {
@@ -162,7 +162,7 @@
     max-height: 100%;
     border-radius: 20px;
     box-shadow: var(--sheet-shadow);
-    animation: share-in 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    animation: share-in var(--motion-base) var(--motion-ease);
 }
 
 @keyframes share-in {
@@ -207,7 +207,7 @@
     cursor: pointer;
     color: var(--text-muted);
     background: transparent;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color var(--motion-quick) var(--motion-ease-inout), color var(--motion-quick) var(--motion-ease-inout);
 }
 
 .share-seg-btn.active {

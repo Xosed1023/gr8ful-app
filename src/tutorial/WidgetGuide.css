@@ -161,7 +161,7 @@
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform var(--motion-quick) var(--motion-ease), opacity var(--motion-quick) var(--motion-ease);
 }
 
 .wg-primary {

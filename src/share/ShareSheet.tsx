@@ -9,6 +9,7 @@ import { setHomeVisible } from "../ads/cardBanner";
 import "../components/common/OnboardingKit.css";
 import { useUserGender } from "../hooks/useUserGender";
 import { AppShareLanguage, LanguageKeys } from "../persistence/languages";
+import { CALM_DURATION, CALM_RISE, CALM_SPRING, calmTransition } from "../theme/motion";
 import { renderQuoteImage, ShareFormat } from "./renderQuoteImage";
 import { shareImage } from "./shareImage";
 import "./ShareSheet.css";
@@ -26,8 +27,6 @@ interface ShareSheetProps {
 
 type Mode = "menu" | "preview";
 type Status = "loading" | "ready" | "error";
-
-const SPRING = { type: "spring", stiffness: 280, damping: 30 } as const;
 
 /**
  * Menú para compartir una frase: «Como imagen» (con vista previa y selector de formato)
@@ -106,7 +105,9 @@ const ShareSheet = ({ open, onClose, quote, author, language, onShareText }: Sha
     }
   };
 
-  const spring = reduceMotion ? { duration: 0 } : SPRING;
+  // La hoja sube con un resorte sobreamortiguado (sin rebote); la vista previa, con un fundido calmo
+  const spring = reduceMotion ? { duration: 0 } : CALM_SPRING;
+  const fadeUp = calmTransition(reduceMotion, CALM_DURATION.slow);
   const accent = isMale ? "man" : "woman";
 
   return createPortal(
@@ -121,7 +122,7 @@ const ShareSheet = ({ open, onClose, quote, author, language, onShareText }: Sha
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.2 }}
+          transition={calmTransition(reduceMotion, CALM_DURATION.base)}
           // Los eventos de un portal suben por el árbol de React: sin esto tocar el
           // menú abriría o cerraría la tarjeta que hay debajo.
           onClick={(e) => {
@@ -168,10 +169,10 @@ const ShareSheet = ({ open, onClose, quote, author, language, onShareText }: Sha
               <motion.div
                 key="preview"
                 className="share-preview"
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: CALM_RISE * 2 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 24 }}
-                transition={spring}
+                exit={{ opacity: 0, y: CALM_RISE, transition: calmTransition(reduceMotion, CALM_DURATION.quick) }}
+                transition={fadeUp}
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="share-preview-header">

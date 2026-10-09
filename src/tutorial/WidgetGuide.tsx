@@ -4,6 +4,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useUserGender } from "../hooks/useUserGender";
 import { LanguageKeys } from "../persistence/languages";
+import { CALM_DURATION, calmTransition } from "../theme/motion";
 import { requestWidgetPin } from "../widget/widgetData";
 import { TutorialText } from "./tutorialLanguage";
 import "./WidgetGuide.css";
@@ -141,7 +142,7 @@ const WidgetGuide = ({ open, onClose, language }: ModalProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.35, ease: "easeOut" }}
+          transition={calmTransition(reduceMotion, CALM_DURATION.base)}
           onClick={onClose}
         >
           <motion.div
@@ -149,7 +150,7 @@ const WidgetGuide = ({ open, onClose, language }: ModalProps) => {
             initial={reduceMotion ? false : { y: 16, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={reduceMotion ? undefined : { y: 16, opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 0.61, 0.36, 1] }}
+            transition={calmTransition(reduceMotion, CALM_DURATION.slow)}
             onClick={(event) => event.stopPropagation()}
           >
             <WidgetGuideBody

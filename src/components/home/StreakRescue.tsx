@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { setHomeVisible } from "../../ads/cardBanner";
 import { useUserGender } from "../../hooks/useUserGender";
+import { CALM_DURATION, CALM_RISE, calmTransition } from "../../theme/motion";
 import { AppStreakLanguage, LanguageKeys } from "../../persistence/languages";
 import StreakRestored, { RESTORED_MS } from "./StreakRestored";
 import "./StreakRescue.css";
@@ -80,7 +81,7 @@ const StreakRescue = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.45, ease: "easeOut" }}
+          transition={calmTransition(reduceMotion, CALM_DURATION.base)}
         >
           <AnimatePresence mode="wait">
             {restored ? (
@@ -97,10 +98,10 @@ const StreakRescue = ({
                 <motion.div
                   key="rescue"
                   className="streak-card"
-                  initial={reduceMotion ? false : { y: 40, scale: 0.94 }}
-                  animate={{ y: 0, scale: 1 }}
-                  exit={reduceMotion ? undefined : { opacity: 0, transition: { duration: 0.25 } }}
-                  transition={{ type: "spring", stiffness: 280, damping: 26 }}
+                  initial={reduceMotion ? false : { opacity: 0, y: CALM_RISE * 2 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduceMotion ? undefined : { opacity: 0, transition: calmTransition(false, CALM_DURATION.quick) }}
+                  transition={calmTransition(reduceMotion, CALM_DURATION.slow)}
                 >
                   <span className="streak-flame" aria-hidden="true">
                     <IonIcon icon={flame} />

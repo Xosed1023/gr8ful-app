@@ -76,7 +76,7 @@
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.15s ease, opacity 0.15s ease;
+    transition: transform var(--motion-quick) var(--motion-ease), opacity var(--motion-quick) var(--motion-ease);
 }
 
 .streak-primary {
@@ -92,7 +92,7 @@
 
 .streak-primary:active,
 .streak-secondary:active {
-    transform: scale(0.98);
+    transform: scale(var(--motion-press));
 }
 
 .streak-primary:disabled,

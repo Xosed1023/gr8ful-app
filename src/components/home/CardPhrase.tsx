@@ -21,6 +21,7 @@ import ShareSheet from "../../share/ShareSheet";
 import { computeBannerMargin } from "../../ads/bannerMargin";
 import { hideCardBanner, showCardBanner } from "../../ads/cardBanner";
 import { registerAdMoment } from "../../ads/adMoments";
+import { isTutorialActive } from "../../tutorial/tutorialState";
 
 interface CardPhraseProps {
   phrase: Pick<Phrase, "content" | "type" | "author">;
@@ -99,6 +100,11 @@ const colorConfig = {
   },
 };
 
+/** Durante el tutorial guiado no cuentan los momentos de valor de los anuncios (spec 030). */
+const adMoment = (moment: Parameters<typeof registerAdMoment>[0]) => {
+  if (!isTutorialActive()) registerAdMoment(moment);
+};
+
 const CardPhrase = ({
   phrase,
   color,
@@ -124,7 +130,7 @@ const CardPhrase = ({
       await Share.share({
         text: `${phrase.content[language]}\n\n— ${phrase.author}`,
       });
-      registerAdMoment("share");
+      adMoment("share");
     } catch (error) {
       // Cancelar el share sheet nativo también rechaza la promesa
       // en algunas plataformas (ej. iOS) — no es necesariamente un
@@ -144,7 +150,7 @@ const CardPhrase = ({
   const toggleCard = async () => {
     if (isExpanded) {
       setIsSettledOpen(false);
-      registerAdMoment("card_close");
+      adMoment("card_close");
     }
     setIsExpanded((prev) => !prev);
     await hapticTap();
@@ -162,7 +168,8 @@ const CardPhrase = ({
   // Banner de la tarjeta (spec 020): se pide al terminar de abrirse y se
   // oculta al cerrar, al desmontar o al salir de Home (ver cardBanner.ts).
   useEffect(() => {
-    if (!isSettledOpen || !bannerSlotRef.current) return;
+    // Sin banners mientras dura el tutorial guiado
+    if (!isSettledOpen || !bannerSlotRef.current || isTutorialActive()) return;
     showCardBanner({
       ownerId: language,
       adId: adBannerId,
@@ -200,6 +207,10 @@ const CardPhrase = ({
     <motion.div
       className={`phrase-card ${background} ${text} absolute w-full`}
       onClick={toggleCard}
+      // El tutorial guiado localiza la tarjeta y sabe si está abierta y asentada (spec 030)
+      data-tutorial={`card-${language}`}
+      data-tutorial-open={isExpanded}
+      data-tutorial-settled={isSettledOpen}
       animate={{
         top: isExpanded ? expandedPosition : initialPosition,
         height: isExpanded ? expandedHeight : initialHeight,
@@ -244,7 +255,7 @@ const CardPhrase = ({
           <IonIcon icon={sparklesOutline} aria-hidden="true" />
           {phrase.type}
         </span>
-        <div className="flex gap-2">
+        <div className="flex gap-2" data-tutorial="actions">
           <button
             type="button"
             className="card-action"
@@ -278,7 +289,7 @@ const CardPhrase = ({
                   string: phrase.content[language],
                 });
                 presentToast("Frase copiada al portapapeles");
-                registerAdMoment("copy");
+                adMoment("copy");
               } catch (err) {
                 presentToast("Error al copiar al portapapeles");
               }

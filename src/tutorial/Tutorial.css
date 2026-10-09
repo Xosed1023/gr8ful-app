@@ -1,0 +1,240 @@
+/* Tutorial guiado de Home (spec 030): foco suave + panel de cristal. Todo es calmado:
+   fundidos y desplazamientos lentos, sin rebotes. */
+.tutorial-root {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    /* La raíz no captura toques: solo los bloqueadores y el panel (así el foco del paso 1
+       deja pasar el toque a la tarjeta) */
+    pointer-events: none;
+    --tutorial-dim: rgba(10, 12, 24, 0.58);
+    --tutorial-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: visible !important;
+}
+
+.ion-palette-dark .tutorial-root {
+    --tutorial-dim: rgba(0, 0, 0, 0.66);
+}
+
+.tutorial-root.visible {
+    opacity: 1;
+}
+
+/* Capas invisibles que impiden tocar lo que hay debajo */
+.tutorial-block {
+    position: fixed;
+    background: transparent;
+    pointer-events: auto;
+}
+
+/* El «agujero»: su sombra gigante atenúa todo lo demás. Se desliza entre objetivos. */
+.tutorial-hole {
+    position: fixed;
+    pointer-events: none;
+    box-shadow: 0 0 0 200vmax var(--tutorial-dim);
+    transition: top 0.75s var(--tutorial-ease), left 0.75s var(--tutorial-ease),
+        width 0.75s var(--tutorial-ease), height 0.75s var(--tutorial-ease),
+        border-radius 0.75s var(--tutorial-ease);
+    overflow: visible !important;
+}
+
+/* Halo que respira despacio alrededor del foco */
+.tutorial-hole::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 0 26px 4px rgba(255, 255, 255, 0.28);
+    animation: tutorial-breathe 3.4s ease-in-out infinite;
+}
+
+@keyframes tutorial-breathe {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
+}
+
+/* Panel de cristal con el texto del paso */
+.tutorial-panel {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    z-index: 1;
+    max-width: 24rem;
+    margin: 0 auto;
+    padding: 16px 18px 14px;
+    border-radius: 24px;
+    color: var(--text-color);
+    background: var(--surface);
+    box-shadow: var(--sheet-shadow);
+    pointer-events: auto;
+    animation: tutorial-in 0.55s var(--tutorial-ease) both;
+    overflow: visible !important;
+}
+
+@keyframes tutorial-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tutorial-panel.man {
+    --tut-accent: var(--tint-blue-fg);
+    --tut-tint: var(--tint-blue-bg);
+}
+
+.tutorial-panel.woman {
+    --tut-accent: var(--tint-purple-fg);
+    --tut-tint: var(--tint-purple-bg);
+}
+
+.tutorial-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.tutorial-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tutorial-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--step-dot);
+    transition: width 0.45s var(--tutorial-ease), background-color 0.45s ease;
+}
+
+.tutorial-dots span.active {
+    width: 18px;
+    background: var(--tut-accent, var(--wg-accent));
+}
+
+.tutorial-skip {
+    padding: 6px 4px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    cursor: pointer;
+}
+
+.tutorial-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.tutorial-text {
+    display: block;
+    margin-top: 4px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--text-muted);
+}
+
+.tutorial-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0 2px;
+    padding: 0;
+    list-style: none;
+}
+
+.tutorial-actions li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.tutorial-actions strong {
+    display: block;
+    font-weight: 600;
+}
+
+.tutorial-actions .tutorial-text {
+    margin-top: 1px;
+    font-size: 13px;
+}
+
+.tutorial-action-icon {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9999px;
+    font-size: 18px;
+    color: var(--tut-accent);
+    background: var(--tut-tint);
+}
+
+.tutorial-next {
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+    border: none;
+    border-radius: 9999px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--btn-text);
+    background: var(--tut-accent);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.tutorial-next:active {
+    transform: scale(0.98);
+}
+
+/* Último paso: tarjeta centrada (guía del widget o cierre) */
+.tutorial-center {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    pointer-events: none;
+}
+
+.tutorial-panel.centered {
+    position: relative;
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-height: 100%;
+    padding: 24px 22px 14px;
+    border-radius: 28px;
+    overflow-y: auto !important;
+    --wg-accent: var(--tut-accent);
+    --wg-tint: var(--tut-tint);
+}
+
+.tutorial-footer-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tutorial-root,
+    .tutorial-hole,
+    .tutorial-dots span,
+    .tutorial-next {
+        transition: none;
+    }
+
+    .tutorial-hole::after,
+    .tutorial-panel {
+        animation: none;
+    }
+}

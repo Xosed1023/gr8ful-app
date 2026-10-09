@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const bridge = vi.hoisted(() => ({ setData: vi.fn().mockResolvedValue(undefined) }));
+const bridge = vi.hoisted(() => ({
+  setData: vi.fn().mockResolvedValue(undefined),
+  requestPin: vi.fn(),
+}));
 const platform = vi.hoisted(() => ({ name: "ios" }));
 
 vi.mock("@capacitor/core", () => ({
@@ -9,7 +12,7 @@ vi.mock("@capacitor/core", () => ({
 }));
 
 import { Phrase } from "../models/Phrase";
-import { buildWidgetPayload, writeWidgetData } from "./widgetData";
+import { buildWidgetPayload, requestWidgetPin, writeWidgetData } from "./widgetData";
 
 const phrase = (id: number): Phrase =>
   ({
@@ -82,6 +85,37 @@ describe("writeWidgetData", () => {
     bridge.setData.mockRejectedValueOnce(new Error("sin grupo"));
     const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
     await expect(writeWidgetData(payload)).resolves.toBeUndefined();
+    spy.mockRestore();
+  });
+});
+
+describe("requestWidgetPin", () => {
+  const NOT_SUPPORTED = { supported: false, requested: false, alreadyAdded: false };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("en Android devuelve lo que responde el plugin", async () => {
+    platform.name = "android";
+    bridge.requestPin.mockResolvedValueOnce({ supported: true, requested: true, alreadyAdded: false });
+    await expect(requestWidgetPin()).resolves.toEqual({ supported: true, requested: true, alreadyAdded: false });
+    expect(bridge.requestPin).toHaveBeenCalledTimes(1);
+  });
+
+  it("en iOS y en la web no llama al plugin y devuelve «no soportado»", async () => {
+    platform.name = "ios";
+    await expect(requestWidgetPin()).resolves.toEqual(NOT_SUPPORTED);
+    platform.name = "web";
+    await expect(requestWidgetPin()).resolves.toEqual(NOT_SUPPORTED);
+    expect(bridge.requestPin).not.toHaveBeenCalled();
+  });
+
+  it("un fallo del plugin se trata como «no soportado»", async () => {
+    platform.name = "android";
+    bridge.requestPin.mockRejectedValueOnce(new Error("sin launcher"));
+    const spy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    await expect(requestWidgetPin()).resolves.toEqual(NOT_SUPPORTED);
     spy.mockRestore();
   });
 });

@@ -11,4 +11,4 @@ description: "Task list: banner fijo en Favoritos"
 - [X] T005 Medir el layout en navegador (lista larga, lista corta, estado vacío; hueco a 12 px sobre la barra)
 - [X] T006 `tsc`, `lint`, `vitest`, `build`
 - [X] T007 Documentar las unidades de AdMob a crear (plan y `BACKLOG.md`)
-- [ ] T008 **Requiere a la usuaria** — probar en iPhone y Android según `quickstart.md`
+- [X] T008 probar en iPhone y Android según `quickstart.md`

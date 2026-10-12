@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (pendiente la prueba en teléfono)
+**Status**: Completed
 
 **Input**: Punto de la usuaria: al terminar de ver el anuncio del rescate de racha (spec 025) y volver a la app, debe aparecer un mensaje tipo «Has restaurado tu racha», con animaciones bonitas y suaves.
 

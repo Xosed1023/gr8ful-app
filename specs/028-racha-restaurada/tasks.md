@@ -12,4 +12,4 @@ description: "Task list: mensaje de racha restaurada"
 - [X] T006 Tests de `StreakRescue`: aparece, N → N+1, auto-descarte, descarte al tocar, anuncio fallido y «Empezar de nuevo»
 - [X] T007 Revisión en navegador (Playwright): claro/oscuro, mujer/hombre
 - [X] T008 `tsc`, `lint`, `vitest`, `build`
-- [ ] T009 **Requiere a la usuaria** — probar en el teléfono según `quickstart.md`
+- [X] T009 probar en el teléfono según `quickstart.md`

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (falta la prueba en teléfono)
+**Status**: Completed
 
 **Input**: Las frases de Favoritos solo se ven en el idioma de la app, aunque cada frase existe en tres idiomas (propósito de aprendizaje de la app).
 

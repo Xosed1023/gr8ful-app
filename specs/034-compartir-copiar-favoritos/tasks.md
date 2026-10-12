@@ -7,4 +7,4 @@ description: "Task list: compartir y copiar en Favoritos"
 - [X] T002 `favoritesCopy.ts` (EN/ES/FR) y prop `pauseHomeBanner` en `ShareSheet.tsx`
 - [X] T003 `Favorites.tsx/.css`: acciones, menú de compartir, banner y puntos de anuncios
 - [X] T004 `tsc`, `lint`, `vitest`, `build`, `cap sync`
-- [ ] T005 **Requiere a la usuaria** — probar en teléfono según `quickstart.md`
+- [X] T005 probar en teléfono según `quickstart.md`

@@ -18,4 +18,4 @@ description: "Task list: tutorial guiado y aviso del widget"
 
 ## Phase 3 — Verificación
 - [X] T009 `tsc`, `lint`, `vitest`, `build`, `assembleDebug`; capturas con Playwright
-- [ ] T010 **Requiere a la usuaria** — probar en teléfono según `quickstart.md`
+- [X] T010 probar en teléfono según `quickstart.md`

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (falta la prueba en teléfono)
+**Status**: Completed
 
 **Input**: Al pedir un anuncio recompensado («Renovar inspiración» o rescate de racha) pasa un tiempo entre el toque y la aparición del anuncio, sin ningún indicio de que algo está ocurriendo.
 

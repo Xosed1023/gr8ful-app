@@ -14,7 +14,7 @@ description: "Task list: animaciones calmas"
 - [X] T007 `OnboardingProgress`, `LoadingScreen` y `useSelectThenAdvance` alineados con los tokens
 - [X] T008 Sección «Movimiento» en `stitch/DESIGN.md`
 - [X] T009 Verificación: `tsc`, `lint`, `vitest`, `build` y fotogramas de las transiciones con Playwright
-- [ ] T010 **Requiere a la usuaria** — probar en iPhone y Android (sobre todo el gesto de volver en iOS)
+- [X] T010 probar en iPhone y Android (sobre todo el gesto de volver en iOS)
 
 ## Fase 2 — Resto de la app (tras integrar las ramas 028–030)
 - [X] T011 Home y `CardsContainer`: entrada escalonada de saludo, tarjetas y pie; suavizar `ENTER/OPEN/CLOSE_SPRING` de `CardPhrase` a `CALM_SPRING`

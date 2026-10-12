@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (falta la prueba en teléfono)
+**Status**: Completed
 
 **Input**: «Guardo la frase del día en favoritos, la veo en Favoritos, la quito desde Favoritos, vuelvo a Home (el icono aparece como guardada), pulso el icono una vez (vuelve a normal), vuelvo a pulsar (guardada) y no aparece en el listado. Es aleatorio.»
 

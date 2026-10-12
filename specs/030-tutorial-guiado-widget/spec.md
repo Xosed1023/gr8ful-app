@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (pendiente de la prueba en teléfono)
+**Status**: Completed
 
 **Input**: Dos puntos de la usuaria: «agregar un tutorial guiado que indique cómo compartir, copiar o guardar frase» y «algún indicativo que le haga saber al usuario que puede poner un widget (en el onboarding o después del tutorial)».
 

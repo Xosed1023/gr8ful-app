@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (pendiente la prueba en teléfono, T008)
+**Status**: Completed
 
 **Input**: Punto de la usuaria: «Agregar banner fijo en la pantalla de favoritos, parte inferior de la pantalla». Continuación de `specs/027-estrategia-de-anuncios` («más ingresos sin más intrusión»).
 

@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (falta la prueba en teléfono, T010)
+**Status**: Completed
 
 **Input**: Petición de la usuaria: «animaciones suaves en toda la app; es una app de motivación, quiero dar la sensación de calma, tranquilidad, paz».
 

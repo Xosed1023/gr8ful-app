@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (falta la prueba en teléfono)
+**Status**: Completed
 
 **Input**: Probar la racha moviendo la fecha del iPhone hace que iOS muestre «Gr8ful ya no está disponible» (el reloj se contrasta con la firma de la app). Se necesita simular el paso de los días sin tocar el reloj.
 

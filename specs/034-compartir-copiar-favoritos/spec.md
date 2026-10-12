@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-09
 
-**Status**: Completed (falta la prueba en teléfono)
+**Status**: Completed
 
 **Input**: En Favoritos solo se puede quitar una frase de guardadas; para compartirla o copiarla hay que volver a Home.
 

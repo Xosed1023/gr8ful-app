@@ -1,13 +1,6 @@
 import { AdMob, InterstitialAdPluginEvents } from "@capacitor-community/admob";
 import { Capacitor } from "@capacitor/core";
-
-// ID de prueba oficial de Google AdMob — https://developers.google.com/admob/ios/test-ads
-// y https://developers.google.com/admob/android/test-ads. Se mantiene hasta resolver el
-// bloqueante de AdMob (ver specs/BACKLOG.md).
-const TEST_INTERSTITIAL_AD_ID =
-  Capacitor.getPlatform() === "ios"
-    ? "ca-app-pub-3940256099942544/4411468910"
-    : "ca-app-pub-3940256099942544/1033173712";
+import { adUnitId, isAdTesting } from "./adUnits";
 
 /** Reintento tras un fallo de carga (sin red, sin anuncio disponible…). */
 const RETRY_MS = 60_000;
@@ -22,7 +15,7 @@ async function prefetch() {
   if (ready || preparing || showing) return;
   preparing = true;
   try {
-    await AdMob.prepareInterstitial({ adId: TEST_INTERSTITIAL_AD_ID, isTesting: true });
+    await AdMob.prepareInterstitial({ adId: adUnitId("interstitial"), isTesting: isAdTesting() });
     ready = true;
   } catch (error) {
     console.warn("Intersticial: no se pudo precargar", error);

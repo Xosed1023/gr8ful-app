@@ -61,6 +61,6 @@
 ## Riesgos y preguntas abiertas
 
 - **R1 — Margen en Android con borde a borde.** En Android 15 la app se dibuja bajo las barras del sistema; el contenedor del plugin puede no coincidir con `window.innerHeight`. Se mide en dispositivo; si hay desfase constante, se ajusta con una constante por plataforma en `bannerMargin.ts` (documentada en quickstart.md).
-- **R2 — Anuncios reales.** Mientras AdMob/AdSense siguen en verificación (BACKLOG), solo se usan anuncios de prueba; no cambia aquí.
+- **R2 — Anuncios reales.** Mientras AdMob sigue en verificación (BACKLOG), solo se usan anuncios de prueba; no cambia aquí.
 - **R3 — Teclado/rotación.** La app es vertical y Home no tiene entradas de texto; no se contempla.
 - **R4 — Tarjetas superpuestas.** El banner nativo flota sobre cualquier tarjeta que quede por encima; se verifica que la tarjeta abierta más reciente sea la visible (FR-004).

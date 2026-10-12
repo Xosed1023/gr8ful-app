@@ -3,19 +3,11 @@ import {
   RewardAdOptions,
   RewardAdPluginEvents,
 } from "@capacitor-community/admob";
-import { Capacitor } from "@capacitor/core";
 import { toastController } from "@ionic/core";
+import { adUnitId, isAdTesting } from "./adUnits";
 import { loadAdState, markRewarded, saveAdState } from "./interstitialPolicy";
 import { RewardedText, currentLanguage } from "./rewardedCopy";
 import { setRewardedLoading } from "./rewardedLoading";
-
-// ID de prueba oficial de Google AdMob — https://developers.google.com/admob/ios/test-ads
-// y https://developers.google.com/admob/android/test-ads. Devuelve anuncios de test
-// para toda solicitud, sin depender de configuración de cuenta/consentimiento.
-const TEST_REWARDED_AD_ID =
-  Capacitor.getPlatform() === "ios"
-    ? "ca-app-pub-3940256099942544/1712485313"
-    : "ca-app-pub-3940256099942544/5224354917";
 
 /** Espera máxima a que el anuncio esté listo; pasado ese tiempo se avisa y se puede reintentar. */
 export const REWARDED_LOAD_TIMEOUT_MS = 15_000;
@@ -78,7 +70,7 @@ export async function showRewarded({ notifyFailure = false }: ShowRewardedOption
       // El anuncio ya está en pantalla: el loader ha cumplido
       await AdMob.addListener(RewardAdPluginEvents.Showed, () => setRewardedLoading(false))
     );
-    const options: RewardAdOptions = { adId: TEST_REWARDED_AD_ID, isTesting: true };
+    const options: RewardAdOptions = { adId: adUnitId("rewarded"), isTesting: isAdTesting() };
     await withTimeout(AdMob.prepareRewardVideoAd(options), REWARDED_LOAD_TIMEOUT_MS);
     const reward = await AdMob.showRewardVideoAd();
     const rewarded = reward.amount > 0;

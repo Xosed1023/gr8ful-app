@@ -120,5 +120,5 @@ Como usuario de iOS o Android, con el modo claro u oscuro, quiero que el banner 
 - La posición del banner sigue el diseño de Figma (recuadro de unos 344×78 bajo los botones de la tarjeta abierta); el tamaño exacto del anuncio se decide en el plan, dentro de los formatos estándar de banner.
 - La tarjeta mantiene su altura y contenido con o sin anuncio: el espacio del banner está reservado y no cambia el diseño de la tarjeta.
 - Se usan los 6 identificadores de banner ya configurados (iOS/Android × EN/ES/FR); no se crean unidades de anuncio nuevas.
-- Las cuentas de AdMob/AdSense siguen en verificación (ver `specs/BACKLOG.md`): hasta resolverla se prueba con anuncios de prueba y no se espera ingreso real.
+- La cuenta y las apps de AdMob siguen en verificación (ver `specs/BACKLOG.md`): hasta resolverla se prueba con anuncios de prueba y no se espera ingreso real.
 - Alcance limitado a Home; no se añaden banners en otras pantallas.

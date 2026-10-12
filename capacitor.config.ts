@@ -5,6 +5,11 @@ const config: CapacitorConfig = {
   appName: 'Gr8ful',
   webDir: 'dist',
   plugins: {
+    // Icono monocromo del ∞ (android/.../drawable/ic_stat_gr8ful.xml) y su color de acento
+    LocalNotifications: {
+      smallIcon: "ic_stat_gr8ful",
+      iconColor: "#5602D3",
+    },
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"],
     },

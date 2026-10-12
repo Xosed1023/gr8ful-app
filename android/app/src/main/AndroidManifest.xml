@@ -10,7 +10,7 @@
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/push_icon" />
+            android:resource="@drawable/ic_stat_gr8ful" />
         <meta-data
             android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
             android:value="true" />
